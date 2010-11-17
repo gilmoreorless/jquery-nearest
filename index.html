@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<style type="text/css">
+		html, body {height:100%; margin:0;}
+		#container {height:100%; overflow:hidden; position:relative; width:100%;}
+		.moving {background-color:#999; border:1px solid #000; position:absolute;}
+		.moving.active {background-color:#9F9;}
+	</style>
+</head>
+<body>
+	<div id="container"></div>
+
+	<script src="lib/jquery-1.4.2.js"></script>
+	<script src="jquery.nearest.js"></script>
+	<script>
+		$(function () {
+			function rand(min, max) {
+				return Math.round(Math.random() * max + min);
+			}
+
+			function moveElem($elem) {
+				var elemX = parseInt($elem.css('left'), 10) || 0,
+					elemY = parseInt($elem.css('top')) || 0,
+					moveX = rand(0, 1000) - 500,
+					moveY = rand(0, 1000) - 500;
+				if (elemX + moveX > contWidth || elemX + moveX < 0) moveX = 0;
+				if (elemY + moveY > contHeight || elemY + moveY < 0) moveY = 0;
+				$elem.animate({
+					left: elemX + moveX,
+					top: elemY + moveY
+				}, 5000);
+			}
+
+			var elemCount = 10,
+				minSize = 25,
+				maxSize = 150,
+				$container = $('#container'),
+				contWidth = $container.width(),
+				contHeight = $container.height(),
+				size, x, y, $moving;
+			while (elemCount--) {
+				size = rand(minSize, maxSize);
+				x = rand(0, contWidth - size);
+				y = rand(0, contHeight - size);
+				$('<div class="moving" />').css({
+					width: size,
+					height: size,
+					left: x,
+					top: y,
+					WebkitBorderRadius: rand(0, size / 2)
+				}).appendTo($container);
+			}
+			$moving = $('.moving');
+
+			/*
+			function moveAll() {
+				$moving.each(function () {
+					moveElem($(this));
+				});
+			}
+			setInterval(moveAll, 5000);
+			moveAll();
+			*/
+		});
+	</script>
+</body>
+</html>
