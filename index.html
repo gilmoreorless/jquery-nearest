@@ -6,7 +6,7 @@
 	<style type="text/css">
 		html, body {height:100%; margin:0;}
 		#container {height:100%; overflow:hidden; position:relative; width:100%;}
-		.moving {background-color:#999; border:1px solid #000; position:absolute;}
+		.moving {background-color:#AAA; border:1px solid #000; position:absolute;}
 		.moving.active {background-color:#9F9;}
 	</style>
 </head>
@@ -21,49 +21,39 @@
 				return Math.round(Math.random() * max + min);
 			}
 
-			function moveElem($elem) {
-				var elemX = parseInt($elem.css('left'), 10) || 0,
-					elemY = parseInt($elem.css('top')) || 0,
-					moveX = rand(0, 1000) - 500,
-					moveY = rand(0, 1000) - 500;
-				if (elemX + moveX > contWidth || elemX + moveX < 0) moveX = 0;
-				if (elemY + moveY > contHeight || elemY + moveY < 0) moveY = 0;
-				$elem.animate({
-					left: elemX + moveX,
-					top: elemY + moveY
-				}, 5000);
-			}
-
+			// Setup random elements
 			var elemCount = 10,
 				minSize = 25,
 				maxSize = 150,
 				$container = $('#container'),
 				contWidth = $container.width(),
 				contHeight = $container.height(),
-				size, x, y, $moving;
+				size, radius, x, y, $moving;
 			while (elemCount--) {
 				size = rand(minSize, maxSize);
 				x = rand(0, contWidth - size);
 				y = rand(0, contHeight - size);
+				radius = rand(0, size / 2);
 				$('<div class="moving" />').css({
 					width: size,
 					height: size,
 					left: x,
-					top: y,
-					WebkitBorderRadius: rand(0, size / 2)
+					top: y/*,
+					WebkitBorderRadius: radius,
+					MozBorderRadius: radius,
+					borderRadius: radius*/
 				}).appendTo($container);
 			}
 			$moving = $('.moving');
 
-			/*
-			function moveAll() {
-				$moving.each(function () {
-					moveElem($(this));
-				});
-			}
-			setInterval(moveAll, 5000);
-			moveAll();
-			*/
+			// Setup plugin demo
+			$(document).mousemove(function (e) {
+				var x = e.pageX,
+					y = e.pageY;
+				//$moving.removeClass('active').nearest({x: x, y: y}).addClass('active');
+				$moving.removeClass('active');
+				$.nearest({x: x, y: y}, $moving).addClass('active');
+			});
 		});
 	</script>
 </body>
