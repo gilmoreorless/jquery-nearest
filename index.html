@@ -6,8 +6,10 @@
 	<style type="text/css">
 		html, body {height:100%; margin:0;}
 		#container {height:100%; overflow:hidden; position:relative; width:100%;}
-		.moving {background-color:#AAA; border:1px solid #000; position:absolute;}
-		.moving.active {background-color:#9F9;}
+		.block {background-color:#AAA; border:1px solid #000; font-size:20px; opacity:1; position:absolute; text-align:center;}
+		.block.active1 {background-color:#9F9;}
+		.block.active2 {opacity:0.5;}
+		.block.highlight {border-color:#F00;}
 	</style>
 </head>
 <body>
@@ -28,13 +30,13 @@
 				$container = $('#container'),
 				contWidth = $container.width(),
 				contHeight = $container.height(),
-				size, radius, x, y, $moving;
+				size, radius, x, y, $blocks;
 			while (elemCount--) {
 				size = rand(minSize, maxSize);
 				x = rand(0, contWidth - size);
 				y = rand(0, contHeight - size);
 				radius = rand(0, size / 2);
-				$('<div class="moving" />').css({
+				$('<div class="block" />').css({
 					width: size,
 					height: size,
 					left: x,
@@ -44,15 +46,23 @@
 					borderRadius: radius*/
 				}).appendTo($container);
 			}
-			$moving = $('.moving');
+			$blocks = $('.block');
 
-			// Setup plugin demo
+			// Demo for $.nearest
 			$(document).mousemove(function (e) {
 				var x = e.pageX,
-					y = e.pageY;
-				//$moving.removeClass('active').nearest({x: x, y: y}).addClass('active');
-				$moving.removeClass('active');
-				$.nearest({x: x, y: y}, $moving).addClass('active');
+					y = e.pageY,
+					point = {x: x, y: y};
+				$blocks.removeClass('active1 active2').nearest(point).addClass('active1');
+				$.nearest(point, $blocks).addClass('active2');
+			});
+
+			// Demo for $.fn.nearest
+			$blocks.click(function () {
+				var $this = $(this);
+				$blocks.not($this).removeClass('highlight').text('');
+				$this.addClass('highlight').text('CLICKED');
+				$this.nearest($blocks.not($this)).addClass('highlight').text('nearest');
 			});
 		});
 	</script>
