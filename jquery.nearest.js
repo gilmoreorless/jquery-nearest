@@ -4,6 +4,8 @@
  * Finds elements closest to a single point based on screen location and pixel dimensions
  *
  * Requires jQuery 1.4 or above
+ *
+ * Also supports Ben Alman's "each2" plugin for faster looping
  */
 
 /**
@@ -22,10 +24,10 @@
 			pointX1 = parseInt(dimensions.x, 10) || 0,
 			pointY1 = parseInt(dimensions.y, 10) || 0,
 			pointX2 = parseInt(pointX1 + dimensions.w, 10) || pointX1,
-			pointY2 = parseInt(pointY1 + dimensions.h, 10) || pointY1;
-		// TODO - speed improvement using Paul Irish's fast each implementation
-		$all.each(function () {
-			var $this = $(this),
+			pointY2 = parseInt(pointY1 + dimensions.h, 10) || pointY1,
+			hasEach2 = !!$.fn.each2;
+		$all[hasEach2 ? 'each2' : 'each'](function (i, elem) {
+			var $this = hasEach2 ? elem : $(this),
 				off = $this.offset(),
 				x = off.left,
 				y = off.top,
