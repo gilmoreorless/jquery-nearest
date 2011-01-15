@@ -57,22 +57,23 @@
 				filtered.push(this);
 			}
 		});
-		return $(filtered);
+		return filtered;
 	}
 
 	/**
+	 *
 	 * @return jQuery object - can be 0 length
 	 */
 	$.nearest = function (point, selector) {
 		if (!point || point.x === undefined || point.y === undefined) {
 			return $([]);
 		}
-		return nearest(point, selector);
+		return $(nearest(point, selector));
 	};
 
 	$.fn.nearest = function (selector) {
-		if ($.isPlainObject(selector)) {
-			return nearest(selector, this);
+		if (selector && $.isPlainObject(selector)) {
+			return this.pushStack(nearest(selector, this));
 		}
 		var offset = this.offset(),
 			dimensions = {
@@ -81,8 +82,6 @@
 				w: this.outerWidth(),
 				h: this.outerHeight()
 			};
-		// TODO - don't forget to use pushStack for proper chaining
-		// THIS DOESN'T WORK PROPERLY YET
-		return nearest(dimensions, selector);
+		return this.pushStack(nearest(dimensions, selector));
 	};
 })(jQuery);

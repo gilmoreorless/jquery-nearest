@@ -50,7 +50,7 @@
 			$blocks = $('.block');
 
 			// Demo for $.nearest
-			//*
+			/*
 			$(document).mousemove(function (e) {
 				var x = e.pageX,
 					y = e.pageY,
@@ -67,6 +67,26 @@
 				$this.nearest($blocks.not($this)).addClass('highlight').text('nearest');
 			});
 			//*/
+
+			// Test for chaining
+			$('<div/>').css({
+				width:1,
+				height:1,
+				backgroundColor:'#F00',
+				position:'absolute',
+				left:500,
+				top:100
+			}).appendTo('body');
+			$blocks
+				.css('backgroundColor','#066')
+				.filter(':odd')
+					.css('backgroundColor','#0FF')
+					.nearest({x:500, y:100})
+						.text('Nearest')
+						.end()
+					.css('color','#F90')
+					.end()
+				.css('opacity', 0.5);
 		});
 	</script>
 </body>
