@@ -11,21 +11,24 @@
 /**
  * Method signatures:
  *
- * $.nearest({x, y}, selector) - find $(selector) closest to point [DONE]
+ * $.nearest({x, y}, selector) - find $(selector) closest to point
  * $(elem).nearest(selector) - find $(selector) closest to elem
- * $(elemSet).nearest({x, y}) - filter $(elemSet) and return closest to point [DONE]
+ * $(elemSet).nearest({x, y}) - filter $(elemSet) and return closest to point
  */
 ;(function ($, undefined) {
 	function nearest(dimensions, selector) {
-		selector = selector || '*'; // I STRONGLY recommend passing in a selector
+		selector || (selector = '*'); // I STRONGLY recommend passing in a selector
 		var $all = $(selector),
 			filtered = [],
 			minDist = Infinity,
-			pointX1 = parseInt(dimensions.x, 10) || 0,
-			pointY1 = parseInt(dimensions.y, 10) || 0,
-			pointX2 = parseInt(pointX1 + dimensions.w, 10) || pointX1,
-			pointY2 = parseInt(pointY1 + dimensions.h, 10) || pointY1,
-			hasEach2 = !!$.fn.each2;
+			point1x = parseInt(dimensions.x, 10) || 0,
+			point1y = parseInt(dimensions.y, 10) || 0,
+			point2x = parseInt(point1x + dimensions.w, 10) || point1x,
+			point2y = parseInt(point1y + dimensions.h, 10) || point1y,
+			hasEach2 = !!$.fn.each2,
+			// Shortcuts to help with compression
+			min = Math.min,
+			max = Math.max;
 		$all[hasEach2 ? 'each2' : 'each'](function (i, elem) {
 			var $this = hasEach2 ? elem : $(this),
 				off = $this.offset(),
@@ -35,11 +38,17 @@
 				h = $this.outerHeight(),
 				x2 = x + w,
 				y2 = y + h,
-				compX = x > pointX1 ? x : x2,
-				compY = y > pointY1 ? y : y2,
-				distX = (x <= pointX1 && x2 >= pointX1) ? 0 : Math.max(compX, pointX1) - Math.min(compX, pointX1),
-				distY = (y <= pointY1 && y2 >= pointY1) ? 0 : Math.max(compY, pointY1) - Math.min(compY, pointY1),
-				distT = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
+				maxX1 = max(x, point1x),
+				minX2 = min(x2, point2x),
+				maxY1 = max(y, point1y),
+				minY2 = min(y2, point2y),
+				intersectX = minX2 > maxX1,
+				intersectY = minY2 > maxY1,
+				distX = intersectX ? 0 : maxX1 - minX2,
+				distY = intersectY ? 0 : maxY1 - minY2,
+				distT = intersectX || intersectY ?
+					max(distX, distY) :
+					Math.sqrt(distX * distX + distY * distY);
 			if (distT < minDist) {
 				filtered = [];
 				minDist = distT;
