@@ -14,13 +14,17 @@
  * $.nearest({x, y}, selector) - find $(selector) closest to point
  * $(elem).nearest(selector) - find $(selector) closest to elem
  * $(elemSet).nearest({x, y}) - filter $(elemSet) and return closest to point
+ *
+ * Also:
+ * $.furthest()
+ * $().furthest()
  */
 ;(function ($, undefined) {
-	function nearest(dimensions, selector) {
+	function nearest(dimensions, selector, furthest) {
 		selector || (selector = '*'); // I STRONGLY recommend passing in a selector
 		var $all = $(selector),
 			filtered = [],
-			minDist = Infinity,
+			compDist = furthest ? 0 : Infinity,
 			point1x = parseInt(dimensions.x, 10) || 0,
 			point1y = parseInt(dimensions.y, 10) || 0,
 			point2x = parseInt(point1x + dimensions.w, 10) || point1x,
@@ -48,40 +52,39 @@
 				distY = intersectY ? 0 : maxY1 - minY2,
 				distT = intersectX || intersectY ?
 					max(distX, distY) :
-					Math.sqrt(distX * distX + distY * distY);
-			if (distT < minDist) {
+					Math.sqrt(distX * distX + distY * distY),
+				comp = furthest ? distT > compDist : distT < compDist;
+			if (comp) {
 				filtered = [];
-				minDist = distT;
+				compDist = distT;
 			}
-			if (distT == minDist) {
+			if (distT == compDist) {
 				filtered.push(this);
 			}
 		});
 		return filtered;
 	}
 
-	/**
-	 *
-	 * @return jQuery object - can be 0 length
-	 */
-	$.nearest = function (point, selector) {
-		if (!point || point.x === undefined || point.y === undefined) {
-			return $([]);
-		}
-		return $(nearest(point, selector));
-	};
+	$.each(['nearest', 'furthest'], function (i, name) {
+		$[name] = function (point, selector) {
+			if (!point || point.x === undefined || point.y === undefined) {
+				return $([]);
+			}
+			return $(nearest(point, selector, name == 'furthest'));
+		};
 
-	$.fn.nearest = function (selector) {
-		if (selector && $.isPlainObject(selector)) {
-			return this.pushStack(nearest(selector, this));
-		}
-		var offset = this.offset(),
-			dimensions = {
-				x: offset.left,
-				y: offset.top,
-				w: this.outerWidth(),
-				h: this.outerHeight()
-			};
-		return this.pushStack(nearest(dimensions, selector));
-	};
+		$.fn[name] = function (selector) {
+			if (selector && $.isPlainObject(selector)) {
+				return this.pushStack(nearest(selector, this));
+			}
+			var offset = this.offset(),
+				dimensions = {
+					x: offset.left,
+					y: offset.top,
+					w: this.outerWidth(),
+					h: this.outerHeight()
+				};
+			return this.pushStack(nearest(dimensions, selector, name == 'furthest'));
+		};
+	});
 })(jQuery);

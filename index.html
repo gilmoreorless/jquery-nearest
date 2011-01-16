@@ -9,7 +9,9 @@
 		.block {background-color:#AAA; border:1px solid #000; font-size:20px; opacity:1; position:absolute; text-align:center;}
 		.block.active1 {background-color:#9F9;}
 		.block.active2 {opacity:0.5;}
+		.block.active3 {background-color:#666;}
 		.block.highlight {border-color:#F00;}
+		.block.lowlight {border-style:dashed;}
 	</style>
 </head>
 <body>
@@ -50,13 +52,14 @@
 			$blocks = $('.block');
 
 			// Demo for $.nearest
-			/*
+			//*
 			$(document).mousemove(function (e) {
 				var x = e.pageX,
 					y = e.pageY,
 					point = {x: x, y: y};
-				$blocks.removeClass('active1 active2').nearest(point).addClass('active1');
+				$blocks.removeClass('active1 active2 active3').nearest(point).addClass('active1');
 				$.nearest(point, $blocks).addClass('active2');
+				$.furthest(point, $blocks).addClass('active3');
 			});
 
 			// Demo for $.fn.nearest
@@ -65,10 +68,12 @@
 				$blocks.not($this).removeClass('highlight').text('');
 				$this.addClass('highlight').text('CLICKED');
 				$this.nearest($blocks.not($this)).addClass('highlight').text('nearest');
+				$this.furthest($blocks.not($this)).addClass('lowlight').text('furthest');
 			});
 			//*/
 
 			// Test for chaining
+			/*
 			$('<div/>').css({
 				width:1,
 				height:1,
@@ -87,6 +92,7 @@
 					.css('color','#F90')
 					.end()
 				.css('opacity', 0.5);
+			//*/
 		});
 	</script>
 </body>
