@@ -65,10 +65,10 @@
 			// Demo for $.fn.nearest
 			$blocks.click(function () {
 				var $this = $(this);
-				$blocks.not($this).removeClass('highlight').text('');
+				$blocks.removeClass('highlight lowlight').text('');
 				$this.addClass('highlight').text('CLICKED');
-				$this.nearest($blocks.not($this)).addClass('highlight').text('nearest');
-				$this.furthest($blocks.not($this)).addClass('lowlight').text('furthest');
+				$this.nearest($blocks).addClass('highlight').text('nearest');
+				$this.furthest($blocks).addClass('lowlight').text('furthest');
 			});
 			//*/
 
