@@ -20,6 +20,16 @@
  * $().furthest()
  */
 ;(function ($, undefined) {
+	
+	/**
+	 * Internal method that does the grunt work
+	 *
+	 * @param mixed selector Any valid jQuery selector providing elements to filter
+	 * @param hash options Key/value list of options for matching elements
+	 * @param mixed thisObj (optional) Any valid jQuery selector that represents self
+	 *                      for the "includeSelf" option
+	 * @return array List of matching elements, can be zero length
+	 */
 	function nearest(selector, options, thisObj) {
 		selector || (selector = '*'); // I STRONGLY recommend passing in a selector
 		var $all = $(selector),
@@ -70,6 +80,9 @@
 	}
 
 	$.each(['nearest', 'furthest'], function (i, name) {
+		
+		// Internal default options
+		// Not exposed publicly because they're method-dependent and easily overwritten anyway
 		var defaults = {
 			x: 0,
 			y: 0,
@@ -79,6 +92,16 @@
 			includeSelf: false
 		};
 
+		/**
+		 * $.nearest() / $.furthest()
+		 *
+		 * Utility functions for finding elements near a specific point or region on screen
+		 *
+		 * @param hash point Co-ordinates for the point or region to measure from
+		 *                   "x" and "y" keys are required, "w" and "h" keys are optional
+		 * @param mixed selector Any valid jQuery selector that provides elements to filter
+		 * @return jQuery object containing matching elements in selector
+		 */
 		$[name] = function (point, selector) {
 			if (!point || point.x === undefined || point.y === undefined) {
 				return $([]);
@@ -87,6 +110,25 @@
 			return $(nearest(selector, opts));
 		};
 
+		/**
+		 * SIGNATURE 1:
+		 *   $(elem).nearest(selector) / $(elem).furthest(selector)
+		 *
+		 *   Finds all elements in selector that are nearest to/furthest from elem
+		 *
+		 *   @param mixed selector Any valid jQuery selector that provides elements to filter
+		 *   @param hash options (optional) Extra filtering options
+		 *   @return jQuery object containing matching elements in selector
+		 *
+		 * SIGNATURE 2:
+		 *   $(elemSet).nearest(point) / $(elemSet).furthest(point)
+		 *
+		 *   Filters elemSet to return only the elements nearest to/furthest from point
+		 *   Effectively a wrapper for $.nearest(point, elemSet) but with the benefits of method chaining
+		 *
+		 *   @param hash point Co-ordinates for the point or region to measure from
+		 *   @return jQuery object containing matching elements in elemSet
+		 */
 		$.fn[name] = function (selector, options) {
 			var opts;
 			if (selector && $.isPlainObject(selector)) {
