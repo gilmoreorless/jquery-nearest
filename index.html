@@ -3,7 +3,7 @@
 <head>
 	<title></title>
 	<meta charset="utf-8">
-	<style type="text/css">
+	<style>
 		html, body {height:100%; margin:0;}
 		#container {height:100%; overflow:hidden; position:relative; width:100%;}
 		.block {background-color:#AAA; border:1px solid #000; font-size:20px; opacity:1; position:absolute; text-align:center;}
@@ -21,6 +21,7 @@
 	<script src="lib/jquery.ba-each2.min.js"></script>
 	<script src="jquery.nearest.js"></script>
 	<script>
+		var includeSelf = false; // can be overwritten in console
 		$(function () {
 			function rand(min, max) {
 				return Math.round(Math.random() * max + min);
@@ -64,11 +65,14 @@
 
 			// Demo for $.fn.nearest
 			$blocks.click(function () {
-				var $this = $(this);
+				var $this = $(this),
+					opts = {
+						includeSelf: includeSelf
+					};
 				$blocks.removeClass('highlight lowlight').text('');
 				$this.addClass('highlight').text('CLICKED');
-				$this.nearest($blocks).addClass('highlight').text('nearest');
-				$this.furthest($blocks).addClass('lowlight').text('furthest');
+				$this.nearest($blocks, opts).addClass('highlight').text('nearest');
+				$this.furthest($blocks, opts).addClass('lowlight').text('furthest');
 			});
 			//*/
 

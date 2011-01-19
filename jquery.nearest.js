@@ -20,19 +20,23 @@
  * $().furthest()
  */
 ;(function ($, undefined) {
-	function nearest(dimensions, selector, furthest) {
+	function nearest(selector, options, thisObj) {
 		selector || (selector = '*'); // I STRONGLY recommend passing in a selector
 		var $all = $(selector),
 			filtered = [],
+			furthest = !!options.furthest,
 			compDist = furthest ? 0 : Infinity,
-			point1x = parseInt(dimensions.x, 10) || 0,
-			point1y = parseInt(dimensions.y, 10) || 0,
-			point2x = parseInt(point1x + dimensions.w, 10) || point1x,
-			point2y = parseInt(point1y + dimensions.h, 10) || point1y,
+			point1x = parseInt(options.x, 10) || 0,
+			point1y = parseInt(options.y, 10) || 0,
+			point2x = parseInt(point1x + options.w, 10) || point1x,
+			point2y = parseInt(point1y + options.h, 10) || point1y,
 			hasEach2 = !!$.fn.each2,
 			// Shortcuts to help with compression
 			min = Math.min,
 			max = Math.max;
+		if (!options.includeSelf && thisObj) {
+			$all = $all.not(thisObj);
+		}
 		$all[hasEach2 ? 'each2' : 'each'](function (i, elem) {
 			var $this = hasEach2 ? elem : $(this),
 				off = $this.offset(),
@@ -66,16 +70,28 @@
 	}
 
 	$.each(['nearest', 'furthest'], function (i, name) {
+		var defaults = {
+			x: 0,
+			y: 0,
+			w: 0,
+			h: 0,
+			furthest: name == 'furthest',
+			includeSelf: false
+		};
+
 		$[name] = function (point, selector) {
 			if (!point || point.x === undefined || point.y === undefined) {
 				return $([]);
 			}
-			return $(nearest(point, selector, name == 'furthest'));
+			var opts = $.extend({}, defaults, point);
+			return $(nearest(selector, opts));
 		};
 
-		$.fn[name] = function (selector) {
+		$.fn[name] = function (selector, options) {
+			var opts;
 			if (selector && $.isPlainObject(selector)) {
-				return this.pushStack(nearest(selector, this));
+				opts = $.extend({}, defaults, selector);
+				return this.pushStack(nearest(this, opts));
 			}
 			var offset = this.offset(),
 				dimensions = {
@@ -84,7 +100,8 @@
 					w: this.outerWidth(),
 					h: this.outerHeight()
 				};
-			return this.pushStack(nearest(dimensions, selector, name == 'furthest'));
+			opts = $.extend({}, defaults, dimensions, options || {});
+			return this.pushStack(nearest(selector, opts, this));
 		};
 	});
 })(jQuery);
