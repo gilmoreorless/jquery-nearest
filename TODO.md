@@ -1,2 +1,2 @@
- * (future) add options to only check x or y axis
- * (future) add $.fn.touching (or $.fn.intersects)
+ * Test with different jQuery versions - v1.4 is just a guess
+ * Browser test

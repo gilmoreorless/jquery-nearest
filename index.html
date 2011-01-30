@@ -21,7 +21,13 @@
 	<script src="lib/jquery.ba-each2.min.js"></script>
 	<script src="jquery.nearest.js"></script>
 	<script>
-		var includeSelf = false; // can be overwritten in console
+		// can be overwritten in console
+		var opts = {
+			includeSelf: false,
+			checkX: true,
+			checkY: true
+		};
+
 		$(function () {
 			function rand(min, max) {
 				return Math.round(Math.random() * max + min);
@@ -57,7 +63,7 @@
 			$(document).mousemove(function (e) {
 				var x = e.pageX,
 					y = e.pageY,
-					point = {x: x, y: y};
+					point = $.extend({x: x, y: y}, opts);
 				$blocks.removeClass('active1 active2 active3').nearest(point).addClass('active1');
 				$.nearest(point, $blocks).addClass('active2');
 				$.furthest(point, $blocks).addClass('active3');
@@ -65,10 +71,7 @@
 
 			// Demo for $.fn.nearest
 			$blocks.click(function () {
-				var $this = $(this),
-					opts = {
-						includeSelf: includeSelf
-					};
+				var $this = $(this);
 				$blocks.removeClass('highlight lowlight').text('');
 				$this.addClass('highlight').text('CLICKED');
 				$this.nearest($blocks, opts).addClass('highlight').text('nearest');

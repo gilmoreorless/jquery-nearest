@@ -1,5 +1,5 @@
 /*!
- * jQuery Nearest plugin v0.2.0
+ * jQuery Nearest plugin v0.3.0
  *
  * Finds elements closest to a single point based on screen location and pixel dimensions
  *
@@ -18,6 +18,9 @@
  * Also:
  * $.furthest()
  * $().furthest()
+ *
+ * $.touching()
+ * $().touching()
  */
 ;(function ($, undefined) {
 	
@@ -31,10 +34,12 @@
 	 * @return array List of matching elements, can be zero length
 	 */
 	function nearest(selector, options, thisObj) {
-		selector || (selector = '*'); // I STRONGLY recommend passing in a selector
+		selector || (selector = 'div'); // I STRONGLY recommend passing in a selector
 		var $all = $(selector),
 			filtered = [],
 			furthest = !!options.furthest,
+			checkX = !!options.checkX,
+			checkY = !!options.checkY,
 			compDist = furthest ? 0 : Infinity,
 			point1x = parseInt(options.x, 10) || 0,
 			point1y = parseInt(options.y, 10) || 0,
@@ -44,6 +49,7 @@
 			// Shortcuts to help with compression
 			min = Math.min,
 			max = Math.max;
+
 		if (!options.includeSelf && thisObj) {
 			$all = $all.not(thisObj);
 		}
@@ -60,40 +66,53 @@
 				minX2 = min(x2, point2x),
 				maxY1 = max(y, point1y),
 				minY2 = min(y2, point2y),
-				intersectX = minX2 > maxX1,
-				intersectY = minY2 > maxY1,
+				intersectX = minX2 >= maxX1,
+				intersectY = minY2 >= maxY1,
 				distX = intersectX ? 0 : maxX1 - minX2,
 				distY = intersectY ? 0 : maxY1 - minY2,
 				distT = intersectX || intersectY ?
 					max(distX, distY) :
 					Math.sqrt(distX * distX + distY * distY),
 				comp = furthest ? distT > compDist : distT < compDist;
-			if (comp) {
-				filtered = [];
-				compDist = distT;
-			}
-			if (distT == compDist) {
-				filtered.push(this);
+			if (
+				// .nearest() / .furthest()
+				(checkX && checkY) ||
+				// .touching()
+				(!checkX && !checkY && intersectX && intersectY) ||
+				// .nearest({checkY: false})
+				(checkX && intersectY) ||
+				// .nearest({checkX: false})
+				(checkY && intersectX)
+			) {
+				if (comp) {
+					filtered = [];
+					compDist = distT;
+				}
+				if (distT == compDist) {
+					filtered.push(this);
+				}
 			}
 		});
 		return filtered;
 	}
 
-	$.each(['nearest', 'furthest'], function (i, name) {
+	$.each(['nearest', 'furthest', 'touching'], function (i, name) {
 		
 		// Internal default options
 		// Not exposed publicly because they're method-dependent and easily overwritten anyway
 		var defaults = {
-			x: 0,
-			y: 0,
-			w: 0,
-			h: 0,
-			furthest: name == 'furthest',
-			includeSelf: false
+			x: 0, // X position of top left corner of point/region
+			y: 0, // Y position of top left corner of point/region
+			w: 0, // Width of region
+			h: 0, // Height of region
+			furthest: name == 'furthest', // Find max distance (true) or min distance (false)
+			includeSelf: false, // Include 'this' in search results (t/f) - only applies to $(elem).func(selector) syntax
+			checkX: name != 'touching', // Check variations in X axis (t/f)
+			checkY: name != 'touching'  // Check variations in Y axis (t/f)
 		};
 
 		/**
-		 * $.nearest() / $.furthest()
+		 * $.nearest() / $.furthest() / $.touching()
 		 *
 		 * Utility functions for finding elements near a specific point or region on screen
 		 *
@@ -112,7 +131,7 @@
 
 		/**
 		 * SIGNATURE 1:
-		 *   $(elem).nearest(selector) / $(elem).furthest(selector)
+		 *   $(elem).nearest(selector) / $(elem).furthest(selector) / $(elem).touching(selector)
 		 *
 		 *   Finds all elements in selector that are nearest to/furthest from elem
 		 *
@@ -121,7 +140,7 @@
 		 *   @return jQuery object containing matching elements in selector
 		 *
 		 * SIGNATURE 2:
-		 *   $(elemSet).nearest(point) / $(elemSet).furthest(point)
+		 *   $(elemSet).nearest(point) / $(elemSet).furthest(point) / $(elemSet).touching(point)
 		 *
 		 *   Filters elemSet to return only the elements nearest to/furthest from point
 		 *   Effectively a wrapper for $.nearest(point, elemSet) but with the benefits of method chaining
