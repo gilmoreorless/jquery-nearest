@@ -1,0 +1,11 @@
+/*** Basic styles ***/
+
+body {font-family:Arial,Helvetica,sans-serif; font-size:95%;}
+h1 span {font-size:0.7em; font-weight:normal;}
+#wrapper {margin:10px auto; width:800px;}
+pre, code {background-color:#000; color:#0F0; font-family:'Courier New',monospace; font-size:0.9em; line-height:1.5em; margin:1em 0; padding:5px;}
+code {margin:0; padding:2px 5px;}
+ul {margin:1em 0; padding:0 20px;}
+ul ul {margin-top:0.25em;}
+a {color:#333; text-decoration:underline;}
+a:hover {text-decoration:none;}
