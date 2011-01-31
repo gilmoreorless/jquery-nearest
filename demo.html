@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<style>
+		html, body {height:100%; margin:0;}
+		#container {height:100%; overflow:hidden; position:relative; width:100%;}
+		.block {background-color:#AAA; border:1px solid #000; font-size:20px; opacity:1; position:absolute; text-align:center;}
+		.block.active1 {background-color:#9F9;}
+		.block.active2 {opacity:0.5;}
+		.block.active3 {background-color:#666;}
+		.block.highlight {border-color:#F00;}
+		.block.lowlight {border-style:dashed;}
+	</style>
+</head>
+<body>
+	<div id="container"></div>
+
+	<!-- TODO: switch to Google CDN -->
+	<script src="lib/jquery-1.4.2.js"></script>
+	<script src="lib/jquery.ba-each2.min.js"></script>
+	<script src="jquery.nearest.js"></script>
+	<script src="demo.js"></script>
+</body>
+</html>
