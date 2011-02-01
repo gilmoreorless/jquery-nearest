@@ -19,7 +19,30 @@
 			<p>(Be kind to Github, don't hotlink JS files)</p>
 			<h2>Intro</h2>
 			<p>
-				I hate writing documentation
+				This plugin finds the elements in a page that are closest to a particular point or element, based on pixel dimensions.
+				This is not to be confused with jQuery's own <a href="http://api.jquery.com/closest">.closest()</a> method,
+				which is based on the DOM tree, not pixels.
+			</p>
+			<p>
+				There are also helper methods to find elements that are the furthest away from or touching a point or element.
+			</p>
+			<h2>Reference</h2>
+			<h3>Methods</h3>
+			<p>
+				There are three main methods:
+			</p>
+			<ul>
+				<li><code>.nearest()</code> returns the elements that have the shortest pixel distance to a point or element.</li>
+				<li><code>.furthest()</code> returns the elements that have the longest pixel distance to a point or element.</li>
+				<li><code>.touching()</code> returns the elements that are touching a point or element (ie. their pixel distance is 0).</li>
+			</ul>
+			<h3>Usage</h3>
+			<p>
+				Each of the three methods has a utility function on the global jQuery object and a jQuery prototype function for working with element sets.
+				The following examples all use <code>nearest</code> as the method, but <code>furthest</code> and <code>touching</code> work in the same way.
+			</p>
+			<p>
+				
 			</p>
 			
 			STRUCTURE:
