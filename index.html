@@ -41,14 +41,43 @@
 				Each of the three methods has a utility function on the global jQuery object and a jQuery prototype function for working with element sets.
 				The following examples all use <code>nearest</code> as the method, but <code>furthest</code> and <code>touching</code> work in the same way.
 			</p>
+			
+			<h4 id="utility">Utility Function</h4>
+			<pre>$.nearest(<em>pointObject</em>, <em>selector</em>[, <em>options</em>]);</pre>
 			<p>
-				
+				Finds the DOM elements matching <code>selector</code> that are closest to a point or region on the page.
 			</p>
+			<p>
+				<code>pointObject</code> is an object with <code>x</code> and <code>y</code> (numeric) properties that define a point on the page (relative to the top left corner of the page, not the screen).<br />
+				Optionally, you can also specify <code>w</code> and <code>h</code> properties to define the width and height respectively of a region in the page instead of a single point &ndash; in this case the x and y properties define the top left corner of the region.
+			</p>
+			<p>
+				<code>selector</code> is any valid jQuery selector or object that defines an element set to be filtered by the function.
+			</p>
+			<p>
+				<code>options</code> is an optional collection of parameters to pass to the function. More details can be found in the <a href="#options">options</a> section.
+			<h5>Example</h5>
+<pre>
+// Find the image(s) closest to a point 300px in and 100px down from the top left corner
+var $point = $.nearest({x: 300, y: 100}, 'img');
+
+// Find the elements with class 'floating' closest to a particular region in the page
+var $elemSet = $('.floating');
+var $region = $.nearest({x: 300, y: 100, w: 200, h: 200}, $elemSet);
+</pre>
+			
+			<h4 id="single">Single Element Operation</h4>
+			<pre>$(elem).nearest(<em>selector</em>[, <em>options</em>]);</pre>
+			
+			<h4 id="multi">Multiple Element Filter</h4>
+			<pre>$(elemSet).nearest(<em>pointObject</em>[, <em>options</em>]);</pre>
+			
 			
 			STRUCTURE:
 			-Description
 			-Function reference
 			-Quick example
+			-Options
 			-Notes (always use a selector)
 		</div><!-- #details -->
 	</div><!-- #wrapper -->
