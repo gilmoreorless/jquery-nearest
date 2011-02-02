@@ -56,29 +56,79 @@
 			</p>
 			<p>
 				<code>options</code> is an optional collection of parameters to pass to the function. More details can be found in the <a href="#options">options</a> section.
+			</p>
 			<h5>Example</h5>
 <pre>
 // Find the image(s) closest to a point 300px in and 100px down from the top left corner
-var $point = $.nearest({x: 300, y: 100}, 'img');
+var $closestToPoint = $.nearest({x: 300, y: 100}, 'img');
 
 // Find the elements with class 'floating' closest to a particular region in the page
 var $elemSet = $('.floating');
-var $region = $.nearest({x: 300, y: 100, w: 200, h: 200}, $elemSet);
+var $closestToRegion = $.nearest({x: 300, y: 100, w: 200, h: 200}, $elemSet);
 </pre>
 			
 			<h4 id="single">Single Element Operation</h4>
 			<pre>$(elem).nearest(<em>selector</em>[, <em>options</em>]);</pre>
+			<p>
+				Finds the DOM elements matching <code>selector</code> that are closest to <code>elem</code>.
+				If more than one element is in <code>$(elem)</code> then only the first member will be used as a point of reference.
+			</p>
+			<p>
+				<code>selector</code> is any valid jQuery selector or object that defines an element set to be filtered by the function.
+			</p>
+			<p>
+				<code>options</code> is an optional collection of parameters to pass to the function. More details can be found in the <a href="#options">options</a> section.
+			</p>
+			<h5>Example</h5>
+<pre>
+var $basicExample = $('#something').nearest('.surrounding');
+
+// Only the first element in this set will be used for matching
+var $set = $('.middle');
+// Selector can be any jQuery object
+var $convolutedExample = $set.nearest($set.siblings());
+</pre>
 			
 			<h4 id="multi">Multiple Element Filter</h4>
 			<pre>$(elemSet).nearest(<em>pointObject</em>[, <em>options</em>]);</pre>
+			<p>
+				Filters <code>elemSet</code> to return only the members that are closest to the point or region defined by <code>pointObject</code>.
+			</p>
+			<p>
+				This is effectivly the same as calling <code>$.nearest(pointObject, elemSet)</code> but with the benefit of not breaking method chains &ndash; see <a href="#chaining">chaining</a> for more details.
+			</p>
+			<p>
+				<code>pointObject</code> is an object as defined in the <a href="#utility">Utility Function</a> reference.
+			</p>
+			<p>
+				<code>options</code> is an optional collection of parameters to pass to the function. More details can be found in the <a href="#options">options</a> section.
+			</p>
+			<h5>Example</h5>
+<pre>
+var $set = $('.filterme');
+
+// Filter the set by distance to a point
+var $closestToPoint = $set.nearest({x: 300, y: 100});
+
+// Filter the set by distance to a region
+var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
+</pre>
 			
+			<h3>Options</h3>
+			<p>
+				All methods take an optional <code>options</code> object to further refine the results.
+				The object can have the following parameters:
+			</p>
+			<dl>
+				<dt><code>includeSelf</code></dt>
+				<dd>Boolean - default false</dd>
+				<dd>Blah</dd>
+			</dl>
 			
-			STRUCTURE:
-			-Description
-			-Function reference
-			-Quick example
-			-Options
-			-Notes (always use a selector)
+			<h2>Notes</h2>
+			<p>
+				TODO (always use a selector)
+			</p>
 		</div><!-- #details -->
 	</div><!-- #wrapper -->
 </body>
