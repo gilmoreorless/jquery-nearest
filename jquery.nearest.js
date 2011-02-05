@@ -119,13 +119,16 @@
 		 * @param hash point Co-ordinates for the point or region to measure from
 		 *                   "x" and "y" keys are required, "w" and "h" keys are optional
 		 * @param mixed selector Any valid jQuery selector that provides elements to filter
+		 * @param hash options (optional) Extra filtering options
+		 *                     Not technically needed as the options could go on the point object,
+		 *                     but it's good to have a consistent API
 		 * @return jQuery object containing matching elements in selector
 		 */
-		$[name] = function (point, selector) {
+		$[name] = function (point, selector, options) {
 			if (!point || point.x === undefined || point.y === undefined) {
 				return $([]);
 			}
-			var opts = $.extend({}, defaults, point);
+			var opts = $.extend({}, defaults, point, options || {});
 			return $(nearest(selector, opts));
 		};
 
@@ -151,7 +154,7 @@
 		$.fn[name] = function (selector, options) {
 			var opts;
 			if (selector && $.isPlainObject(selector)) {
-				opts = $.extend({}, defaults, selector);
+				opts = $.extend({}, defaults, selector, options || {});
 				return this.pushStack(nearest(this, opts));
 			}
 			var offset = this.offset(),
