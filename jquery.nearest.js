@@ -38,8 +38,8 @@
 		var $all = $(selector),
 			filtered = [],
 			furthest = !!options.furthest,
-			checkX = !!options.checkX,
-			checkY = !!options.checkY,
+			checkX = !!options.checkHoriz,
+			checkY = !!options.checkVert,
 			compDist = furthest ? 0 : Infinity,
 			point1x = parseInt(options.x, 10) || 0,
 			point1y = parseInt(options.y, 10) || 0,
@@ -105,10 +105,10 @@
 			y: 0, // Y position of top left corner of point/region
 			w: 0, // Width of region
 			h: 0, // Height of region
-			furthest: name == 'furthest', // Find max distance (true) or min distance (false)
+			furthest:    name == 'furthest', // Find max distance (true) or min distance (false)
 			includeSelf: false, // Include 'this' in search results (t/f) - only applies to $(elem).func(selector) syntax
-			checkX: name != 'touching', // Check variations in X axis (t/f)
-			checkY: name != 'touching'  // Check variations in Y axis (t/f)
+			checkHoriz:  name != 'touching', // Check variations in X axis (t/f)
+			checkVert:   name != 'touching'  // Check variations in Y axis (t/f)
 		};
 
 		/**
