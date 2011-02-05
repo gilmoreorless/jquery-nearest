@@ -121,14 +121,38 @@ var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 			</p>
 			<dl>
 				<dt><code>includeSelf</code></dt>
-				<dd>Boolean - default false</dd>
-				<dd>Blah</dd>
+				<dd class="type">Boolean - default false <em>(not used by the utility methods)</em></dd>
+				<dd>TODO: write this bit - I'm not sure if this option is even really needed</dd>
+
+				<dt><code>checkHoriz</code></dt>
+				<dd class="type">Boolean - default true <em>(not used by <code>.touching()</code>)</em></dd>
+				<dd>If false, the function will not check for elements along the X axis,
+					meaning only elements directly above or below the reference point will be matched.</dd>
+
+				<dt><code>checkVert</code></dt>
+				<dd class="type">Boolean - default true <em>(not used by <code>.touching()</code>)</em></dd>
+				<dd>If false, the function will not check for elements along the Y axis,
+					meaning only elements directly to the left or right of the reference point will be matched.</dd>
 			</dl>
+			<p>
+				A example of using different options can be found on the <a href="demo.html">demonstration page</a>.
+			</p>
 			
 			<h2>Notes</h2>
-			<p>
-				TODO (always use a selector)
-			</p>
+			<ul>
+				<li>
+					The <code>selector</code> parameter is technically optional in all methods, and will default to <code>*</code> if not present.
+					However, it is <strong>strongly recommended</strong> that you pass in a selector,
+					otherwise the method will loop through every single DOM element on the page, which &ndash;
+					apart from being slow and computationally expensive &ndash; will most likely produce false positives
+					by matching a reference element's parent nodes.
+				</li>
+				<li>
+					Only set one of the <code>checkHoriz</code> and <code>checkVert</code> options to false in a single call, not both.
+					If you set both to false, the <code>.nearest()</code> and <code>.furthest()</code> methods will fail to work
+					(it is technically the same as calling <code>.touching()</code> instead).
+				</li>
+			</ul>
 		</div><!-- #details -->
 	</div><!-- #wrapper -->
 </body>
