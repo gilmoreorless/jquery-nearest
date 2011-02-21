@@ -1,27 +1,29 @@
 // can be overwritten in console
 var opts = {
 	includeSelf: false,
-	checkX: true,
-	checkY: true
+	checkHoriz: true,
+	checkVert: true
 };
 
 $(function () {
 	function rand(min, max) {
-		return Math.round(Math.random() * max + min);
+		return Math.round(Math.random() * (max - min)) + min;
 	}
 
 	// Setup random elements
 	var elemCount = 10,
 		minSize = 25,
 		maxSize = 150,
+		$menu = $('#menu'),
 		$container = $('#container'),
+		menuHeight = $menu.outerHeight(),
 		contWidth = $container.width(),
 		contHeight = $container.height(),
 		size, x, y, $blocks;
 	while (elemCount--) {
 		size = rand(minSize, maxSize);
 		x = rand(0, contWidth - size);
-		y = rand(0, contHeight - size);
+		y = rand(menuHeight, contHeight - size);
 		$('<div class="block" />').css({
 			width: size,
 			height: size,
@@ -30,6 +32,11 @@ $(function () {
 		}).appendTo($container);
 	}
 	$blocks = $('.block');
+
+	// Controls
+	$('#menu input').click(function () {
+		opts[this.name] = this.checked;
+	});
 
 	// Demo for $.nearest
 	//*
