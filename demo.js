@@ -12,18 +12,18 @@ $(function () {
 
 	// Setup random elements
 	var elemCount = 10,
-		minSize = 25,
+		minSize = 50,
 		maxSize = 150,
 		$menu = $('#menu'),
 		$container = $('#container'),
-		menuHeight = $menu.outerHeight(),
+        menuWidth = $menu.outerWidth(),
 		contWidth = $container.width(),
 		contHeight = $container.height(),
 		size, x, y, $blocks;
 	while (elemCount--) {
 		size = rand(minSize, maxSize);
-		x = rand(0, contWidth - size);
-		y = rand(menuHeight, contHeight - size);
+		x = rand(menuWidth, contWidth - size);
+		y = rand(0, contHeight - size);
 		$('<div class="block" />').css({
 			width: size,
 			height: size,
@@ -44,18 +44,18 @@ $(function () {
 		var x = e.pageX,
 			y = e.pageY,
 			point = $.extend({x: x, y: y}, opts);
-		$blocks.removeClass('active1 active2 active3').nearest(point).addClass('active1');
-		$.nearest(point, $blocks).addClass('active2');
-		$.furthest(point, $blocks).addClass('active3');
+		$blocks.removeClass('nearestFilter nearestFind furthestFind').nearest(point).addClass('nearestFilter');
+		$.nearest(point, $blocks).addClass('nearestFind');
+		$.furthest(point, $blocks).addClass('furthestFind');
 	});
 
 	// Demo for $.fn.nearest
 	$blocks.click(function () {
 		var $this = $(this);
-		$blocks.removeClass('highlight lowlight').text('');
-		$this.addClass('highlight').text('CLICKED');
-		$this.nearest($blocks, opts).addClass('highlight').text('nearest');
-		$this.furthest($blocks, opts).addClass('lowlight').text('furthest');
+		$blocks.removeClass('nearestClick furthestClick').text('');
+		$this.addClass('nearestClick').text('CLICKED');
+		$this.nearest($blocks, opts).addClass('nearestClick').text('nearest');
+		$this.furthest($blocks, opts).addClass('furthestClick').text('furthest');
 	});
 	//*/
 

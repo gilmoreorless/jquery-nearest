@@ -5,18 +5,20 @@
 	<meta charset="utf-8">
 	<style>
 		html, body {height:100%; margin:0;}
-		#menu {background-color:#CCC; border-bottom:1px solid #000; padding:3px; position:absolute; width:100%; z-index:5;}
+		#menu {background-color:#CCC; border-right:1px solid #000; height:100%; overflow:hidden; position:absolute; width:200px; z-index:5;}
+        #menu label {display:block;}
 		#container {height:100%; overflow:hidden; position:relative; width:100%;}
 		.block {background-color:#AAA; border:1px solid #000; font-size:20px; opacity:1; position:absolute; text-align:center;}
-		.block.active1 {background-color:#9F9;}
-		.block.active2 {opacity:0.5;}
-		.block.active3 {background-color:#666;}
-		.block.highlight {border-color:#F00;}
-		.block.lowlight {border-style:dashed;}
+		.block.nearestFilter {background-color:#9F9;}
+		.block.nearestFind {opacity:0.5;}
+		.block.furthestFind {background-color:#666;}
+		.block.nearestClick {border-color:#F00;}
+		.block.furthestClick {border-style:dashed;}
 	</style>
 </head>
 <body>
 	<div id="menu">
+        <strong>Options:</strong>
 		<label><input type="checkbox" name="checkHoriz" checked>Check horizontal axis</label>
 		<label><input type="checkbox" name="checkVert" checked>Check vertical axis</label>
 	</div>
