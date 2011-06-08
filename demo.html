@@ -8,6 +8,13 @@
 		#menu {background-color:#CCC; border-right:1px solid #000; height:100%; overflow:hidden; position:absolute; width:200px; z-index:5;}
         #menu label {display:block;}
 		#container {height:100%; overflow:hidden; position:relative; width:100%;}
+        .guide {display:none; position:absolute;}
+        .guidePoint {background-color:#00F;}
+        #pointHoriz {height:1px; width:100%;}
+        #pointVert {height:100%; width:1px;}
+        .guideBlock {background-color:#9FF;}
+        #blockHoriz {width:100%;}
+        #blockVert {height:100%;}
 		.block {background-color:#AAA; border:1px solid #000; font-size:20px; opacity:1; position:absolute; text-align:center;}
 		.block.nearestFilter {background-color:#9F9;}
 		.block.nearestFind {opacity:0.5;}
@@ -21,8 +28,14 @@
         <strong>Options:</strong>
 		<label><input type="checkbox" name="checkHoriz" checked>Check horizontal axis</label>
 		<label><input type="checkbox" name="checkVert" checked>Check vertical axis</label>
+		<label><input type="checkbox" name="showGuides" checked>Show guides</label>
 	</div>
-	<div id="container"></div>
+	<div id="container">
+        <div class="guide guideBlock" id="blockHoriz"></div>
+        <div class="guide guideBlock" id="blockVert"></div>
+        <div class="guide guidePoint" id="pointHoriz"></div>
+        <div class="guide guidePoint" id="pointVert"></div>
+    </div>
 
 	<!-- TODO: switch to Google CDN -->
 	<script src="lib/jquery-1.4.2.js"></script>

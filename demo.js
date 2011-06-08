@@ -2,7 +2,8 @@
 var opts = {
 	includeSelf: false,
 	checkHoriz: true,
-	checkVert: true
+	checkVert: true,
+    showGuides: true
 };
 
 $(function () {
@@ -32,11 +33,32 @@ $(function () {
 		}).appendTo($container);
 	}
 	$blocks = $('.block');
+    
+    var $guidePointHoriz = $('#pointHoriz'),
+        $guidePointVert  = $('#pointVert'),
+        $guideBlockHoriz = $('#blockHoriz'),
+        $guideBlockVert  = $('#blockVert'),
+        $guidePointAll   = $('.guidePoint'),
+        $guideBlockAll   = $('.guideBlock');
+    
+    function updatePointGuideDisplay() {
+        if (opts.showGuides) {
+            $guidePointHoriz.toggle(opts.checkHoriz);
+            $guidePointVert.toggle(opts.checkVert);
+            opts.checkHoriz || $guideBlockHoriz.hide();
+            opts.checkVert || $guideBlockVert.hide();
+        } else {
+            $guidePointAll.hide();
+            $guideBlockAll.hide();
+        }
+    }
 
 	// Controls
 	$('#menu input').click(function () {
 		opts[this.name] = this.checked;
+        updatePointGuideDisplay();
 	});
+    updatePointGuideDisplay();
 
 	// Demo for $.nearest
 	//*
@@ -44,6 +66,10 @@ $(function () {
 		var x = e.pageX,
 			y = e.pageY,
 			point = $.extend({x: x, y: y}, opts);
+        if (opts.showGuides) {
+            opts.checkHoriz && $guidePointHoriz.css({top: y - 1});
+            opts.checkVert && $guidePointVert.css({left: x - 1});
+        }
 		$blocks.removeClass('nearestFilter nearestFind furthestFind').nearest(point).addClass('nearestFilter');
 		$.nearest(point, $blocks).addClass('nearestFind');
 		$.furthest(point, $blocks).addClass('furthestFind');
@@ -52,6 +78,10 @@ $(function () {
 	// Demo for $.fn.nearest
 	$blocks.click(function () {
 		var $this = $(this);
+        if (opts.showGuides) {
+            opts.checkHoriz && $guideBlockHoriz.css({top: $this.css('top'), height: $this.outerHeight()}).show();
+            opts.checkVert && $guideBlockVert.css({left: $this.css('left'), width: $this.outerWidth()}).show();
+        }
 		$blocks.removeClass('nearestClick furthestClick').text('');
 		$this.addClass('nearestClick').text('CLICKED');
 		$this.nearest($blocks, opts).addClass('nearestClick').text('nearest');
