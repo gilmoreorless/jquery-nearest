@@ -70,9 +70,25 @@ $(function () {
             opts.checkHoriz && $guidePointHoriz.css({top: y - 1});
             opts.checkVert && $guidePointVert.css({left: x - 1});
         }
-		$blocks.removeClass('nearestFilter nearestFind furthestFind').nearest(point).addClass('nearestFilter');
+		var $nearest = $blocks.removeClass('nearestFilter nearestFind furthestFind')
+			.nearest(point)
+			.addClass('nearestFilter');
 		$.nearest(point, $blocks).addClass('nearestFind');
 		$.furthest(point, $blocks).addClass('furthestFind');
+		
+		// Add an indicator line
+		// TODO: Make it snap to the correct corner or box edge
+		if (opts.showGuides && opts.checkHoriz && opts.checkVert) {
+			var $n = $nearest.eq(0),
+				off = $n.offset(),
+				nx1 = off.left,
+				ny1 = off.top,
+				nx2 = nx1 + $n.outerWidth(),
+				ny2 = ny1 + $n.outerHeight(),
+				nx = nx1 < x ? nx2 : nx1,
+				ny = ny1 < y ? ny2 : ny1;
+			$.line({x:x, y:y}, {x:nx, y:ny}, {elem:'#pointDiag', lineColor:'red'}).show();
+		}
 	});
 
 	// Demo for $.fn.nearest
