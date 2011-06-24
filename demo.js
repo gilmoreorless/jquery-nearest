@@ -36,6 +36,7 @@ $(function () {
     
     var $guidePointHoriz = $('#pointHoriz'),
         $guidePointVert  = $('#pointVert'),
+        $guidePointDiag  = $('#pointDiag'),
         $guideBlockHoriz = $('#blockHoriz'),
         $guideBlockVert  = $('#blockVert'),
         $guidePointAll   = $('.guidePoint'),
@@ -45,8 +46,9 @@ $(function () {
         if (opts.showGuides) {
             $guidePointHoriz.toggle(opts.checkHoriz);
             $guidePointVert.toggle(opts.checkVert);
+			$guidePointDiag.toggle(opts.checkHoriz && opts.checkVert);
             opts.checkHoriz || $guideBlockHoriz.hide();
-            opts.checkVert || $guideBlockVert.hide();
+            opts.checkVert  || $guideBlockVert.hide();
         } else {
             $guidePointAll.hide();
             $guideBlockAll.hide();
@@ -63,12 +65,12 @@ $(function () {
 	// Demo for $.nearest
 	//*
 	$(document).mousemove(function (e) {
-		var x = e.pageX,
-			y = e.pageY,
+		var x = e.pageX - 1,
+			y = e.pageY - 1,
 			point = $.extend({x: x, y: y}, opts);
         if (opts.showGuides) {
-            opts.checkHoriz && $guidePointHoriz.css({top: y - 1});
-            opts.checkVert && $guidePointVert.css({left: x - 1});
+            opts.checkHoriz && $guidePointHoriz.css({top: y});
+            opts.checkVert && $guidePointVert.css({left: x});
         }
 		var $nearest = $blocks.removeClass('nearestFilter nearestFind furthestFind')
 			.nearest(point)
@@ -77,7 +79,6 @@ $(function () {
 		$.furthest(point, $blocks).addClass('furthestFind');
 		
 		// Add an indicator line
-		// TODO: Make it snap to the correct corner or box edge
 		if (opts.showGuides && opts.checkHoriz && opts.checkVert) {
 			var $n = $nearest.eq(0),
 				off = $n.offset(),
@@ -85,9 +86,18 @@ $(function () {
 				ny1 = off.top,
 				nx2 = nx1 + $n.outerWidth(),
 				ny2 = ny1 + $n.outerHeight(),
-				nx = nx1 < x ? nx2 : nx1,
-				ny = ny1 < y ? ny2 : ny1;
-			$.line({x:x, y:y}, {x:nx, y:ny}, {elem:'#pointDiag', lineColor:'red'}).show();
+				maxX1 = Math.max(x, nx1),
+				minX2 = Math.min(x, nx2),
+				maxY1 = Math.max(y, ny1),
+				minY2 = Math.min(y, ny2),
+				intersectX = minX2 >= maxX1,
+				intersectY = minY2 >= maxY1,
+				from = {x:x, y:y},
+				to = {
+					x: intersectX ? x : nx2 < x ? nx2 : nx1,
+					y: intersectY ? y : ny2 < y ? ny2 : ny1
+				};
+			$.line(from, to, {elem:'#pointDiag', lineColor:'red', lineWidth:3}).show();
 		}
 	});
 
