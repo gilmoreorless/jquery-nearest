@@ -3,7 +3,7 @@ var opts = {
 	includeSelf: false,
 	checkHoriz: true,
 	checkVert: true,
-    showGuides: true
+	showGuides: true
 };
 
 $(function () {
@@ -17,7 +17,7 @@ $(function () {
 		maxSize = 150,
 		$menu = $('#menu'),
 		$container = $('#container'),
-        menuWidth = $menu.outerWidth(),
+		menuWidth = $menu.outerWidth(),
 		contWidth = $container.width(),
 		contHeight = $container.height(),
 		size, x, y, $blocks;
@@ -33,34 +33,35 @@ $(function () {
 		}).appendTo($container);
 	}
 	$blocks = $('.block');
-    
-    var $guidePointHoriz = $('#pointHoriz'),
-        $guidePointVert  = $('#pointVert'),
-        $guidePointDiag  = $('#pointDiag'),
-        $guideBlockHoriz = $('#blockHoriz'),
-        $guideBlockVert  = $('#blockVert'),
-        $guidePointAll   = $('.guidePoint'),
-        $guideBlockAll   = $('.guideBlock');
-    
-    function updatePointGuideDisplay() {
-        if (opts.showGuides) {
-            $guidePointHoriz.toggle(opts.checkHoriz);
-            $guidePointVert.toggle(opts.checkVert);
-			$guidePointDiag.toggle(opts.checkHoriz && opts.checkVert);
-            opts.checkHoriz || $guideBlockHoriz.hide();
-            opts.checkVert  || $guideBlockVert.hide();
-        } else {
-            $guidePointAll.hide();
-            $guideBlockAll.hide();
-        }
-    }
+	
+	var $guidePointHoriz = $('#pointHoriz'),
+		$guidePointVert  = $('#pointVert'),
+		$guidePointDiag  = $('#pointDiag'),
+		$guideBlockHoriz = $('#blockHoriz'),
+		$guideBlockVert  = $('#blockVert'),
+		$guideTextDiag   = $('#textDiag'),
+		$guidePointAll   = $('.guidePoint, .guideText'),
+		$guideBlockAll   = $('.guideBlock');
+	
+	function updatePointGuideDisplay() {
+		if (opts.showGuides) {
+			$guidePointHoriz.toggle(opts.checkHoriz);
+			$guidePointVert.toggle(opts.checkVert);
+			$guidePointDiag.add($guideTextDiag).toggle(opts.checkHoriz && opts.checkVert);
+			(opts.checkHoriz && !opts.checkVert) || $guideBlockHoriz.hide();
+			(opts.checkVert && !opts.checkHoriz) || $guideBlockVert.hide();
+		} else {
+			$guidePointAll.hide();
+			$guideBlockAll.hide();
+		}
+	}
 
 	// Controls
 	$('#menu input').click(function () {
 		opts[this.name] = this.checked;
-        updatePointGuideDisplay();
+		updatePointGuideDisplay();
 	});
-    updatePointGuideDisplay();
+	updatePointGuideDisplay();
 
 	// Demo for $.nearest
 	//*
@@ -68,10 +69,10 @@ $(function () {
 		var x = e.pageX - 1,
 			y = e.pageY - 1,
 			point = $.extend({x: x, y: y}, opts);
-        if (opts.showGuides) {
-            opts.checkHoriz && $guidePointHoriz.css({top: y});
-            opts.checkVert && $guidePointVert.css({left: x});
-        }
+		if (opts.showGuides) {
+			opts.checkHoriz && $guidePointHoriz.css({top: y});
+			opts.checkVert && $guidePointVert.css({left: x});
+		}
 		var $nearest = $blocks.removeClass('nearestFilter nearestFind furthestFind')
 			.nearest(point)
 			.addClass('nearestFilter');
@@ -97,17 +98,28 @@ $(function () {
 					x: intersectX ? x : nx2 < x ? nx2 : nx1,
 					y: intersectY ? y : ny2 < y ? ny2 : ny1
 				};
-			$.line(from, to, {elem:'#pointDiag', lineColor:'red', lineWidth:3}).show();
+			$.line(from, to, {elem:$guidePointDiag, lineColor:'red', lineWidth:3}).show();
+			
+			// Add distance text
+			var distX = to.x - from.x,
+				distY = to.y - from.y,
+				hypot = Math.sqrt(distX * distX + distY * distY),
+				pointX = parseFloat($guidePointDiag.css('left')) + $guidePointDiag.width() / 2,
+				pointY = parseFloat($guidePointDiag.css('top'));
+			$guideTextDiag.css({
+				left: pointX,
+				top: pointY
+			}).text((Math.round(hypot * 100, 2) / 100) + 'px');
 		}
 	});
 
 	// Demo for $.fn.nearest
 	$blocks.click(function () {
 		var $this = $(this);
-        if (opts.showGuides) {
-            opts.checkHoriz && $guideBlockHoriz.css({top: $this.css('top'), height: $this.outerHeight()}).show();
-            opts.checkVert && $guideBlockVert.css({left: $this.css('left'), width: $this.outerWidth()}).show();
-        }
+		if (opts.showGuides) {
+			opts.checkHoriz && !opts.checkVert && $guideBlockHoriz.css({top: $this.css('top'), height: $this.outerHeight()}).show();
+			opts.checkVert && !opts.checkHoriz && $guideBlockVert.css({left: $this.css('left'), width: $this.outerWidth()}).show();
+		}
 		$blocks.removeClass('nearestClick furthestClick').text('');
 		$this.addClass('nearestClick').text('CLICKED');
 		$this.nearest($blocks, opts).addClass('nearestClick').text('nearest');
