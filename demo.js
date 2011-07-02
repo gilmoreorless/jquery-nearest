@@ -97,19 +97,29 @@ $(function () {
 				to = {
 					x: intersectX ? x : nx2 < x ? nx2 : nx1,
 					y: intersectY ? y : ny2 < y ? ny2 : ny1
-				};
-			$.line(from, to, {elem:$guidePointDiag, lineColor:'red', lineWidth:3}).show();
+				},
+				lineProps = $.line(from, to, {
+					elem: $guidePointDiag,
+					lineColor: 'red',
+					lineWidth: 3,
+					returnValues: true
+				});
 			
 			// Add distance text
 			var distX = to.x - from.x,
 				distY = to.y - from.y,
-				hypot = Math.sqrt(distX * distX + distY * distY),
-				pointX = parseFloat($guidePointDiag.css('left')) + $guidePointDiag.width() / 2,
-				pointY = parseFloat($guidePointDiag.css('top'));
+				hypot = Math.sqrt(distX * distX + distY * distY);
+			$guideTextDiag.text((Math.round(hypot * 100, 2) / 100) + 'px');
+			var pointX = lineProps.center.x,
+				pointY = lineProps.center.y,
+				textW = $guideTextDiag.outerWidth(),
+				textH = $guideTextDiag.outerHeight(),
+				textW2 = textW / 2,
+				textH2 = textH / 2;
 			$guideTextDiag.css({
-				left: pointX,
-				top: pointY
-			}).text((Math.round(hypot * 100, 2) / 100) + 'px');
+				left: pointX - textW2,
+				top: pointY - textH2
+			});
 		}
 	});
 
