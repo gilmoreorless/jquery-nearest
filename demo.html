@@ -4,8 +4,9 @@
 	<title></title>
 	<meta charset="utf-8">
 	<style>
-		html, body {height:100%; margin:0;}
-		#menu {background-color:#CCC; border-right:1px solid #000; height:100%; overflow:hidden; position:absolute; width:200px; z-index:5;}
+		html, body {font-family:Arial; height:100%; margin:0;}
+		#menu {background-color:#CCC; border-right:1px solid #000; height:100%; overflow:hidden; padding:10px; position:absolute; width:180px; z-index:5;}
+		#menu strong {display:block; margin-bottom:5px;}
         #menu label {display:block;}
 		#container {height:100%; overflow:hidden; position:relative; width:100%;}
         .guide {display:none; position:absolute;}
@@ -17,10 +18,11 @@
         #blockHoriz {width:100%;}
         #blockVert {height:100%;}
 		#textDiag {background-color:rgba(255,255,255,0.9); border:1px solid #F00; color:#F00; font-size:12px; padding:2px;}
-		.block {background-color:#AAA; border:1px solid #000; font-size:20px; opacity:1; position:absolute; text-align:center;}
+		.block {background-color:#AAA; border:1px solid #000; font-size:16px; opacity:1; position:absolute; text-align:center;}
+		.block div {bottom:0; left:0; position:absolute; right:0; top:0;}
 		.block.nearestFilter {background-color:#9F9;}
 		.block.nearestFind {opacity:0.5;}
-		.block.furthestFind {background-color:#666;}
+		.block.furthestFind div {border:3px solid #000;}
 		.block.nearestClick {border-color:#F00;}
 		.block.furthestClick {border-style:dashed;}
 	</style>

@@ -25,7 +25,7 @@ $(function () {
 		size = rand(minSize, maxSize);
 		x = rand(menuWidth, contWidth - size);
 		y = rand(0, contHeight - size);
-		$('<div class="block" />').css({
+		$('<div class="block"><div></div></div>').css({
 			width: size,
 			height: size,
 			left: x,
@@ -130,10 +130,10 @@ $(function () {
 			opts.checkHoriz && !opts.checkVert && $guideBlockHoriz.css({top: $this.css('top'), height: $this.outerHeight()}).show();
 			opts.checkVert && !opts.checkHoriz && $guideBlockVert.css({left: $this.css('left'), width: $this.outerWidth()}).show();
 		}
-		$blocks.removeClass('nearestClick furthestClick').text('');
-		$this.addClass('nearestClick').text('CLICKED');
-		$this.nearest($blocks, opts).addClass('nearestClick').text('nearest');
-		$this.furthest($blocks, opts).addClass('furthestClick').text('furthest');
+		$blocks.removeClass('nearestClick furthestClick').children().text('');
+		$this.addClass('nearestClick').children().text('CLICKED');
+		$this.nearest($blocks, opts).addClass('nearestClick').children().text('nearest');
+		$this.furthest($blocks, opts).addClass('furthestClick').children().text('furthest');
 	});
 	//*/
 
