@@ -17,14 +17,16 @@ $(function () {
 		maxSize = 150,
 		$menu = $('#menu'),
 		$container = $('#container'),
+		$footer = $('#footer'),
 		menuWidth = $menu.outerWidth(),
 		contWidth = $container.width(),
 		contHeight = $container.height(),
+		footerHeight = $footer.outerHeight(),
 		size, x, y, $blocks;
 	while (elemCount--) {
 		size = rand(minSize, maxSize);
 		x = rand(menuWidth, contWidth - size);
-		y = rand(0, contHeight - size);
+		y = rand(0, contHeight - size - footerHeight);
 		$('<div class="block"><div></div></div>').css({
 			width: size,
 			height: size,
@@ -66,8 +68,8 @@ $(function () {
 	// Demo for $.nearest
 	//*
 	$(document).mousemove(function (e) {
-		var x = e.pageX - 1,
-			y = e.pageY - 1,
+		var x = e.pageX,
+			y = e.pageY,
 			point = $.extend({x: x, y: y}, opts);
 		if (opts.showGuides) {
 			opts.checkHoriz && $guidePointHoriz.css({top: y});
