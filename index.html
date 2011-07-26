@@ -12,8 +12,8 @@
 			<h2>Quick Links</h2>
 			<ul>
 				<li><a href="https://github.com/gilmoreorless/jquery-nearest">Github project</a></li>
-				<li><a href="https://github.com/gilmoreorless/jquery-nearest/raw/master/jquery.easing.repeater.js">Raw source code</a></li>
-				<li><a href="https://github.com/gilmoreorless/jquery-nearest/raw/master/jquery.easing.repeater.min.js">Minified source code</a></li>
+				<li><a href="https://github.com/gilmoreorless/jquery-nearest/raw/master/jquery.nearest.js">Raw source code</a></li>
+				<li><a href="https://github.com/gilmoreorless/jquery-nearest/raw/master/jquery.nearest.min.js">Minified source code</a></li>
 				<li><a href="demo.html">Interactive demonstration</a></li>
 			</ul>
 			<p>(Be kind to Github, don't hotlink JS files)</p>
@@ -43,7 +43,7 @@
 			</p>
 			
 			<h4 id="utility">Utility Function</h4>
-			<pre>$.nearest(<em>pointObject</em>, <em>selector</em>[, <em>options</em>]);</pre>
+			<pre><code>$.nearest(<em>pointObject</em>, <em>selector</em>[, <em>options</em>]);</code></pre>
 			<p>
 				Finds the DOM elements matching <code>selector</code> that are closest to a point or region on the page.
 			</p>
@@ -58,17 +58,16 @@
 				<code>options</code> is an optional collection of parameters to pass to the function. More details can be found in the <a href="#options">options</a> section.
 			</p>
 			<h5>Example</h5>
-<pre>
-// Find the image(s) closest to a point 300px in and 100px down from the top left corner
+<pre><code>// Find the image(s) closest to a point 300px in and 100px down from the top left corner
 var $closestToPoint = $.nearest({x: 300, y: 100}, 'img');
 
 // Find the elements with class 'floating' closest to a particular region in the page
 var $elemSet = $('.floating');
 var $closestToRegion = $.nearest({x: 300, y: 100, w: 200, h: 200}, $elemSet);
-</pre>
+</code></pre>
 			
 			<h4 id="single">Single Element Operation</h4>
-			<pre>$(elem).nearest(<em>selector</em>[, <em>options</em>]);</pre>
+			<pre><code>$(elem).nearest(<em>selector</em>[, <em>options</em>]);</code></pre>
 			<p>
 				Finds the DOM elements matching <code>selector</code> that are closest to <code>elem</code>.
 				If more than one element is in <code>$(elem)</code> then only the first member will be used as a point of reference.
@@ -80,22 +79,21 @@ var $closestToRegion = $.nearest({x: 300, y: 100, w: 200, h: 200}, $elemSet);
 				<code>options</code> is an optional collection of parameters to pass to the function. More details can be found in the <a href="#options">options</a> section.
 			</p>
 			<h5>Example</h5>
-<pre>
-var $basicExample = $('#something').nearest('.surrounding');
+<pre><code>var $basicExample = $('#something').nearest('.surrounding');
 
 // Only the first element in this set will be used for matching
 var $set = $('.middle');
 // Selector can be any jQuery object
 var $convolutedExample = $set.nearest($set.siblings());
-</pre>
+</code></pre>
 			
 			<h4 id="multi">Multiple Element Filter</h4>
-			<pre>$(elemSet).nearest(<em>pointObject</em>[, <em>options</em>]);</pre>
+			<pre><code>$(elemSet).nearest(<em>pointObject</em>[, <em>options</em>]);</code></pre>
 			<p>
 				Filters <code>elemSet</code> to return only the members that are closest to the point or region defined by <code>pointObject</code>.
 			</p>
 			<p>
-				This is effectivly the same as calling <code>$.nearest(pointObject, elemSet)</code> but with the benefit of not breaking method chains &ndash; see <a href="#chaining">chaining</a> for more details.
+				This is effectively the same as calling <code>$.nearest(pointObject, elemSet)</code> but with the benefit of not breaking method chains &ndash; see <a href="#chaining">chaining</a> for more details.
 			</p>
 			<p>
 				<code>pointObject</code> is an object as defined in the <a href="#utility">Utility Function</a> reference.
@@ -104,15 +102,14 @@ var $convolutedExample = $set.nearest($set.siblings());
 				<code>options</code> is an optional collection of parameters to pass to the function. More details can be found in the <a href="#options">options</a> section.
 			</p>
 			<h5>Example</h5>
-<pre>
-var $set = $('.filterme');
+<pre><code>var $set = $('.filterme');
 
 // Filter the set by distance to a point
 var $closestToPoint = $set.nearest({x: 300, y: 100});
 
 // Filter the set by distance to a region
 var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
-</pre>
+</code></pre>
 			
 			<h3>Options</h3>
 			<p>
@@ -143,7 +140,7 @@ var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 				<li>
 					The <code>selector</code> parameter is technically optional in all methods, and will default to <code>div</code> if not present.
 					However, it is <strong>strongly recommended</strong> that you pass in a selector,
-					otherwise the method will loop through every single DOM element on the page, which &ndash;
+					otherwise the method will loop through every single div element on the page, which &ndash;
 					apart from being slow and computationally expensive &ndash; will most likely produce false positives
 					by matching a reference element's parent nodes.
 				</li>
