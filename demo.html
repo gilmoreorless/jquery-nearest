@@ -10,7 +10,8 @@
 		#menu {background-color:#FFC; border-right:1px solid #000; height:100%; overflow:hidden; padding:0 10px; position:absolute; width:180px; z-index:5;}
 		#menu strong {display:block; margin-bottom:5px;}
 		#menu label {display:block;}
-		dt {float:left; height:25px; width:25px;}
+		dl {position:relative;}
+		dt {height:25px; left:0; position:absolute; width:25px;}
 		dt div {height:19px; width:19px;}
 		dd {margin-bottom:1em; margin-left:45px;}
 		#container {height:100%; overflow:hidden; position:relative; width:100%;}
@@ -67,14 +68,14 @@
 		<p>
 			A demonstration of the <a href="./">jQuery Nearest Element plugin</a>.
 			Check out the <a href="demo.js">code behind it</a>.
-			Distance line generated with the <a href="#TODO">jQuery Line plugin</a>.
+			Distance line generated with the <a href="https://github.com/gilmoreorless/jquery-dom-line">jQuery DOM Line plugin</a>.
 		</p>
 	</div>
 
 	<!-- TODO: switch to Google CDN -->
 	<script src="lib/jquery-1.6.1.js"></script>
 	<script src="lib/jquery.ba-each2.min.js"></script>
-	<script src="lib/jquery.line.full.js"></script>
+	<script src="lib/jquery.domline.min.js"></script>
 	<script src="jquery.nearest.js"></script>
 	<script src="demo.js"></script>
 	<script>

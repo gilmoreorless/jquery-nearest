@@ -111,7 +111,7 @@ $(function () {
 			var distX = to.x - from.x,
 				distY = to.y - from.y,
 				hypot = Math.sqrt(distX * distX + distY * distY);
-			$guideTextDiag.text((Math.round(hypot * 100, 2) / 100) + 'px');
+			$guideTextDiag.text((Math.round(hypot * 100) / 100) + 'px');
 			var pointX = lineProps.center.x,
 				pointY = lineProps.center.y,
 				textW = $guideTextDiag.outerWidth(),
