@@ -1,7 +1,7 @@
 jQuery Nearest Element plugin
 ======
 
-**NOTE: This is a work in progress, these are just some quick notes.**
+**Full documentation is at <http://gilmoreorless.github.com/jquery-nearest/>**
 
 Method signatures:
 
@@ -12,9 +12,9 @@ Method signatures:
 Reverse logic:
 
  * $.furthest()
- * $().furthest()
+ * $(elem).furthest()
 
 Intersecting/touching:
 
  * $.touching()
- * $().touching()
+ * $(elem).touching()
