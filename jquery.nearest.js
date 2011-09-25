@@ -1,11 +1,11 @@
 /*!
- * jQuery Nearest plugin v0.3.0
+ * jQuery Nearest plugin v1.0.0
  *
  * Finds elements closest to a single point based on screen location and pixel dimensions
  *
  * Requires jQuery 1.4 or above
  *
- * Also supports Ben Alman's "each2" plugin for faster looping
+ * Also supports Ben Alman's "each2" plugin for faster looping (if available)
  */
 
 /**
@@ -17,10 +17,10 @@
  *
  * Also:
  * $.furthest()
- * $().furthest()
+ * $(elem).furthest()
  *
  * $.touching()
- * $().touching()
+ * $(elem).touching()
  */
 ;(function ($, undefined) {
 	

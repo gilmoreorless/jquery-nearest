@@ -72,8 +72,9 @@
 		</p>
 	</div>
 
-	<!-- TODO: switch to Google CDN -->
-	<script src="lib/jquery-1.6.1.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
+	<!-- Offline fallback -->
+	<script>window.jQuery || document.write('<script src="lib/jquery-1.6.1.js"><\/script>')</script>
 	<script src="lib/jquery.ba-each2.min.js"></script>
 	<script src="lib/jquery.domline.min.js"></script>
 	<script src="jquery.nearest.js"></script>

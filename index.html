@@ -119,7 +119,9 @@ var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 			<dl>
 				<dt><code>includeSelf</code></dt>
 				<dd class="type">Boolean - default false <em>(not used by the utility methods)</em></dd>
-				<dd>TODO: write this bit - I'm not sure if this option is even really needed</dd>
+				<dd>If true, the reference element used in a <a href="#single">Single Element Operation</a> will also
+					be included in the distance calculations.<br />
+					Example: <code>$(elem).nearest('.droppable', {includeSelf: true});</code></dd>
 
 				<dt><code>checkHoriz</code></dt>
 				<dd class="type">Boolean - default true <em>(not used by <code>.touching()</code>)</em></dd>
@@ -152,9 +154,7 @@ var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 			</ul>
 		</div><!-- #details -->
 	</div><!-- #wrapper -->
-	<a class="forkme" href="https://github.com/gilmoreorless/jquery-nearest">
-		<img alt="Fork me on GitHub" id="ribbon" src="http://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" />
-	</a>
+	<a class="forkme" href="https://github.com/gilmoreorless/jquery-nearest">Fork me on GitHub</a>
 	<script>
 	  var _gaq = _gaq || [];
 	  _gaq.push(['_setAccount', 'UA-8341018-3']);
