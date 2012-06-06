@@ -35,16 +35,16 @@ $(function () {
 		}).appendTo($container);
 	}
 	$blocks = $('.block');
-	
+
 	var $guidePointHoriz = $('#pointHoriz'),
 		$guidePointVert  = $('#pointVert'),
-		$guidePointDiag  = $('#pointDiag'),
+		$guidePointDiag  = $('.guidePointDiag'),
 		$guideBlockHoriz = $('#blockHoriz'),
 		$guideBlockVert  = $('#blockVert'),
-		$guideTextDiag   = $('#textDiag'),
+		$guideTextDiag   = $('.guideText'),
 		$guidePointAll   = $('.guidePoint, .guideText'),
 		$guideBlockAll   = $('.guideBlock');
-	
+
 	function updatePointGuideDisplay() {
 		if (opts.showGuides) {
 			$guidePointHoriz.toggle(opts.checkHoriz);
@@ -67,6 +67,7 @@ $(function () {
 
 	// Demo for $.nearest
 	//*
+	var lastLineCount = 0;
 	$(document).mousemove(function (e) {
 		var x = e.pageX,
 			y = e.pageY,
@@ -80,49 +81,73 @@ $(function () {
 			.addClass('nearestFilter');
 		$.nearest(point, $blocks).addClass('nearestFind');
 		$.furthest(point, $blocks).addClass('furthestFind');
-		
+
 		// Add an indicator line
 		if (opts.showGuides && opts.checkHoriz && opts.checkVert) {
-			var $n = $nearest.eq(0),
-				off = $n.offset(),
-				nx1 = off.left,
-				ny1 = off.top,
-				nx2 = nx1 + $n.outerWidth(),
-				ny2 = ny1 + $n.outerHeight(),
-				maxX1 = Math.max(x, nx1),
-				minX2 = Math.min(x, nx2),
-				maxY1 = Math.max(y, ny1),
-				minY2 = Math.min(y, ny2),
-				intersectX = minX2 >= maxX1,
-				intersectY = minY2 >= maxY1,
-				from = {x:x, y:y},
-				to = {
-					x: intersectX ? x : nx2 < x ? nx2 : nx1,
-					y: intersectY ? y : ny2 < y ? ny2 : ny1
-				},
+			$nearest.each2(function (i, $n) {
+				var off = $n.offset(),
+					nx1 = off.left,
+					ny1 = off.top,
+					nx2 = nx1 + $n.outerWidth(),
+					ny2 = ny1 + $n.outerHeight(),
+					maxX1 = Math.max(x, nx1),
+					minX2 = Math.min(x, nx2),
+					maxY1 = Math.max(y, ny1),
+					minY2 = Math.min(y, ny2),
+					intersectX = minX2 >= maxX1,
+					intersectY = minY2 >= maxY1,
+					from = {x:x, y:y},
+					to = {
+						x: intersectX ? x : nx2 < x ? nx2 : nx1,
+						y: intersectY ? y : ny2 < y ? ny2 : ny1
+					},
+					$lineElem = $('#pointDiag' + i).show(),
+					$lineText = $('#textDiag' + i).show(),
+					lineProps;
+				// Make sure the line guide exists
+				if (!$lineElem.length) {
+					$lineElem = $('#pointDiag0')
+						.clone()
+						.attr('id', 'pointDiag' + i)
+						.insertAfter('#pointDiag0');
+				}
+				// Make sure the distance text exists
+				if (!$lineText.length) {
+					$lineText = $('#textDiag0')
+						.clone()
+						.attr('id', 'textDiag' + i)
+						.insertAfter('#textDiag0');
+				}
+				// Draw the line and cache its properties
 				lineProps = $.line(from, to, {
-					elem: $guidePointDiag,
+					elem: $lineElem,
 					lineColor: 'red',
 					lineWidth: 3,
 					returnValues: true
 				});
-			
-			// Add distance text
-			var distX = to.x - from.x,
-				distY = to.y - from.y,
-				hypot = Math.sqrt(distX * distX + distY * distY);
-			$guideTextDiag.text((Math.round(hypot * 100) / 100) + 'px');
-			var pointX = lineProps.center.x,
-				pointY = lineProps.center.y,
-				textW = $guideTextDiag.outerWidth(),
-				textH = $guideTextDiag.outerHeight(),
-				textW2 = textW / 2,
-				textH2 = textH / 2;
-			$guideTextDiag.css({
-				left: pointX - textW2,
-				top: pointY - textH2
+
+				// Add distance text
+				var distX = to.x - from.x,
+					distY = to.y - from.y,
+					hypot = Math.sqrt(distX * distX + distY * distY);
+				$lineText.text((Math.round(hypot * 100) / 100) + 'px');
+				var pointX = lineProps.center.x,
+					pointY = lineProps.center.y,
+					textW = $lineText.outerWidth(),
+					textH = $lineText.outerHeight(),
+					textW2 = textW / 2,
+					textH2 = textH / 2;
+				$lineText.css({
+					left: pointX - textW2,
+					top: pointY - textH2
+				});
 			});
 		}
+		// Hide any unwanted lines/text
+		for (var i = $nearest.length; i < lastLineCount; i++) {
+			$('#pointDiag' + i).add('#textDiag' + i).hide();
+		}
+		lastLineCount = $nearest.length;
 	});
 
 	// Demo for $.fn.nearest

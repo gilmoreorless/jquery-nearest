@@ -19,11 +19,11 @@
 		.guidePoint {background-color:#00F;}
 		#pointHoriz {height:1px; width:100%;}
 		#pointVert {height:100%; width:1px;}
-		#pointDiag {border-radius: 10px;}
+		.pointDiag {background-color:#F00; border-radius:5px;}
 		.guideBlock {background-color:#9FF;}
+		.guideText {background-color:rgba(255,255,255,0.9); border:1px solid #F00; color:#F00; font-size:12px; padding:2px;}
 		#blockHoriz {width:100%;}
 		#blockVert {height:100%;}
-		#textDiag {background-color:rgba(255,255,255,0.9); border:1px solid #F00; color:#F00; font-size:12px; padding:2px;}
 		.block, dt {background-color:#AAA; border:1px solid #000; font-size:16px; opacity:1; position:absolute; text-align:center;}
 		.block div {bottom:0; left:0; position:absolute; right:0; top:0;}
 		.nearestFilter {background-color:#9F9;}
@@ -41,7 +41,7 @@
 		<label><input type="checkbox" name="checkHoriz" checked>Check horizontal axis</label>
 		<label><input type="checkbox" name="checkVert" checked>Check vertical axis</label>
 		<label><input type="checkbox" name="showGuides" checked>Show guides</label>
-		
+
 		<h3>Legend:</h3>
 		<dl id="legend">
 			<dt class="nearestFilter nearestFind"></dt>
@@ -53,7 +53,7 @@
 			<dt class="furthestClick"></dt>
 			<dd>Furthest from clicked element</dd>
 		</dl>
-		
+
 		<a href="./">Back to documentation</a>
 	</div>
 	<div id="container">
@@ -61,8 +61,8 @@
 		<div class="guide guideBlock" id="blockVert"></div>
 		<div class="guide guidePoint" id="pointHoriz"></div>
 		<div class="guide guidePoint" id="pointVert"></div>
-		<div class="guide guidePoint" id="pointDiag"></div>
-		<div class="guide guideText"  id="textDiag"></div>
+		<div class="guide guidePoint guidePointDiag" id="pointDiag0"></div>
+		<div class="guide guideText"  id="textDiag0"></div>
 	</div>
 	<div id="footer">
 		<p>
