@@ -3,7 +3,8 @@ var opts = {
 	includeSelf: false,
 	checkHoriz: true,
 	checkVert: true,
-	showGuides: true
+	showGuides: true,
+	tolerance: 1
 };
 
 $(function () {
@@ -42,7 +43,7 @@ $(function () {
 		$guideBlockHoriz = $('#blockHoriz'),
 		$guideBlockVert  = $('#blockVert'),
 		$guideTextDiag   = $('.guideText'),
-		$guidePointAll   = $('.guidePoint, .guideText'),
+		$guidePointAll   = $('.guidePoint, .guideText, .guideTol'),
 		$guideBlockAll   = $('.guideBlock');
 
 	function updatePointGuideDisplay() {
@@ -60,10 +61,19 @@ $(function () {
 
 	// Controls
 	$('#menu input').click(function () {
-		opts[this.name] = this.checked;
-		updatePointGuideDisplay();
+		if (this.type === 'checkbox') {
+			opts[this.name] = this.checked;
+			updatePointGuideDisplay();
+		}
 	});
 	updatePointGuideDisplay();
+	var $toleranceRange = $('#toleranceRange'),
+		$toleranceValue = $('#toleranceValue');
+	$toleranceRange.change(function () {
+		var tolerance = $toleranceRange.val();
+		$toleranceValue.text(tolerance);
+		opts.tolerance = tolerance;
+	});
 
 	// Demo for $.nearest
 	//*
@@ -103,6 +113,7 @@ $(function () {
 					},
 					$lineElem = $('#pointDiag' + i).show(),
 					$lineText = $('#textDiag' + i).show(),
+					$lineTol  = $('#tolDiag' + i).toggle(!!opts.tolerance),
 					lineProps;
 				// Make sure the line guide exists
 				if (!$lineElem.length) {
@@ -117,6 +128,13 @@ $(function () {
 						.clone()
 						.attr('id', 'textDiag' + i)
 						.insertAfter('#textDiag0');
+				}
+				// Make sure the tolerance guide exists
+				if (opts.tolerance && !$lineTol.length) {
+					$lineTol = $('#tolDiag0')
+						.clone()
+						.attr('id', 'tolDiag' + i)
+						.insertAfter('#tolDiag0');
 				}
 				// Draw the line and cache its properties
 				lineProps = $.line(from, to, {
@@ -141,13 +159,22 @@ $(function () {
 					left: pointX - textW2,
 					top: pointY - textH2
 				});
+				// Add tolerance guide
+				if (opts.tolerance) {
+					$lineTol.css({
+						width:  opts.tolerance * 2,
+						height: opts.tolerance * 2,
+						left: to.x - opts.tolerance,
+						top:  to.y - opts.tolerance
+					});
+				}
 			});
 		}
 		// Hide any unwanted lines/text
 		for (var i = $nearest.length; i < lastLineCount; i++) {
-			$('#pointDiag' + i).add('#textDiag' + i).hide();
+			$('#pointDiag' + i).add('#textDiag' + i).add('#tolDiag' + i).hide();
 		}
-		lastLineCount = $nearest.length;
+		lastLineCount = (opts.showGuides && opts.checkHoriz && opts.checkVert) ? $nearest.length : 0;
 	});
 
 	// Demo for $.fn.nearest
