@@ -1,5 +1,5 @@
 /*!
- * jQuery Nearest plugin v1.0.0
+ * jQuery Nearest plugin v1.1.0
  *
  * Finds elements closest to a single point based on screen location and pixel dimensions
  *
@@ -23,7 +23,7 @@
  * $(elem).touching()
  */
 ;(function ($, undefined) {
-	
+
 	/**
 	 * Internal method that does the grunt work
 	 *
@@ -36,15 +36,16 @@
 	function nearest(selector, options, thisObj) {
 		selector || (selector = 'div'); // I STRONGLY recommend passing in a selector
 		var $all = $(selector),
-			filtered = [],
+			cache = [],
 			furthest = !!options.furthest,
 			checkX = !!options.checkHoriz,
 			checkY = !!options.checkVert,
 			compDist = furthest ? 0 : Infinity,
-			point1x = parseInt(options.x, 10) || 0,
-			point1y = parseInt(options.y, 10) || 0,
-			point2x = parseInt(point1x + options.w, 10) || point1x,
-			point2y = parseInt(point1y + options.h, 10) || point1y,
+			point1x = parseFloat(options.x) || 0,
+			point1y = parseFloat(options.y) || 0,
+			point2x = parseFloat(point1x + options.w) || point1x,
+			point2y = parseFloat(point1y + options.h) || point1y,
+			tolerance = options.tolerance || 0,
 			hasEach2 = !!$.fn.each2,
 			// Shortcuts to help with compression
 			min = Math.min,
@@ -68,36 +69,61 @@
 				minY2 = min(y2, point2y),
 				intersectX = minX2 >= maxX1,
 				intersectY = minY2 >= maxY1,
-				distX = intersectX ? 0 : maxX1 - minX2,
-				distY = intersectY ? 0 : maxY1 - minY2,
-				distT = intersectX || intersectY ?
-					max(distX, distY) :
-					Math.sqrt(distX * distX + distY * distY),
-				comp = furthest ? distT > compDist : distT < compDist;
+				distX, distY, distT, isValid;
 			if (
 				// .nearest() / .furthest()
 				(checkX && checkY) ||
 				// .touching()
 				(!checkX && !checkY && intersectX && intersectY) ||
-				// .nearest({checkY: false})
+				// .nearest({checkVert: false})
 				(checkX && intersectY) ||
-				// .nearest({checkX: false})
+				// .nearest({checkHoriz: false})
 				(checkY && intersectX)
 			) {
-				if (comp) {
-					filtered = [];
-					compDist = distT;
-				}
-				if (distT == compDist) {
-					filtered.push(this);
+				distX = intersectX ? 0 : maxX1 - minX2;
+				distY = intersectY ? 0 : maxY1 - minY2;
+				distT = intersectX || intersectY ?
+					max(distX, distY) :
+					Math.sqrt(distX * distX + distY * distY);
+				isValid = furthest ?
+					distT >= compDist - tolerance :
+					distT <= compDist + tolerance;
+				if (isValid) {
+					compDist = furthest ?
+						max(compDist, distT) :
+						min(compDist, distT);
+					cache.push({
+						node: this,
+						dist: distT
+					});
 				}
 			}
 		});
+		// Make sure all cached items are within tolerance range
+		var len = cache.length,
+			filtered = [],
+			compMin, compMax,
+			i, item;
+		if (len) {
+			if (furthest) {
+				compMin = compDist - tolerance;
+				compMax = compDist;
+			} else {
+				compMin = compDist;
+				compMax = compDist + tolerance;
+			}
+			for (i = 0; i < len; i++) {
+				item = cache[i];
+				if (item.dist >= compMin && item.dist <= compMax) {
+					filtered.push(item.node);
+				}
+			}
+		}
 		return filtered;
 	}
 
 	$.each(['nearest', 'furthest', 'touching'], function (i, name) {
-		
+
 		// Internal default options
 		// Not exposed publicly because they're method-dependent and easily overwritten anyway
 		var defaults = {
@@ -105,6 +131,7 @@
 			y: 0, // Y position of top left corner of point/region
 			w: 0, // Width of region
 			h: 0, // Height of region
+			tolerance:   1, // Distance tolerance in pixels, mainly to handle fractional pixel rounding bugs
 			furthest:    name == 'furthest', // Find max distance (true) or min distance (false)
 			includeSelf: false, // Include 'this' in search results (t/f) - only applies to $(elem).func(selector) syntax
 			checkHoriz:  name != 'touching', // Check variations in X axis (t/f)
