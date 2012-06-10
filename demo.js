@@ -44,7 +44,10 @@ $(function () {
 		$guideBlockVert  = $('#blockVert'),
 		$guideTextDiag   = $('.guideText'),
 		$guidePointAll   = $('.guidePoint, .guideText, .guideTol'),
-		$guideBlockAll   = $('.guideBlock');
+		$guideBlockAll   = $('.guideBlock'),
+		$guideTolAll     = $('.guideTol'),
+		$guideTolInner   = $('#tolInner'),
+		$guideTolOuter   = $('#tolOuter');
 
 	function updatePointGuideDisplay() {
 		if (opts.showGuides) {
@@ -53,6 +56,7 @@ $(function () {
 			$guidePointDiag.add($guideTextDiag).toggle(opts.checkHoriz && opts.checkVert);
 			(opts.checkHoriz && !opts.checkVert) || $guideBlockHoriz.hide();
 			(opts.checkVert && !opts.checkHoriz) || $guideBlockVert.hide();
+			$guideTolAll.show();
 		} else {
 			$guidePointAll.hide();
 			$guideBlockAll.hide();
@@ -72,8 +76,26 @@ $(function () {
 	$toleranceRange.change(function () {
 		var tolerance = $toleranceRange.val();
 		$toleranceValue.text(tolerance);
-		opts.tolerance = tolerance;
+		opts.tolerance = +tolerance;
 	});
+
+	// Calculate a tolerance circle
+	function showTolerance($elem, x, y, dist, invert) {
+		var wh = dist * 2, // Needs to change
+			tol = opts.tolerance,
+			wh2
+		// if (invert) {
+		// 	wh -= tol;
+		// }
+		wh2 = (wh + tol * 2) / 2;
+		$elem.css({
+			borderWidth: tol,
+			left: x - wh2,
+			top: y - wh2,
+			width: wh,
+			height: wh
+		});
+	}
 
 	// Demo for $.nearest
 	//*
@@ -94,6 +116,8 @@ $(function () {
 
 		// Add an indicator line
 		if (opts.showGuides && opts.checkHoriz && opts.checkVert) {
+			var minDist = Infinity,
+				maxDist = 0;
 			$nearest.each2(function (i, $n) {
 				var off = $n.offset(),
 					nx1 = off.left,
@@ -113,7 +137,6 @@ $(function () {
 					},
 					$lineElem = $('#pointDiag' + i).show(),
 					$lineText = $('#textDiag' + i).show(),
-					$lineTol  = $('#tolDiag' + i).toggle(!!opts.tolerance),
 					lineProps;
 				// Make sure the line guide exists
 				if (!$lineElem.length) {
@@ -128,13 +151,6 @@ $(function () {
 						.clone()
 						.attr('id', 'textDiag' + i)
 						.insertAfter('#textDiag0');
-				}
-				// Make sure the tolerance guide exists
-				if (opts.tolerance && !$lineTol.length) {
-					$lineTol = $('#tolDiag0')
-						.clone()
-						.attr('id', 'tolDiag' + i)
-						.insertAfter('#tolDiag0');
 				}
 				// Draw the line and cache its properties
 				lineProps = $.line(from, to, {
@@ -159,16 +175,16 @@ $(function () {
 					left: pointX - textW2,
 					top: pointY - textH2
 				});
-				// Add tolerance guide
-				if (opts.tolerance) {
-					$lineTol.css({
-						width:  opts.tolerance * 2,
-						height: opts.tolerance * 2,
-						left: to.x - opts.tolerance,
-						top:  to.y - opts.tolerance
-					});
+				if (hypot < minDist) {
+					minDist = hypot;
+				}
+				if (hypot > maxDist) {
+					maxDist = hypot;
 				}
 			});
+			// Add tolerance guides
+			showTolerance($guideTolInner, x, y, minDist);
+			// showTolerance($guideTolOuter, x, y, maxDist, true);
 		}
 		// Hide any unwanted lines/text
 		for (var i = $nearest.length; i < lastLineCount; i++) {
