@@ -84,9 +84,9 @@ $(function () {
 		var wh = dist * 2, // Needs to change
 			tol = opts.tolerance,
 			wh2
-		// if (invert) {
-		// 	wh -= tol;
-		// }
+		if (invert) {
+			wh -= tol * 2;
+		}
 		wh2 = (wh + tol * 2) / 2;
 		$elem.css({
 			borderWidth: tol,
@@ -112,9 +112,9 @@ $(function () {
 			.nearest(point)
 			.addClass('nearestFilter');
 		$.nearest(point, $blocks).addClass('nearestFind');
-		$.furthest(point, $blocks).addClass('furthestFind');
+		var $furthest = $.furthest(point, $blocks).addClass('furthestFind');
 
-		// Add an indicator line
+		// Add an indicator line for nearest blocks
 		if (opts.showGuides && opts.checkHoriz && opts.checkVert) {
 			var minDist = Infinity,
 				maxDist = 0;
@@ -178,13 +178,35 @@ $(function () {
 				if (hypot < minDist) {
 					minDist = hypot;
 				}
+			});
+			// Get furthest distance for tolerance guide
+			$furthest.each2(function (i, $n) {
+				var off = $n.offset(),
+					nx1 = off.left,
+					ny1 = off.top,
+					nx2 = nx1 + $n.outerWidth(),
+					ny2 = ny1 + $n.outerHeight(),
+					maxX1 = Math.max(x, nx1),
+					minX2 = Math.min(x, nx2),
+					maxY1 = Math.max(y, ny1),
+					minY2 = Math.min(y, ny2),
+					intersectX = minX2 >= maxX1,
+					intersectY = minY2 >= maxY1,
+					from = {x:x, y:y},
+					to = {
+						x: intersectX ? x : nx2 < x ? nx2 : nx1,
+						y: intersectY ? y : ny2 < y ? ny2 : ny1
+					},
+					distX = to.x - from.x,
+					distY = to.y - from.y,
+					hypot = Math.sqrt(distX * distX + distY * distY);
 				if (hypot > maxDist) {
 					maxDist = hypot;
 				}
 			});
 			// Add tolerance guides
 			showTolerance($guideTolInner, x, y, minDist);
-			// showTolerance($guideTolOuter, x, y, maxDist, true);
+			showTolerance($guideTolOuter, x, y, maxDist, true);
 		}
 		// Hide any unwanted lines/text
 		for (var i = $nearest.length; i < lastLineCount; i++) {
