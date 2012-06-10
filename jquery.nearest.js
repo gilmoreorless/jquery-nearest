@@ -1,5 +1,5 @@
 /*!
- * jQuery Nearest plugin v1.1.0-alpha
+ * jQuery Nearest plugin v1.1.0
  *
  * Finds elements closest to a single point based on screen location and pixel dimensions
  *
@@ -36,7 +36,7 @@
 	function nearest(selector, options, thisObj) {
 		selector || (selector = 'div'); // I STRONGLY recommend passing in a selector
 		var $all = $(selector),
-			filtered = [],
+			cache = [],
 			furthest = !!options.furthest,
 			checkX = !!options.checkHoriz,
 			checkY = !!options.checkVert,
@@ -69,7 +69,7 @@
 				minY2 = min(y2, point2y),
 				intersectX = minX2 >= maxX1,
 				intersectY = minY2 >= maxY1,
-				distX, distY, distT, setBaseline;
+				distX, distY, distT, isValid;
 			if (
 				// .nearest() / .furthest()
 				(checkX && checkY) ||
@@ -85,18 +85,40 @@
 				distT = intersectX || intersectY ?
 					max(distX, distY) :
 					Math.sqrt(distX * distX + distY * distY);
-				setBaseline = furthest ?
-					distT > compDist : // + tolerance :
-					distT < compDist; // - tolerance;
-				if (setBaseline) {
-					filtered = [];
-					compDist = distT;
-				}
-				if (distT == compDist) {
-					filtered.push(this);
+				isValid = furthest ?
+					distT >= compDist - tolerance :
+					distT <= compDist + tolerance;
+				if (isValid) {
+					compDist = furthest ?
+						max(compDist, distT) :
+						min(compDist, distT);
+					cache.push({
+						node: this,
+						dist: distT
+					});
 				}
 			}
 		});
+		// Make sure all cached items are within tolerance range
+		var len = cache.length,
+			filtered = [],
+			compMin, compMax,
+			i, item;
+		if (len) {
+			if (furthest) {
+				compMin = compDist - tolerance;
+				compMax = compDist;
+			} else {
+				compMin = compDist;
+				compMax = compDist + tolerance;
+			}
+			for (i = 0; i < len; i++) {
+				item = cache[i];
+				if (item.dist >= compMin && item.dist <= compMax) {
+					filtered.push(item.node);
+				}
+			}
+		}
 		return filtered;
 	}
 
