@@ -47,10 +47,12 @@ $(function () {
 		$guideBlockAll   = $('.guideBlock'),
 		$guideTolAll     = $('.guideTol'),
 		$guideTolInner   = $('#tolInner'),
-		$guideTolOuter   = $('#tolOuter');
+		$guideTolOuter   = $('#tolOuter'),
+		showGuides;
 
 	function updatePointGuideDisplay() {
-		if (opts.showGuides) {
+		showGuides = opts.showGuides && (opts.checkHoriz || opts.checkVert);
+		if (showGuides) {
 			$guidePointHoriz.toggle(opts.checkHoriz);
 			$guidePointVert.toggle(opts.checkVert);
 			$guidePointDiag.add($guideTextDiag).toggle(opts.checkHoriz && opts.checkVert);
@@ -113,9 +115,10 @@ $(function () {
 			.addClass('nearestFilter');
 		$.nearest(point, $blocks).addClass('nearestFind');
 		var $furthest = $.furthest(point, $blocks).addClass('furthestFind');
+		var nearestCount = $nearest.length;
 
 		// Add an indicator line for nearest blocks
-		if (opts.showGuides && opts.checkHoriz && opts.checkVert) {
+		if (showGuides) {
 			var minDist = Infinity,
 				maxDist = 0;
 			$nearest.each2(function (i, $n) {
@@ -144,6 +147,8 @@ $(function () {
 						.clone()
 						.attr('id', 'pointDiag' + i)
 						.insertAfter('#pointDiag0');
+					$guidePointDiag = $guidePointDiag.add($lineElem);
+					$guidePointAll  = $guidePointAll.add($lineElem);
 				}
 				// Make sure the distance text exists
 				if (!$lineText.length) {
@@ -151,6 +156,8 @@ $(function () {
 						.clone()
 						.attr('id', 'textDiag' + i)
 						.insertAfter('#textDiag0');
+					$guideTextDiag = $guideTextDiag.add($lineText);
+					$guidePointAll = $guidePointAll.add($lineText);
 				}
 				// Draw the line and cache its properties
 				lineProps = $.line(from, to, {
@@ -205,14 +212,18 @@ $(function () {
 				}
 			});
 			// Add tolerance guides
-			showTolerance($guideTolInner, x, y, minDist);
-			showTolerance($guideTolOuter, x, y, maxDist, true);
+			if (nearestCount) {
+				showTolerance($guideTolInner.show(), x, y, minDist);
+				showTolerance($guideTolOuter.show(), x, y, maxDist, true);
+			} else {
+				$guideTolAll.hide();
+			}
+			// Hide any unwanted lines/text
+			for (var i = nearestCount; i < lastLineCount; i++) {
+				$('#pointDiag' + i).add('#textDiag' + i).hide();
+			}
 		}
-		// Hide any unwanted lines/text
-		for (var i = $nearest.length; i < lastLineCount; i++) {
-			$('#pointDiag' + i).add('#textDiag' + i).add('#tolDiag' + i).hide();
-		}
-		lastLineCount = (opts.showGuides && opts.checkHoriz && opts.checkVert) ? $nearest.length : 0;
+		lastLineCount = showGuides ? nearestCount : 0;
 	});
 
 	// Demo for $.fn.nearest
