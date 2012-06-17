@@ -41,7 +41,7 @@
 				Each of the three methods has a utility function on the global jQuery object and a jQuery prototype function for working with element sets.
 				The following examples all use <code>nearest</code> as the method, but <code>furthest</code> and <code>touching</code> work in the same way.
 			</p>
-			
+
 			<h4 id="utility">Utility Function</h4>
 			<pre><code>$.nearest(<em>pointObject</em>, <em>selector</em>[, <em>options</em>]);</code></pre>
 			<p>
@@ -65,7 +65,7 @@ var $closestToPoint = $.nearest({x: 300, y: 100}, 'img');
 var $elemSet = $('.floating');
 var $closestToRegion = $.nearest({x: 300, y: 100, w: 200, h: 200}, $elemSet);
 </code></pre>
-			
+
 			<h4 id="single">Single Element Operation</h4>
 			<pre><code>$(elem).nearest(<em>selector</em>[, <em>options</em>]);</code></pre>
 			<p>
@@ -86,7 +86,7 @@ var $set = $('.middle');
 // Selector can be any jQuery object
 var $convolutedExample = $set.nearest($set.siblings());
 </code></pre>
-			
+
 			<h4 id="multi">Multiple Element Filter</h4>
 			<pre><code>$(elemSet).nearest(<em>pointObject</em>[, <em>options</em>]);</code></pre>
 			<p>
@@ -110,8 +110,8 @@ var $closestToPoint = $set.nearest({x: 300, y: 100});
 // Filter the set by distance to a region
 var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 </code></pre>
-			
-			<h3>Options</h3>
+
+			<h3 id="options">Options</h3>
 			<p>
 				All methods take an optional <code>options</code> object to further refine the results.
 				The object can have the following parameters:
@@ -132,11 +132,16 @@ var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 				<dd class="type">Boolean - default true <em>(not used by <code>.touching()</code>)</em></dd>
 				<dd>If false, the function will not check for elements along the Y axis,
 					meaning only elements directly to the left or right of the reference point will be matched.</dd>
+
+				<dt><code>tolerance</code></dt>
+				<dd class="type">Integer - default 1</dd>
+				<dd>Number of pixels to allow for when calculating distances, to account for fractional pixel values.<br />
+					For example, a tolerance of 1 would match distances of 23px, 23.45px and 24px as being closest, but not 24.1px.</dd>
 			</dl>
 			<p>
 				A example of using different options can be found on the <a href="demo.html">demonstration page</a>.
 			</p>
-			
+
 			<h2>Notes</h2>
 			<ul>
 				<li>
