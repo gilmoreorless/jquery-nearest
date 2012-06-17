@@ -105,16 +105,16 @@ $(function () {
 	$(document).mousemove(function (e) {
 		var x = e.pageX,
 			y = e.pageY,
-			point = $.extend({x: x, y: y}, opts);
+			point = {x: x, y: y};
 		if (opts.showGuides) {
 			opts.checkHoriz && $guidePointHoriz.css({top: y});
 			opts.checkVert && $guidePointVert.css({left: x});
 		}
 		var $nearest = $blocks.removeClass('nearestFilter nearestFind furthestFind')
-			.nearest(point)
+			.nearest(point, opts)
 			.addClass('nearestFilter');
-		$.nearest(point, $blocks).addClass('nearestFind');
-		var $furthest = $.furthest(point, $blocks).addClass('furthestFind');
+		$.nearest(point, $blocks, opts).addClass('nearestFind');
+		var $furthest = $.furthest(point, $blocks, opts).addClass('furthestFind');
 		var nearestCount = $nearest.length;
 
 		// Add an indicator line for nearest blocks
