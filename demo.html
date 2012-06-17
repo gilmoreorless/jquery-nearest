@@ -22,11 +22,13 @@
 		.pointDiag {background-color:#F00; border-radius:5px;}
 		.guideBlock {background-color:#9FF;}
 		.guideText {background-color:rgba(255,255,255,0.9); border:1px solid #F00; color:#F00; font-size:12px; padding:2px;}
-		.guideTol {border-style:solid; border-color:rgb(218,147,81); border-radius:100%; opacity:0.8;}
-		.guideTolOuter {opacity:0.4;}
+		.guideTol {border-style:solid; border-radius:100%; opacity:0.6;}
+		.guideTolInner {border-color:#393;}
+		.guideTolOuter {border-color:#000;}
 		#blockHoriz {width:100%;}
 		#blockVert {height:100%;}
 		.block, dt {background-color:#AAA; border:1px solid #000; font-size:16px; opacity:1; position:absolute; text-align:center;}
+		dt.guideTol {background:none; border-width:4px; height:19px; width:19px;}
 		.block div {bottom:0; left:0; position:absolute; right:0; top:0;}
 		.nearestFilter {background-color:#9F9;}
 		.nearestFind {opacity:0.5;}
@@ -56,6 +58,10 @@
 			<dd>Nearest to clicked element</dd>
 			<dt class="furthestClick"></dt>
 			<dd>Furthest from clicked element</dd>
+			<dt class="guideTol guideTolInner"></dt>
+			<dd>Tolerance for nearest element</dd>
+			<dt class="guideTol guideTolOuter"></dt>
+			<dd>Tolerance for furthest element</dd>
 		</dl>
 
 		<a href="./">Back to documentation</a>
@@ -65,7 +71,7 @@
 		<div class="guide guideBlock" id="blockVert"></div>
 		<div class="guide guidePoint" id="pointHoriz"></div>
 		<div class="guide guidePoint" id="pointVert"></div>
-		<div class="guide guideTol"   id="tolInner"></div>
+		<div class="guide guideTol guideTolInner"    id="tolInner"></div>
 		<div class="guide guideTol guideTolOuter"    id="tolOuter"></div>
 		<div class="guide guidePoint guidePointDiag" id="pointDiag0"></div>
 		<div class="guide guideText"  id="textDiag0"></div>
