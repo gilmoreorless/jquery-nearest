@@ -17,6 +17,10 @@ $(function () {
 		corners = ['tl', 'tr', 'br', 'bl'],
 		edgeBorders = {t: 'top', b: 'bottom', l: 'left', r: 'right'},
 		edgeLimits = {},
+		detectionOptions = {
+			edgeX: '',
+			edgeY: ''
+		},
 		size, $blocks, $corners, curDrag;
 
 	// Prevent selecting text while resizing the container
@@ -97,8 +101,8 @@ $(function () {
 	}
 	$blocks = $('.block');
 
-	// Handle edge selector
-	$('#dimension-select').on('click', 'input[name=dimension]', function (e) {
+	// Handle edge selector input clicks
+	function handleEdgeSelection() {
 		var $this = $(this),
 			val = $this.val(),
 			dims = val.split(''),
@@ -116,8 +120,34 @@ $(function () {
 			border = [edgeBorders[dims[0]], edgeBorders[dims[1]]];
 			$corners.filter('.' + border.join('.')).css('background-color', '#F00');
 		} else {
-			// TODO: Show middle point with sliders
+			// TODO: Show middle point with sliders for percentage
 		}
+		detectionOptions.edgeX = dims[1];
+		detectionOptions.edgeY = dims[0];
+		detectNearest();
+	}
 
-	});
+	// Highlight blocks that are nearest to current edge/point
+	function detectNearest() {
+		var edgeX = detectionOptions.edgeX,
+			edgeY = detectionOptions.edgeY,
+			opts = {
+				x: 0,
+				y: 0,
+				w: 0,
+				h: 0
+			};
+		if (edgeX === 'm' && edgeY === 'm') {
+			// TODO: Detect from middle point option
+		} else {
+			opts.x = edgeX === 'r' ? '100%' : 0;
+			opts.y = edgeY === 'b' ? '100%' : 0;
+			opts.w = edgeX === 'm' ? '100%' : 0;
+			opts.h = edgeY === 'm' ? '100%' : 0;
+		}
+		$blocks.removeClass('nearest').nearest(opts).addClass('nearest');
+	}
+
+	// Setup detection handlers
+	$('#dimension-select').on('click', 'input[name=dimension]', handleEdgeSelection);
 });
