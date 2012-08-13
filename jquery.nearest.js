@@ -1,5 +1,5 @@
 /*!
- * jQuery Nearest plugin v1.1.0
+ * jQuery Nearest plugin v1.2.0-beta
  *
  * Finds elements closest to a single point based on screen location and pixel dimensions
  * http://gilmoreorless.github.com/jquery-nearest/
@@ -34,8 +34,26 @@
 	 *                      for the "includeSelf" option
 	 * @return array List of matching elements, can be zero length
 	 */
+	var rPerc = /^([\d.]+)%$/;
 	function nearest(selector, options, thisObj) {
+		// Normalise selector and dimensions
 		selector || (selector = 'div'); // I STRONGLY recommend passing in a selector
+		var $container = $(options.container),
+			containerOffset = $container.offset(),
+			containerDims = [
+				containerOffset.left + $container.width(),
+				containerOffset.top + $container.height()
+			],
+			percProps = {x: 0, y: 1, w: 0, h: 1},
+			prop, match;
+		for (prop in percProps) if (percProps.hasOwnProperty(prop)) {
+			match = rPerc.exec(options[prop]);
+			if (match) {
+				options[prop] = containerDims[percProps[prop]] * match[1] / 100;
+			}
+		}
+
+		// Get elements and work out x/y points
 		var $all = $(selector),
 			cache = [],
 			furthest = !!options.furthest,
@@ -52,12 +70,14 @@
 			min = Math.min,
 			max = Math.max;
 
+		// Normalise the remaining options
 		if (!options.includeSelf && thisObj) {
 			$all = $all.not(thisObj);
 		}
 		if (tolerance < 0) {
 			tolerance = 0;
 		}
+		// Loop through all elements and check their positions
 		$all[hasEach2 ? 'each2' : 'each'](function (i, elem) {
 			var $this = hasEach2 ? elem : $(this),
 				off = $this.offset(),
@@ -136,6 +156,7 @@
 			w: 0, // Width of region
 			h: 0, // Height of region
 			tolerance:   1, // Distance tolerance in pixels, mainly to handle fractional pixel rounding bugs
+			container:   document, // Container of objects for calculating %-based dimensions
 			furthest:    name == 'furthest', // Find max distance (true) or min distance (false)
 			includeSelf: false, // Include 'this' in search results (t/f) - only applies to $(elem).func(selector) syntax
 			checkHoriz:  name != 'touching', // Check variations in X axis (t/f)
