@@ -7,6 +7,7 @@ $(function () {
 		minSize = 50,
 		maxSize = 150,
 		$menu = $('#menu'),
+		$dimSelect = $('#dimension-select'),
 		$container = $('#container'),
 		$blockWrap = $container.find('.block-wrap'),
 		$footer = $('#footer'),
@@ -21,7 +22,7 @@ $(function () {
 			edgeX: '',
 			edgeY: ''
 		},
-		size, $blocks, $corners, curDrag;
+		i, size, $blocks, $corners, curDrag;
 
 	// Prevent selecting text while resizing the container
 	function noSelect(e) {
@@ -78,6 +79,7 @@ $(function () {
 		$container.css(edgeY, function (i, val) {
 			return (parseFloat(val) || 0) + y;
 		});
+		detectNearest();
 	}
 
 	// Setup corner handles
@@ -92,9 +94,9 @@ $(function () {
 	$(document).on('selectstart', noSelect);
 
 	// Setup random elements
-	while (elemCount--) {
+	for (i = 0; i < elemCount; i++) {
 		size = rand(minSize, maxSize);
-		$('<div class="block"><div></div></div>').css({
+		$('<div class="block"><div>' + (i + 1) + '</div></div>').css({
 			width: size,
 			height: size
 		}).appendTo($blockWrap);
@@ -132,6 +134,7 @@ $(function () {
 		var edgeX = detectionOptions.edgeX,
 			edgeY = detectionOptions.edgeY,
 			opts = {
+				container: $container,
 				x: 0,
 				y: 0,
 				w: 0,
@@ -149,5 +152,12 @@ $(function () {
 	}
 
 	// Setup detection handlers
-	$('#dimension-select').on('click', 'input[name=dimension]', handleEdgeSelection);
+	$dimSelect.on('click', 'input[name=dimension]', handleEdgeSelection);
+	$(window).resize(detectNearest);
+
+	// Set initial state based on default checked input
+	var $defaultChecked = $dimSelect.find('input:checked');
+	if ($defaultChecked.length) {
+		handleEdgeSelection.call($defaultChecked[0]);
+	}
 });
