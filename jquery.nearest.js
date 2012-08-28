@@ -39,7 +39,7 @@
 		// Normalise selector and dimensions
 		selector || (selector = 'div'); // I STRONGLY recommend passing in a selector
 		var $container = $(options.container),
-			containerOffset = $container.offset(),
+			containerOffset = $container.offset() || {left: 0, top: 0},
 			containerDims = [
 				containerOffset.left + $container.width(),
 				containerOffset.top + $container.height()
