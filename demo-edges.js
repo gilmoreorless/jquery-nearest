@@ -10,6 +10,7 @@ $(function () {
 		$dimSelect = $('#dimension-select'),
 		$container = $('#container'),
 		$blockWrap = $container.find('.block-wrap'),
+		$output = $('#code-output'),
 		$footer = $('#footer'),
 		menuWidth = $menu.outerWidth(),
 		contWidth = $container.width(),
@@ -22,7 +23,10 @@ $(function () {
 			edgeX: '',
 			edgeY: ''
 		},
+		codeTemplate = '$(".block").nearest({\n/#props#/\n});',
 		i, size, $blocks, $corners, curDrag;
+
+	/*** Drag interactions ***/
 
 	// Prevent selecting text while resizing the container
 	function noSelect(e) {
@@ -82,6 +86,9 @@ $(function () {
 		detectNearest();
 	}
 
+
+	/*** DOM setup ***/
+
 	// Setup corner handles
 	$.each(corners, function (i, corner) {
 		var c = corner.split('');
@@ -102,6 +109,9 @@ $(function () {
 		}).appendTo($blockWrap);
 	}
 	$blocks = $('.block');
+
+
+	/*** Options interactions ***/
 
 	// Handle edge selector input clicks
 	function handleEdgeSelection() {
@@ -127,6 +137,7 @@ $(function () {
 		detectionOptions.edgeX = dims[1];
 		detectionOptions.edgeY = dims[0];
 		detectNearest();
+		showExampleCode();
 	}
 
 	// Highlight blocks that are nearest to current edge/point
@@ -160,4 +171,40 @@ $(function () {
 	if ($defaultChecked.length) {
 		handleEdgeSelection.call($defaultChecked[0]);
 	}
+
+
+	/*** Example code ***/
+
+	function generateExampleCode(x, y, w, h) {
+		var code = codeTemplate;
+		var props = [
+			['container', '#container'],
+			['x', x],
+			['y', y]
+		];
+		var prop;
+		w && props.push(['w', w]);
+		h && props.push(['h', h]);
+		for (var i = 0, ii = props.length; i < ii; i++) {
+			prop = props[i];
+			// Really basic string encoding because we're working with known strings
+			if (typeof prop[1] == 'string') {
+				prop[1] = '"' + prop[1] + '"';
+			}
+			props[i] = '  ' + prop.join(': ');
+		}
+		code = code.replace('/#props#/', props.join(',\n'));
+		return code;
+	}
+
+	function showExampleCode() {
+		var edgeX = detectionOptions.edgeX,
+			edgeY = detectionOptions.edgeY,
+			x = edgeX === 'r' ? '100%' : 0,
+			y = edgeY === 'b' ? '100%' : 0,
+			w = edgeX === 'm' ? '100%' : 0,
+			h = edgeY === 'm' ? '100%' : 0;
+		$output.text(generateExampleCode(x, y, w, h));
+	}
+
 });

@@ -7,56 +7,32 @@
 		html, body {background-color:#FFC; font-family:Arial; height:100%; margin:0;}
 		a {color:#000; text-decoration:underline;}
 		a:hover {text-decoration:none;}
-		#menu {height:100%; overflow:hidden; padding:0 10px; width:180px;}
+		#menu {height:100%; overflow:hidden; padding:0 10px; width:230px;}
 		.grid {border-collapse:collapse; display:table; margin:0 auto;}
 		.grid-row {display:table-row;}
 		.grid-row label {border:1px solid #000; cursor:pointer; display:table-cell; height:30px; text-align:center; vertical-align:middle; width:30px;}
 		.grid-row label.edge {border:none;}
 		.grid-row label:hover {background-color:#FC9;}
 		.grid-row input {cursor:pointer;}
-/*		#menu strong {display:block; margin-bottom:5px;}
-		#menu label {display:block;}
-		dl {position:relative;}
-		dt {height:25px; left:0; position:absolute; width:25px;}
-		dt div {height:19px; width:19px;}
-		dd {margin-bottom:1em; margin-left:45px;}
-*/		#container {background-color:#FFF; border:2px solid #000; bottom:26px; left:200px; position:absolute; right:20px; top:20px;}
+		#menu pre {background-color:#FFF; border:1px solid #999; padding:.5em;}
+		#container {background-color:#FFF; border:2px solid #000; bottom:26px; left:270px; position:absolute; right:20px; top:20px;}
 		.corner {background-color:#000; cursor:move; height:15px; position:absolute; width:15px;}
 		.corner.top {top:-15px;}
 		.corner.bottom {bottom:-15px;}
 		.corner.left {left:-15px;}
 		.corner.right {right:-15px;}
 		.block-wrap {bottom:0; left:0; overflow:hidden; position:absolute; right:0; top:0;}
-/*		.guide {display:none; position:absolute;}
-		.guidePoint {background-color:#00F;}
-		#pointHoriz {height:1px; width:100%;}
-		#pointVert {height:100%; width:1px;}
-		.pointDiag {background-color:#F00; border-radius:5px;}
-		.guideBlock {background-color:#9FF;}
-		.guideText {background-color:rgba(255,255,255,0.9); border:1px solid #F00; color:#F00; font-size:12px; padding:2px;}
-		.guideTol {border-style:solid; border-radius:100%; opacity:0.6;}
-		.guideTolInner {border-color:#393;}
-		.guideTolOuter {border-color:#000;}
-		#blockHoriz {width:100%;}
-		#blockVert {height:100%;}
-*/
 		.block, dt {background-color:#AAA; border:1px solid #000; font-size:16px; opacity:1; text-align:center;}
 		.block {float:left; height:100px; margin:10px; width:100px;}
 		.nearest {background-color:#9F9;}
-/*		dt.guideTol {background:none; border-width:4px; height:19px; width:19px;}
-		.block div {bottom:0; left:0; position:absolute; right:0; top:0;}
-		.nearestFilter {background-color:#9F9;}
-		.nearestFind {opacity:0.5;}
-		.furthestFind div {border:3px solid #000;}
-		.nearestClick {border-color:#F00;}
-		.furthestClick {border-style:dashed;}
-*/		#footer {bottom:0; position:absolute; width:100%;}
+		#footer {bottom:0; position:absolute; width:100%;}
 		#footer p {font-size:0.9em; margin:0 0 0 200px; padding:5px 0; text-align:center;}
 	</style>
 </head>
 <body>
 	<div id="menu">
 		<h3>Options</h3>
+		<h4>Edge / Corner</h4>
 		<div class="grid" id="dimension-select">
 			<div class="grid-row">
 				<label><input type="radio" name="dimension" value="tl"></label>
@@ -75,23 +51,8 @@
 			</div>
 		</div>
 
-		<h3>Legend:</h3>
-		<!--
-		<dl id="legend">
-			<dt class="nearestFilter nearestFind"></dt>
-			<dd>Nearest to cursor (found two ways)</dd>
-			<dt class="furthestFind"><div></div></dt>
-			<dd>Furthest from cursor</dd>
-			<dt class="nearestClick"></dt>
-			<dd>Nearest to clicked element</dd>
-			<dt class="furthestClick"></dt>
-			<dd>Furthest from clicked element</dd>
-			<dt class="guideTol guideTolInner"></dt>
-			<dd>Tolerance for nearest element</dd>
-			<dt class="guideTol guideTolOuter"></dt>
-			<dd>Tolerance for furthest element</dd>
-		</dl>
-		-->
+		<h3>Output:</h3>
+		<pre><code id="code-output"></code></pre>
 
 		<a href="./">Back to documentation</a>
 	</div>

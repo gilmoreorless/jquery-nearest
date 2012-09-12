@@ -83,9 +83,9 @@ $(function () {
 
 	// Calculate a tolerance circle
 	function showTolerance($elem, x, y, dist, invert) {
-		var wh = dist * 2, // Needs to change
+		var wh = dist * 2,
 			tol = opts.tolerance,
-			wh2
+			wh2;
 		if (invert) {
 			wh -= tol * 2;
 		}
