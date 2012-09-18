@@ -52,6 +52,9 @@
 				Optionally, you can also specify <code>w</code> and <code>h</code> properties to define the width and height respectively of a region in the page instead of a single point &ndash; in this case the x and y properties define the top left corner of the region.
 			</p>
 			<p>
+				The <code>x</code>, <code>y</code>, <code>w</code> and <code>h</code> properties can also be defined as a percentage string, relative to the <code>container</code> option (defined in the <a href="#options">options</a> section).
+			</p>
+			<p>
 				<code>selector</code> is any valid jQuery selector or object that defines an element set to be filtered by the function.
 			</p>
 			<p>
@@ -64,6 +67,9 @@ var $closestToPoint = $.nearest({x: 300, y: 100}, 'img');
 // Find the elements with class 'floating' closest to a particular region in the page
 var $elemSet = $('.floating');
 var $closestToRegion = $.nearest({x: 300, y: 100, w: 200, h: 200}, $elemSet);
+
+// Find the elements with class 'floating' closest to the right-hand side of the document
+var $closestToRightEdge = $.nearest({x: '100%', y: 0, h: '100%'}, '.floating');
 </code></pre>
 
 			<h4 id="single">Single Element Operation</h4>
@@ -118,25 +124,30 @@ var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 			</p>
 			<dl>
 				<dt><code>includeSelf</code></dt>
-				<dd class="type">Boolean - default false <em>(not used by the utility methods)</em></dd>
+				<dd class="type">Boolean - default <code>false</code> <em>(not used by the utility methods)</em></dd>
 				<dd>If true, the reference element used in a <a href="#single">Single Element Operation</a> will also
 					be included in the distance calculations.<br />
 					Example: <code>$(elem).nearest('.droppable', {includeSelf: true});</code></dd>
 
 				<dt><code>checkHoriz</code></dt>
-				<dd class="type">Boolean - default true <em>(not used by <code>.touching()</code>)</em></dd>
+				<dd class="type">Boolean - default <code>true</code> <em>(not used by <code>.touching()</code>)</em></dd>
 				<dd>If false, the function will not check for elements along the X axis,
 					meaning only elements directly above or below the reference point will be matched.</dd>
 
 				<dt><code>checkVert</code></dt>
-				<dd class="type">Boolean - default true <em>(not used by <code>.touching()</code>)</em></dd>
+				<dd class="type">Boolean - default <code>true</code> <em>(not used by <code>.touching()</code>)</em></dd>
 				<dd>If false, the function will not check for elements along the Y axis,
 					meaning only elements directly to the left or right of the reference point will be matched.</dd>
 
 				<dt><code>tolerance</code></dt>
-				<dd class="type">Integer - default 1</dd>
+				<dd class="type">Integer - default <code>1</code></dd>
 				<dd>Number of pixels to allow for when calculating distances, to account for fractional pixel values.<br />
 					For example, a tolerance of 1 would match distances of 23px, 23.45px and 24px as being closest, but not 24.1px.</dd>
+
+				<dt><code>container</code></dt>
+				<dd class="type">DOM node or jQuery selector - default <code>document</code> <em>(not used by <code>.touching()</code>)</em></dd>
+				<dd>Used with percentage options for <code>x</code>, <code>y</code>, <code>w</code> and <code>h</code>.<br />
+					Defines the container to measure percentage values against. The top left corner of the container is 0%, the bottom right corner is 100%.</dd>
 			</dl>
 			<p>
 				A example of using different options can be found on the <a href="demo.html">demonstration page</a>.
