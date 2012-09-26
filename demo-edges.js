@@ -6,6 +6,7 @@ $(function () {
 	var elemCount = 30,
 		minSize = 50,
 		maxSize = 150,
+		$document = $(document),
 		$menu = $('#menu'),
 		$dimSelect = $('#dimension-select'),
 		$container = $('#container'),
@@ -23,10 +24,17 @@ $(function () {
 			edgeX: '',
 			edgeY: ''
 		},
-		codeTemplate = '$(".block").nearest({\n/#props#/\n});',
+		codeTemplate = "$('.block').nearest({\n/#props#/\n});",
 		i, size, $blocks, $corners, curDrag;
 
 	/*** Drag interactions ***/
+
+	for (i in edgeBorders) if (edgeBorders.hasOwnProperty(i)) {
+		edgeLimits[edgeBorders[i]] = {
+			limit: parseFloat($container.css(edgeBorders[i])) || 0
+		};
+		edgeLimits[edgeBorders[i]].current = edgeLimits[edgeBorders[i]].limit;
+	}
 
 	// Prevent selecting text while resizing the container
 	function noSelect(e) {
@@ -44,13 +52,13 @@ $(function () {
 				x: e.pageX,
 				y: e.pageY
 			};
-			$(document).on('mousemove', handleCornerMouseEvents);
+			$document.on('mousemove', handleCornerMouseEvents);
 			return;
 		}
 		if (e.type === 'mouseup') {
 			if (curDrag && curDrag.elem === this) {
 				curDrag = null;
-				$(document).off('mousemove', handleCornerMouseEvents);
+				$document.off('mousemove', handleCornerMouseEvents);
 			}
 			return;
 		}
@@ -66,6 +74,13 @@ $(function () {
 		}
 	}
 
+	// Make sure to catch mouseup outside the drag handles
+	function handleDocumentMouseEvents(e) {
+		if (e.type === 'mouseup' && curDrag && curDrag.elem !== this) {
+			handleCornerMouseEvents.call(curDrag.elem, e);
+		}
+	}
+
 	// Move a corner of the container by a certain amount
 	// x/y are relative, not absolute
 	function moveContainerCorner(corner, x, y) {
@@ -78,10 +93,14 @@ $(function () {
 			y = -y;
 		}
 		$container.css(edgeX, function (i, val) {
-			return (parseFloat(val) || 0) + x;
+			var limiter = edgeLimits[edgeX];
+			limiter.current += x;
+			return (limiter.current < limiter.limit) ? limiter.limit : limiter.current;
 		});
 		$container.css(edgeY, function (i, val) {
-			return (parseFloat(val) || 0) + y;
+			var limiter = edgeLimits[edgeY];
+			limiter.current += y;
+			return (limiter.current < limiter.limit) ? limiter.limit : limiter.current;
 		});
 		detectNearest();
 	}
@@ -98,7 +117,10 @@ $(function () {
 	});
 	$corners = $container.find('.corner');
 	$corners.on('mousedown mouseup', handleCornerMouseEvents);
-	$(document).on('selectstart', noSelect);
+	$document.on({
+		selectstart: noSelect,
+		mouseup: handleDocumentMouseEvents
+	});
 
 	// Setup random elements
 	for (i = 0; i < elemCount; i++) {
@@ -189,7 +211,7 @@ $(function () {
 			prop = props[i];
 			// Really basic string encoding because we're working with known strings
 			if (typeof prop[1] == 'string') {
-				prop[1] = '"' + prop[1] + '"';
+				prop[1] = "'" + prop[1] + "'";
 			}
 			props[i] = '  ' + prop.join(': ');
 		}
