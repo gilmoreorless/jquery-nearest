@@ -15,7 +15,9 @@
 		.grid-row label:hover {background-color:#FC9;}
 		.grid-row input {cursor:pointer;}
 		#menu pre {background-color:#FFF; border:1px solid #999; padding:.5em;}
-		#container {background-color:#FFF; border:2px solid #000; bottom:26px; left:270px; position:absolute; right:20px; top:20px;}
+		#header {position:absolute; top:0; width:100%;}
+		#header p {font-size:0.9em; margin:0 0 0 282px; padding:5px 0;}
+		#container {background-color:#FFF; border:2px solid #000; bottom:20px; left:270px; position:absolute; right:20px; top:60px;}
 		.corner {background-color:#000; cursor:move; height:15px; position:absolute; width:15px;}
 		.corner.top {top:-15px;}
 		.corner.bottom {bottom:-15px;}
@@ -25,8 +27,6 @@
 		.block, dt {background-color:#AAA; border:1px solid #000; font-size:16px; opacity:1; text-align:center;}
 		.block {float:left; height:100px; margin:10px; width:100px;}
 		.nearest {background-color:#9F9;}
-		#footer {bottom:0; position:absolute; width:100%;}
-		#footer p {font-size:0.9em; margin:0 0 0 200px; padding:5px 0; text-align:center;}
 	</style>
 </head>
 <body>
@@ -56,10 +56,14 @@
 
 		<a href="./">Back to documentation</a>
 	</div>
-	<div id="footer">
+	<div id="header">
 		<p>
 			A demonstration of the <a href="./">jQuery Nearest Element plugin</a>.
 			Check out the <a href="demo-edges.js">code behind it</a>.
+		</p>
+		<p>
+			Select an edge/corner to find the nearest blocks (with example code).
+			Drag the corners to resize the container.
 		</p>
 	</div>
 	<div id="container">
