@@ -1,5 +1,5 @@
 /*!
- * jQuery Nearest plugin v1.2.0-beta
+ * jQuery Nearest plugin v1.2.0
  *
  * Finds elements closest to a single point based on screen location and pixel dimensions
  * http://gilmoreorless.github.com/jquery-nearest/
