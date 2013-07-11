@@ -3,7 +3,8 @@
 <head>
 	<title>jQuery Nearest Element plugin</title>
 	<meta charset="utf-8">
-	<link rel="stylesheet" type="text/css" href="main.css" />
+	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Raleway" />
+	<link rel="stylesheet" type="text/css" href="../lib/css/common-docs.css" />
 </head>
 <body>
 	<div id="wrapper">
@@ -33,9 +34,9 @@
 				There are three main methods:
 			</p>
 			<ul>
-				<li><code>.nearest()</code> returns the elements that have the shortest pixel distance to a point or element.</li>
-				<li><code>.furthest()</code> returns the elements that have the longest pixel distance to a point or element.</li>
-				<li><code>.touching()</code> returns the elements that are touching a point or element (ie. their pixel distance is 0).</li>
+				<li><code>.nearest()</code> returns the elements that have the <strong>shortest</strong> pixel distance to a point or element.</li>
+				<li><code>.furthest()</code> returns the elements that have the <strong>longest</strong> pixel distance to a point or element.</li>
+				<li><code>.touching()</code> returns the elements that are <strong>touching</strong> a point or element (ie. their pixel distance is 0).</li>
 			</ul>
 			<h3>Usage</h3>
 			<p>
@@ -62,14 +63,14 @@
 				<code>options</code> is an optional collection of parameters to pass to the function. More details can be found in the <a href="#options">options</a> section.
 			</p>
 			<h5>Example</h5>
-<pre><code>// Find the image(s) closest to a point 300px in and 100px down from the top left corner
+<pre><code><span class="comment">// Find the image(s) closest to a point 300px in and 100px down from the top left corner</span>
 var $closestToPoint = $.nearest({x: 300, y: 100}, 'img');
 
-// Find the elements with class 'floating' closest to a particular region in the page
+<span class="comment">// Find the elements with class 'floating' closest to a particular region in the page</span>
 var $elemSet = $('.floating');
 var $closestToRegion = $.nearest({x: 300, y: 100, w: 200, h: 200}, $elemSet);
 
-// Find the elements with class 'floating' closest to the right-hand side of the document
+<span class="comment">// Find the elements with class 'floating' closest to the right-hand side of the document</span>
 var $closestToRightEdge = $.nearest({x: '100%', y: 0, h: '100%'}, '.floating');
 </code></pre>
 
@@ -88,9 +89,9 @@ var $closestToRightEdge = $.nearest({x: '100%', y: 0, h: '100%'}, '.floating');
 			<h5>Example</h5>
 <pre><code>var $basicExample = $('#something').nearest('.surrounding');
 
-// Only the first element in this set will be used for matching
+<span class="comment">// Only the first element in this set will be used for matching</span>
 var $set = $('.middle');
-// Selector can be any jQuery object
+<span class="comment">// Selector can be any jQuery object</span>
 var $convolutedExample = $set.nearest($set.siblings());
 </code></pre>
 
@@ -111,10 +112,10 @@ var $convolutedExample = $set.nearest($set.siblings());
 			<h5>Example</h5>
 <pre><code>var $set = $('.filterme');
 
-// Filter the set by distance to a point
+<span class="comment">// Filter the set by distance to a point</span>
 var $closestToPoint = $set.nearest({x: 300, y: 100});
 
-// Filter the set by distance to a region
+<span class="comment">// Filter the set by distance to a region</span>
 var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 </code></pre>
 
@@ -125,28 +126,28 @@ var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 			</p>
 			<dl>
 				<dt><code>includeSelf</code></dt>
-				<dd class="type">Boolean - default <code>false</code> <em>(not used by the utility methods)</em></dd>
+				<dd class="type">Boolean &ndash; default <code>false</code> <em>(not used by the utility methods)</em></dd>
 				<dd>If true, the reference element used in a <a href="#single">Single Element Operation</a> will also
 					be included in the distance calculations.<br />
 					Example: <code>$(elem).nearest('.droppable', {includeSelf: true});</code></dd>
 
 				<dt><code>checkHoriz</code></dt>
-				<dd class="type">Boolean - default <code>true</code> <em>(not used by <code>.touching()</code>)</em></dd>
+				<dd class="type">Boolean &ndash; default <code>true</code> <em>(not used by <code>.touching()</code>)</em></dd>
 				<dd>If false, the function will not check for elements along the X axis,
 					meaning only elements directly above or below the reference point will be matched.</dd>
 
 				<dt><code>checkVert</code></dt>
-				<dd class="type">Boolean - default <code>true</code> <em>(not used by <code>.touching()</code>)</em></dd>
+				<dd class="type">Boolean &ndash; default <code>true</code> <em>(not used by <code>.touching()</code>)</em></dd>
 				<dd>If false, the function will not check for elements along the Y axis,
 					meaning only elements directly to the left or right of the reference point will be matched.</dd>
 
 				<dt><code>tolerance</code></dt>
-				<dd class="type">Integer - default <code>1</code></dd>
+				<dd class="type">Integer &ndash; default <code>1</code></dd>
 				<dd>Number of pixels to allow for when calculating distances, to account for fractional pixel values.<br />
 					For example, a tolerance of 1 would match distances of 23px, 23.45px and 24px as being closest, but not 24.1px.</dd>
 
 				<dt><code>container</code></dt>
-				<dd class="type">DOM node or jQuery selector - default <code>document</code> <em>(not used by <code>.touching()</code>)</em></dd>
+				<dd class="type">DOM node or jQuery selector &ndash; default <code>document</code> <em>(not used by <code>.touching()</code>)</em></dd>
 				<dd>Used with percentage options for <code>x</code>, <code>y</code>, <code>w</code> and <code>h</code>.<br />
 					Defines the container to measure percentage values against. The top left corner of the container is 0%, the bottom right corner is 100%.</dd>
 			</dl>
@@ -171,17 +172,8 @@ var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 			</ul>
 		</div><!-- #details -->
 	</div><!-- #wrapper -->
-	<a class="forkme" href="https://github.com/gilmoreorless/jquery-nearest">Fork me on GitHub</a>
-	<script>
-	  var _gaq = _gaq || [];
-	  _gaq.push(['_setAccount', 'UA-8341018-3']);
-	  _gaq.push(['_trackPageview']);
+	<!-- <a class="forkme" href="https://github.com/gilmoreorless/jquery-nearest">Fork me on GitHub</a> -->
 
-	  (function() {
-		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	  })();
-	</script>
+	<script src="../lib/js/common-docs.js"></script>
 </body>
 </html>
