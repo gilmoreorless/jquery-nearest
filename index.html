@@ -5,6 +5,39 @@
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Raleway" />
 	<link rel="stylesheet" type="text/css" href="../lib/css/common-docs.css" />
+	<style>
+		#wrapper {
+			position: relative;
+		}
+		.demo-overlay {
+			background-color: #D4E9F2;
+			opacity: 0;
+			pointer-events: none;
+
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			z-index: 1;
+
+			-webkit-transition: opacity 1s;
+			   -moz-transition: opacity 1s;
+			    -ms-transition: opacity 1s;
+			     -o-transition: opacity 1s;
+			        transition: opacity 1s;
+		}
+		.demo-enabled .demo-overlay {
+			opacity: 0.8;
+		}
+		.demo-set {
+			position: relative;
+			z-index: 2;
+		}
+		.demo-nearest {
+			outline: 2px dashed blue;
+		}
+	</style>
 </head>
 <body>
 	<div id="wrapper">
@@ -176,5 +209,8 @@ var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 	<!-- <a class="forkme" href="https://github.com/gilmoreorless/jquery-nearest">Fork me on GitHub</a> -->
 
 	<script src="../lib/js/common-docs.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
+	<script src="jquery.nearest.min.js"></script>
+	<script src="index.js"></script>
 </body>
 </html>
