@@ -54,7 +54,7 @@
 		}
 
 		// Get elements and work out x/y points
-		var $all = $(selector),
+		var $all = $container.find(selector),
 			cache = [],
 			furthest = !!options.furthest,
 			checkX = !!options.checkHoriz,
