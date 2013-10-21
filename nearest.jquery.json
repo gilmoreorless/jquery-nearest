@@ -2,7 +2,7 @@
   "name": "nearest",
   "title": "jQuery Nearest Element",
   "description": "Find the elements in a page that are closest to (or furthest away from) a particular point or element, based on pixel dimensions",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "keywords": ["nearest", "furthest", "touching", "pixel", "distance"],
   "homepage": "http://gilmoreorless.github.io/jquery-nearest/",
   "docs": "http://gilmoreorless.github.io/jquery-nearest/",
