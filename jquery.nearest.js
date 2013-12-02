@@ -104,21 +104,21 @@
 				// .nearest({checkHoriz: false})
 				(checkY && intersectX) ||
 				// .nearest({onlyX: true})
-                (checkX && options.onlyX) ||
-                // .nearest({onlyY: true})
-                (checkY && options.onlyY)
+				(checkX && options.onlyX) ||
+				// .nearest({onlyY: true})
+				(checkY && options.onlyY)
 			) {
 				distX = intersectX ? 0 : maxX1 - minX2;
 				distY = intersectY ? 0 : maxY1 - minY2;
-                if (options.onlyX) {
-                    distT = distX;
-                } else if (options.onlyY) {
-                    distT = distY;
-                } else {
-                    distT = intersectX || intersectY ?
-                        max(distX, distY) :
-                        Math.sqrt(distX * distX + distY * distY);
-                }
+				if (options.onlyX) {
+					distT = distX;
+				} else if (options.onlyY) {
+					distT = distY;
+				} else {
+					distT = intersectX || intersectY ?
+						max(distX, distY) :
+						Math.sqrt(distX * distX + distY * distY);
+				}
 				isValid = furthest ?
 					distT >= compDist - tolerance :
 					distT <= compDist + tolerance;
