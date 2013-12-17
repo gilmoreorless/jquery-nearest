@@ -175,6 +175,14 @@ var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 				<dd>If false, the function will not check for elements along the Y axis,
 					meaning only elements directly to the left or right of the reference point will be matched.</dd>
 
+				<dt><code>onlyX</code></dt>
+				<dd class="type">Boolean &ndash; default <code>false</code> <em>(not used by <code>.touching()</code>)</em></dd>
+				<dd>If true, the function will ignore the Y axis and only the X distance from the reference point will be used.</dd>
+
+				<dt><code>onlyY</code></dt>
+				<dd class="type">Boolean &ndash; default <code>false</code> <em>(not used by <code>.touching()</code>)</em></dd>
+				<dd>If true, the function will ignore the X axis and only the Y distance from the reference point will be used.</dd>
+
 				<dt><code>tolerance</code></dt>
 				<dd class="type">Integer &ndash; default <code>1</code></dd>
 				<dd>Number of pixels to allow for when calculating distances, to account for fractional pixel values.<br />
