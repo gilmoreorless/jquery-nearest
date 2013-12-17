@@ -1,0 +1,13 @@
+/*** Basic styles ***/
+
+body {font-family:Arial,Helvetica,sans-serif; font-size:95%;}
+h1 span {font-size:0.7em; font-weight:normal;}
+#wrapper {margin:10px auto; width:800px;}
+pre, code {background-color:#000; border-radius:5px; color:#0F0; font-family:'Courier New',monospace; font-size:0.9em; line-height:1.5em; margin:1em 0; padding:5px;}
+code {margin:0; padding:2px 5px;}
+pre code {font-size:1em; padding:0;}
+ul {margin:1em 0; padding:0 20px;}
+ul ul {margin-top:0.25em;}
+a {color:#333; text-decoration:underline;}
+a:hover {text-decoration:none;}
+a.forkme {background:url(../lib/img/forkme-terminal.png) no-repeat 0 0; height:149px; position:fixed; right:0; top:0; text-indent:-9999em; width:149px;}
