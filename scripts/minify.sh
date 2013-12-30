@@ -1,1 +1,0 @@
-uglifyjs jquery.nearest.js -c -m --comments '/^\!/' > jquery.nearest.min.js

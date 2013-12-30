@@ -6,7 +6,7 @@
   "keywords": ["nearest", "furthest", "touching", "pixel", "distance"],
   "homepage": "http://gilmoreorless.github.io/jquery-nearest/",
   "docs": "http://gilmoreorless.github.io/jquery-nearest/",
-  "demo": "http://gilmoreorless.github.io/jquery-nearest/demo.html",
+  "demo": "http://gilmoreorless.github.io/jquery-nearest/demo/",
   "bugs": "https://github.com/gilmoreorless/jquery-nearest/issues",
   "author": {
     "name": "Gilmore Davidson",
