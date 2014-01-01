@@ -214,6 +214,9 @@
 		 *   @return jQuery object containing matching elements in elemSet
 		 */
 		$.fn[name] = function (selector, options) {
+			if (!this.length) {
+				return this.pushStack([]);
+			}
 			var opts;
 			if (selector && $.isPlainObject(selector)) {
 				opts = $.extend({}, defaults, selector, options || {});

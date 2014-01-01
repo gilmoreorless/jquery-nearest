@@ -3,9 +3,17 @@
 <head>
 	<meta charset="utf-8">
 	<title>jQuery Nearest Test Suite</title>
+	<link rel="stylesheet" href="qunit/qunit.css">
+	<style>
+		#qunit-fixture > * {
+			height: 20px;
+			position: absolute;
+			width: 20px;
+		}
+	</style>
+
 	<!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
 	<script src="../inc/lib/jquery-loader.js"></script>
-	<link rel="stylesheet" href="qunit/qunit.css" media="screen">
 	<script src="qunit/qunit.js"></script>
 
 	<script src="../src/jquery.nearest.js"></script>
@@ -15,6 +23,17 @@
 <body>
 	<div id="qunit"></div>
 	<div id="qunit-fixture">
+		<!-- Corners -->
+		<div class="corner" id="top-left" style="left:0;top:0;"></div>
+		<div class="corner" id="top-right" style="right:0;top:0;"></div>
+		<div class="corner" id="bottom-left" style="left:0;bottom:0;"></div>
+		<div class="corner" id="bottom-right" style="right:0;bottom:0;"></div>
+
+		<!-- Top middle group -->
+		<span class="topmid" id="tmtl" style="left:500px;top:0;"></span>
+		<span class="topmid" id="tmbl" style="left:500px;top:40px;"></span>
+		<span class="topmid" id="tmtr" style="left:540px;top:0;"></span>
+		<span class="topmid" id="tmbr" style="left:540px;top:40px;"></span>
 	</div>
 </body>
 </html>
