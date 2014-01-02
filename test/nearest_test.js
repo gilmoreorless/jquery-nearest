@@ -1,17 +1,34 @@
 (function($) {
 
-	var testUtils = {
-		/**
-		 * Get an x/y point object that accounts for negative offset of #qunit-fixture
-		 */
-		getPoint: function (x, y) {
-			var offset = $('#qunit-fixture').offset();
-			return {
-				x: offset.left + x,
-				y: offset.top + y
-			};
+	/**
+	 * Get an x/y point object that accounts for negative offset of #qunit-fixture
+	 */
+	function getPoint(x, y) {
+		var offset = $('#qunit-fixture').offset();
+		return {
+			x: offset.left + x,
+			y: offset.top + y
+		};
+	}
+
+	/**
+	 * Assert the length of a jQuery object, and that the elements have the correct IDs
+	 */
+	function assertSet($set, length) {
+		var ids = Array.prototype.slice.call(arguments, 2);
+		var suffix = '';
+		if (ids.length && typeof ids[0] === 'object') {
+			if (ids[0].suffix) {
+				suffix = ids[0].suffix;
+			}
+			ids.shift();
 		}
-	};
+		var elemStr = length == 1 ? 'element' : 'elements';
+		equal($set.length, length, [length, elemStr, 'returned', suffix].join(' '));
+		for (var i = 0, ii = ids.length; i < ii; i++) {
+			equal($set[i].id, ids[i], ['element at index', i, 'has ID of', ids[i], suffix].join(' '));
+		}
+	}
 
 	/*
 		======== A Handy Little QUnit Reference ========
@@ -39,38 +56,35 @@
 	test('empty set', 2, function () {
 		var $set = $.nearest();
 		ok($set.jquery, 'returned set is a jQuery object');
-		equal($set.length, 0, 'returned set is empty');
+		assertSet($set, 0);
 	});
 
 	test('one parameter defaults to div', 2, function () {
-		var $set = $.nearest(testUtils.getPoint(510, 10)); // point intersects with a span
-		equal($set.length, 1, 'one element returned');
-		equal($set[0].nodeName, 'DIV', 'one element returned');
+		var $set = $.nearest(getPoint(510, 10)); // point intersects with a span
+		assertSet($set, 1);
+		equal($set[0].nodeName, 'DIV', 'element is a div');
 	});
 
 	test('basic usage: nearest', 2, function () {
-		var $set = $.nearest(testUtils.getPoint(0, 0), '.basic-group');
-		equal($set.length, 1, 'one element returned');
-		equal($set[0].id, 'basic-ref', 'correct element returned');
+		var $set = $.nearest(getPoint(0, 0), '.basic-group');
+		assertSet($set, 1, 'basic-ref');
 	});
 
 	test('basic usage: furthest', 3, function () {
-		var $set = $.furthest(testUtils.getPoint(0, 0), '.basic-group');
-		equal($set.length, 1, 'one element returned');
-		equal($set[0].id, 'basic-furthest', 'correct element returned');
+		var $set = $.furthest(getPoint(0, 0), '.basic-group');
+		assertSet($set, 1, 'basic-furthest');
 
-		$set = $.furthest(testUtils.getPoint(10, 10), '#top-left');
+		$set = $.furthest(getPoint(10, 10), '#top-left');
 		equal($set[0].id, 'top-left', 'touching element returned if it\'s the only match');
 	});
 
 	test('basic usage: touching', 4, function () {
-		var $set = $.touching(testUtils.getPoint(0, 0));
-		equal($set.length, 2, 'one element returned when unfiltered');
-		equal($set[0].id, 'qunit-fixture', 'parent element returned when unfiltered');
-		equal($set[1].id, 'top-left', 'child element returned when unfiltered');
+		var $set = $.touching(getPoint(0, 0));
+		// Should contain both the parent and child elements
+		assertSet($set, 2, {suffix: 'when unfiltered'}, 'qunit-fixture', 'top-left');
 
-		$set = $.touching(testUtils.getPoint(0, 0), '.basic-group');
-		equal($set.length, 0, 'no elements returned for top left when filtered');
+		$set = $.touching(getPoint(0, 0), '.basic-group');
+		assertSet($set, 0, {suffix: 'when filtered'});
 	});
 
 
@@ -119,7 +133,7 @@
 	test('empty set', 2, function () {
 		var $set = $('#does-not-exist');
 		var $result = $set.nearest();
-		equal($result.length, 0, 'returned set is empty');
+		assertSet($result, 0);
 		notStrictEqual($result, $set, 'returned set is a copy');
 	});
 
@@ -131,8 +145,7 @@
 	test('methods use dimensions of the first element in a set', 2, function () {
 		var $set = $('.corner');
 		var $nearest = $set.nearest('.topmid', {tolerance: 0});
-		equal($nearest.length, 1, 'only one element is returned');
-		equal($nearest[0].id, 'tmtl', 'closest element to the top left is returned');
+		assertSet($nearest, 1, 'tmtl');
 	});
 
 	test('basic find usage', 6, function () {
@@ -141,12 +154,9 @@
 		var $furthest = $elem.furthest('.basic-group');
 		var $touching = $elem.touching('.basic-group');
 
-		equal($nearest.length, 1, 'only one other element is nearest');
-		equal($nearest[0].id, 'basic-touching', 'correct element is nearest');
-		equal($furthest.length, 1, 'only one other element is furthest');
-		equal($furthest[0].id, 'basic-furthest', 'correct element is furthest');
-		equal($touching.length, 1, 'only one other element is touching');
-		equal($touching[0].id, 'basic-touching', 'correct element is touching');
+		assertSet($nearest, 1, {suffix: 'for nearest'}, 'basic-touching');
+		assertSet($furthest, 1, {suffix: 'for furthest'}, 'basic-furthest');
+		assertSet($touching, 1, {suffix: 'for touching'}, 'basic-touching');
 	});
 
 	test('option: includeSelf', 5, function () {
@@ -154,26 +164,20 @@
 		var $withoutSelf = $elem.nearest('.basic-group');
 		var $withSelf = $elem.nearest('.basic-group', {includeSelf: true});
 
-		equal($withoutSelf.length, 1, 'when false, only one other element is nearest');
-		equal($withoutSelf[0].id, 'basic-touching', 'correct element is nearest');
-
-		equal($withSelf.length, 2, 'when true, two elements are nearest');
-		equal($withSelf[0].id, 'basic-ref', 'original element is nearest');
-		equal($withSelf[1].id, 'basic-touching', 'touching element is nearest');
+		assertSet($withoutSelf, 1, {suffix: 'when false'}, 'basic-touching');
+		assertSet($withSelf, 2, {suffix: 'when true'}, 'basic-ref', 'basic-touching');
 	});
 
 	test('basic filter usage', 5, function () {
 		var $set = $('.corner');
-		var point = testUtils.getPoint(30, 30);
+		var point = getPoint(30, 30);
 		var $nearest = $set.nearest(point);
 		var $furthest = $set.furthest(point);
 		var $touching = $set.touching(point);
 
-		equal($nearest.length, 1, 'only one element is nearest');
-		equal($nearest[0].id, 'top-left', 'correct element is nearest');
-		equal($furthest.length, 1, 'only one element is furthest');
-		equal($furthest[0].id, 'bottom-right', 'correct element is furthest');
-		equal($touching.length, 0, 'no elements are touching');
+		assertSet($nearest, 1, {suffix: 'for nearest'}, 'top-left');
+		assertSet($furthest, 1, {suffix: 'for furthest'}, 'bottom-right');
+		assertSet($touching, 0, {suffix: 'for touching'});
 	});
 
 }(jQuery));
