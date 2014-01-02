@@ -5,7 +5,7 @@
 	<title>jQuery Nearest Test Suite</title>
 	<link rel="stylesheet" href="qunit/qunit.css">
 	<style>
-		#qunit-fixture > * {
+		#qunit-fixture > *, .container > * {
 			height: 20px;
 			position: absolute;
 			width: 20px;
@@ -34,6 +34,17 @@
 		<span class="topmid" id="tmbl" style="left:500px;top:40px;"></span>
 		<span class="topmid" id="tmtr" style="left:540px;top:0;"></span>
 		<span class="topmid" id="tmbr" style="left:540px;top:40px;"></span>
+
+		<div id="dead-centre" style="left:50%;top:50%;margin:-10px -10px 0 0;"></div>
+
+		<!-- Basic group of touching/near/far elems from bottom-right -->
+		<div id="basic-group-container" class="container" style="left:200px;top:200px;width:200px;height:200px;position:relative;">
+			<a    class="basic-group" id="basic-ref" style="left:0;top:0;">thing</a>
+			<span class="basic-group" id="basic-touching" style="left:10px;top:15px;">thing</span>
+			<div  class="basic-group" id="basic-nearest" style="left:30px;top:15px;">thing</div>
+			<div  class="basic-group" id="basic-mid" style="left:50%;top:50%;">thing</div>
+			<p    class="basic-group" id="basic-furthest" style="right:0;bottom:0;">thing</a>
+		</div>
 	</div>
 </body>
 </html>
