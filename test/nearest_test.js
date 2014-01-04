@@ -6,9 +6,19 @@
 	function getPoint(x, y) {
 		var offset = $('#qunit-fixture').offset();
 		return {
-			x: offset.left + x,
-			y: offset.top + y
+			x: typeof x === 'string' ? x : offset.left + x,
+			y: typeof y === 'string' ? y : offset.top + y
 		};
+	}
+
+	/**
+	 * Get an x/y/w/h box object that accounts for negative offset of #qunit-fixture
+	 */
+	function getBox(x, y, w, h) {
+		var box = getPoint(x, y);
+		box.w = w;
+		box.h = h;
+		return box;
 	}
 
 	/**
@@ -93,6 +103,54 @@
 
 	module('$.method: dimensions');
 
+	var containerSelector = '#qunit-fixture';
+	var dimOpts = {container: containerSelector};
+
+	test('point', 5, function () {
+		var $set = $.nearest(getPoint(530, 30), '.topmid');
+		assertSet($set, 4, 'tmtl', 'tmbl', 'tmtr', 'tmbr');
+	});
+
+	test('box', 5, function () {
+		var $set = $.nearest(getBox(525, 25, 10, 10), '.topmid');
+		assertSet($set, 4, 'tmtl', 'tmbl', 'tmtr', 'tmbr');
+	});
+
+	test('x: 100%', 2, function () {
+		var $set = $.touching(getPoint('100%', 0), '*', dimOpts);
+		assertSet($set, 1, 'top-right');
+	});
+
+	test('y: 100%', 2, function () {
+		var $set = $.touching(getPoint(0, '100%'), '*', dimOpts);
+		assertSet($set, 1, 'bottom-left');
+	});
+
+	test('w: 100%', 3, function () {
+		var $set = $.touching(getBox(0, 0, '100%', 0), '.corner', dimOpts);
+		assertSet($set, 2, 'top-left', 'top-right');
+	});
+
+	test('h: 100%', 3, function () {
+		var $set = $.touching(getBox(0, 0, 0, '100%'), '.corner', dimOpts);
+		assertSet($set, 2, 'top-left', 'bottom-left');
+	});
+
+	test('x/h: 100%', 3, function () {
+		var $set = $.touching(getBox('100%', 0, 0, '100%'), '.corner', dimOpts);
+		assertSet($set, 2, 'top-right', 'bottom-right');
+	});
+
+	test('x/y: 50%', 2, function () {
+		var $set = $.touching(getPoint('50%', '50%'), '*', dimOpts);
+		assertSet($set, 1, 'dead-centre');
+	});
+
+	test('x/y: 0 + w/h: 100%', 1, function () {
+		var $set = $.touching(getBox(0, 0, '100%', '100%'), '*', dimOpts);
+		equal($set.length, $(containerSelector + ' *').length, '0,0 to 100%,100% returns all elements');
+	});
+
 
 
 	////////// MODULE $.method options //////////
@@ -105,15 +163,6 @@
 	 * -------------
 	 *
 	 * - util methods
-	 *   - dimensions
-	 *     - point
-	 *     - box
-	 *     - x: 100%
-	 *     - y: 100%
-	 *     - w: 100%
-	 *     - h: 100%
-	 *     - x/y: 50%
-	 *     - x/y: 0 + w/h: 100% = return everything
 	 *   - options
 	 *     - checkHoriz/sameX
 	 *     - checkVert/sameY
@@ -122,6 +171,7 @@
 	 *     - tolerance (normal & out-of-bounds)
 	 *     - container - percentages
 	 *     - container - children
+	 *     - container - invalid
 	 */
 
 

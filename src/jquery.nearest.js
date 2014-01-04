@@ -40,16 +40,23 @@
 		selector || (selector = 'div'); // I STRONGLY recommend passing in a selector
 		var $container = $(options.container),
 			containerOffset = $container.offset() || {left: 0, top: 0},
-			containerDims = [
-				containerOffset.left + $container.width(),
-				containerOffset.top + $container.height()
+			containerWH = [
+				$container.width() || 0,
+				$container.height() || 0
 			],
-			percProps = {x: 0, y: 1, w: 0, h: 1},
-			prop, match;
-		for (prop in percProps) if (percProps.hasOwnProperty(prop)) {
+			containerProps = {
+				// prop: [min, max]
+				x: [containerOffset.left, containerOffset.left + containerWH[0]],
+				y: [containerOffset.top, containerOffset.top + containerWH[1]],
+				w: [0, containerWH[0]],
+				h: [0, containerWH[1]]
+			},
+			prop, dims, match;
+		for (prop in containerProps) if (containerProps.hasOwnProperty(prop)) {
 			match = rPerc.exec(options[prop]);
 			if (match) {
-				options[prop] = containerDims[percProps[prop]] * match[1] / 100;
+				dims = containerProps[prop];
+				options[prop] = (dims[1] - dims[0]) * match[1] / 100 + dims[0];
 			}
 		}
 
