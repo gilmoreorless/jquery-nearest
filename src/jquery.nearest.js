@@ -71,7 +71,7 @@
 			point1y = parseFloat(options.y) || 0,
 			point2x = parseFloat(point1x + options.w) || point1x,
 			point2y = parseFloat(point1y + options.h) || point1y,
-			tolerance = options.tolerance || 0,
+			tolerance = parseFloat(options.tolerance) || 0,
 			hasEach2 = !!$.fn.each2,
 			// Shortcuts to help with compression
 			min = Math.min,

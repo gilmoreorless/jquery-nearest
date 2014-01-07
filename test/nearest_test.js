@@ -1,5 +1,7 @@
 (function($) {
 
+	////////// HELPER FUNCTIONS //////////
+
 	/**
 	 * Get an x/y point object that accounts for negative offset of #qunit-fixture
 	 */
@@ -40,26 +42,9 @@
 		}
 	}
 
-	/*
-		======== A Handy Little QUnit Reference ========
-		http://api.qunitjs.com/
 
-		Test methods:
-			module(name, {[setup][ ,teardown]})
-			test(name, callback)
-			expect(numberOfAssertions)
-			stop(increment)
-			start(decrement)
-		Test assertions:
-			ok(value, [message])
-			equal(actual, expected, [message])
-			notEqual(actual, expected, [message])
-			deepEqual(actual, expected, [message])
-			notDeepEqual(actual, expected, [message])
-			strictEqual(actual, expected, [message])
-			notStrictEqual(actual, expected, [message])
-			throws(block, [expected], [message])
-	*/
+
+	////////// MODULE $.method basic usage //////////
 
 	module('$.method: basic');
 
@@ -97,6 +82,10 @@
 		assertSet($set, 0, {suffix: 'when filtered'});
 	});
 
+	test('invalid selector', 1, function () {
+		assertSet($.nearest(getPoint(0, 0), '#does-not-exist'), 0);
+	});
+
 
 
 	////////// MODULE $.method dimensions //////////
@@ -107,12 +96,12 @@
 	var dimOpts = {container: containerSelector};
 
 	test('point', 5, function () {
-		var $set = $.nearest(getPoint(530, 30), '.topmid');
+		var $set = $.nearest(getPoint(530, 30), '.top-mid');
 		assertSet($set, 4, 'tmtl', 'tmbl', 'tmtr', 'tmbr');
 	});
 
 	test('box', 5, function () {
-		var $set = $.nearest(getBox(525, 25, 10, 10), '.topmid');
+		var $set = $.nearest(getBox(525, 25, 10, 10), '.top-mid');
 		assertSet($set, 4, 'tmtl', 'tmbl', 'tmtr', 'tmbr');
 	});
 
@@ -155,24 +144,157 @@
 
 	////////// MODULE $.method options //////////
 
-	module('$.method: options');
+	module('$.method: options', {
+		setup: function () {
+			this.midPoint = getPoint(250, 750);
+			this.midBox = getBox(240, 740, 20, 20);
+			this.tolPoint = getPoint(700, 200);
+			this.contPoint = getPoint(700, 700);
+		}
+	});
 
+	// 100,600 -> 400,900 = 300x300; 50% = 250,750
+	test('x/y sanity check', 5, function () {
+		var $nearest  = $.nearest( this.midPoint, '.xy-group');
+		var $furthest = $.furthest(this.midPoint, '.xy-group');
+		var $touching = $.touching(this.midPoint, '.xy-group');
 
-	/*
-	 * Tests to run
-	 * -------------
-	 *
-	 * - util methods
-	 *   - options
-	 *     - checkHoriz/sameX
-	 *     - checkVert/sameY
-	 *     - onlyX
-	 *     - onlyY
-	 *     - tolerance (normal & out-of-bounds)
-	 *     - container - percentages
-	 *     - container - children
-	 *     - container - invalid
-	 */
+		assertSet($nearest,  1, {suffix: 'for nearest'},  'xy-nearest-diag');
+		assertSet($furthest, 1, {suffix: 'for furthest'}, 'xy-furthest-diag');
+		assertSet($touching, 0, {suffix: 'for touching'});
+	});
+
+	test('checkHoriz', 5, function () {
+		var $nearest2  = $.nearest( this.midBox, '.xy-group', {checkHoriz: false});
+		var $furthest2 = $.furthest(this.midBox, '.xy-group', {checkHoriz: false});
+		var $touching2 = $.touching(this.midBox, '.xy-group', {checkHoriz: false});
+
+		assertSet($nearest2,  1, {suffix: 'for nearest'},  'xy-mid-sameX');
+		assertSet($furthest2, 1, {suffix: 'for furthest'}, 'xy-mid-sameX');
+		assertSet($touching2, 0, {suffix: 'for touching'}); // Make sure .touching() is unaffected
+	});
+
+	test('checkVert', 5, function () {
+		var $nearest2  = $.nearest( this.midBox, '.xy-group', {checkVert: false});
+		var $furthest2 = $.furthest(this.midBox, '.xy-group', {checkVert: false});
+		var $touching2 = $.touching(this.midBox, '.xy-group', {checkVert: false});
+
+		assertSet($nearest2,  1, {suffix: 'for nearest'},  'xy-mid-sameY');
+		assertSet($furthest2, 1, {suffix: 'for furthest'}, 'xy-mid-sameY');
+		assertSet($touching2, 0, {suffix: 'for touching'}); // Make sure .touching() is unaffected
+	});
+
+	test('checkHoriz + checkVert (no match)', 3, function () {
+		var $nearest2  = $.nearest( this.midBox, '.xy-group', {checkHoriz: false, checkVert: false});
+		var $furthest2 = $.furthest(this.midBox, '.xy-group', {checkHoriz: false, checkVert: false});
+		var $touching2 = $.touching(this.midBox, '.xy-group', {checkHoriz: false, checkVert: false});
+
+		// All methods should act like .touching()
+		assertSet($nearest2,  0, {suffix: 'for nearest'});
+		assertSet($furthest2, 0, {suffix: 'for furthest'});
+		assertSet($touching2, 0, {suffix: 'for touching'});
+	});
+
+	test('checkHoriz + checkVert (match)', 6, function () {
+		var point = getPoint(290, 790);
+		var $nearest2  = $.nearest( point, '.xy-group', {checkHoriz: false, checkVert: false});
+		var $furthest2 = $.furthest(point, '.xy-group', {checkHoriz: false, checkVert: false});
+		var $touching2 = $.touching(point, '.xy-group', {checkHoriz: false, checkVert: false});
+
+		// All methods should act like .touching()
+		assertSet($nearest2,  1, {suffix: 'for nearest'},  'xy-nearest-diag');
+		assertSet($furthest2, 1, {suffix: 'for furthest'}, 'xy-nearest-diag');
+		assertSet($touching2, 1, {suffix: 'for touching'}, 'xy-nearest-diag');
+	});
+
+	test('onlyX', 5, function () {
+		var $nearest  = $.nearest( this.midBox, '.xy-group.not-same', {onlyX: true});
+		var $furthest = $.furthest(this.midBox, '.xy-group.not-same', {onlyX: true});
+		var $touching = $.touching(this.midBox, '.xy-group.not-same', {onlyX: true});
+
+		assertSet($nearest,  1, {suffix: 'for nearest'},  'xy-closeX');
+		assertSet($furthest, 1, {suffix: 'for furthest'}, 'xy-right');
+		assertSet($touching, 0, {suffix: 'for touching'}); // Make sure .touching() is unaffected
+	});
+
+	test('onlyY', 5, function () {
+		var $nearest  = $.nearest( this.midBox, '.xy-group.not-same', {onlyY: true});
+		var $furthest = $.furthest(this.midBox, '.xy-group.not-same', {onlyY: true});
+		var $touching = $.touching(this.midBox, '.xy-group.not-same', {onlyY: true});
+
+		assertSet($nearest,  1, {suffix: 'for nearest'},  'xy-closeY');
+		assertSet($furthest, 1, {suffix: 'for furthest'}, 'xy-bottom');
+		assertSet($touching, 0, {suffix: 'for touching'}); // Make sure .touching() is unaffected
+	});
+
+	test('tolerance: 0', 4, function () {
+		var $nearest  = $.nearest( this.tolPoint, '.tolerance', {tolerance: 0});
+		var $furthest = $.furthest(this.tolPoint, '.tolerance', {tolerance: 0});
+
+		assertSet($nearest,  1, {suffix: 'for nearest'},  'tol-14');
+		assertSet($furthest, 1, {suffix: 'for furthest'}, 'tol-16');
+	});
+
+	test('tolerance: 0.5', 5, function () {
+		var $nearest  = $.nearest( this.tolPoint, '.tolerance', {tolerance: 0.5});
+		var $furthest = $.furthest(this.tolPoint, '.tolerance', {tolerance: 0.5});
+
+		assertSet($nearest,  2, {suffix: 'for nearest'},  'tol-14', 'tol-14-and-a-bit');
+		assertSet($furthest, 1, {suffix: 'for furthest'}, 'tol-16');
+	});
+
+	test('tolerance: 1 (default)', 7, function () {
+		var $nearest  = $.nearest( this.tolPoint, '.tolerance');
+		var $furthest = $.furthest(this.tolPoint, '.tolerance');
+
+		assertSet($nearest,  3, {suffix: 'for nearest'},  'tol-14', 'tol-14-and-a-bit', 'tol-15');
+		assertSet($furthest, 2, {suffix: 'for furthest'}, 'tol-15', 'tol-16');
+	});
+
+	test('tolerance: large', 7, function () {
+		var $nearest  = $.nearest( this.tolPoint, '.corner', {tolerance: 380});
+		var $furthest = $.furthest(this.tolPoint, '.corner', {tolerance: 380});
+
+		assertSet($nearest,  2, {suffix: 'for nearest'},  'top-left', 'top-right');
+		assertSet($furthest, 3, {suffix: 'for furthest'}, 'top-left', 'bottom-left', 'bottom-right');
+	});
+
+	test('tolerance: out of bounds', 4, function () {
+		var $set1 = $.nearest(this.tolPoint, '.tolerance', {tolerance: -1});
+		var $set2 = $.nearest(this.tolPoint, '.tolerance', {tolerance: 'not a number'});
+		// Negative/invalid numbers reset to 0
+		assertSet($set1, 1, 'tol-14');
+		assertSet($set2, 1, 'tol-14');
+	});
+
+	test('container: percentages', 4, function () {
+		var point = {
+			x: '25%',
+			y: '20%',
+			w: '20%',
+			h: '30%'
+		};
+		var $nearest  = $.nearest( point, 'div', {container: '#cont-option-container'});
+		var $furthest = $.furthest(point, 'div', {container: '#cont-option-container'});
+
+		assertSet($nearest,  1, 'cont-centre');
+		assertSet($furthest, 1, 'cont-top-left');
+	});
+
+	test('container: children', 4, function () {
+		// Sanity check
+		var $out = $.nearest(this.contPoint, '.cont');
+		assertSet($out, 1, {suffix: 'without container'}, 'cont-outside');
+
+		// With container option
+		var $in = $.nearest(this.contPoint, '.cont', {container: '#cont-option-container'});
+		assertSet($in, 1, {suffix: 'with container'}, 'cont-centre');
+	});
+
+	test('container: invalid', 1, function () {
+		var $set = $.nearest(this.contPoint, '.cont', {container: '#does-not-exist'});
+		assertSet($set, 0); // Make sure it doesn't blow up
+	});
 
 
 
@@ -194,17 +316,17 @@
 
 	test('methods use dimensions of the first element in a set', 2, function () {
 		var $set = $('.corner');
-		var $nearest = $set.nearest('.topmid', {tolerance: 0});
+		var $nearest = $set.nearest('.top-mid', {tolerance: 0});
 		assertSet($nearest, 1, 'tmtl');
 	});
 
 	test('basic find usage', 6, function () {
 		var $elem = $('#basic-ref');
-		var $nearest = $elem.nearest('.basic-group');
+		var $nearest  = $elem.nearest( '.basic-group');
 		var $furthest = $elem.furthest('.basic-group');
 		var $touching = $elem.touching('.basic-group');
 
-		assertSet($nearest, 1, {suffix: 'for nearest'}, 'basic-touching');
+		assertSet($nearest,  1, {suffix: 'for nearest'},  'basic-touching');
 		assertSet($furthest, 1, {suffix: 'for furthest'}, 'basic-furthest');
 		assertSet($touching, 1, {suffix: 'for touching'}, 'basic-touching');
 	});
@@ -221,11 +343,11 @@
 	test('basic filter usage', 5, function () {
 		var $set = $('.corner');
 		var point = getPoint(30, 30);
-		var $nearest = $set.nearest(point);
+		var $nearest  = $set.nearest( point);
 		var $furthest = $set.furthest(point);
 		var $touching = $set.touching(point);
 
-		assertSet($nearest, 1, {suffix: 'for nearest'}, 'top-left');
+		assertSet($nearest,  1, {suffix: 'for nearest'},  'top-left');
 		assertSet($furthest, 1, {suffix: 'for furthest'}, 'bottom-right');
 		assertSet($touching, 0, {suffix: 'for touching'});
 	});
