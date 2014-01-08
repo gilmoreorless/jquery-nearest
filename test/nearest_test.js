@@ -164,47 +164,85 @@
 		assertSet($touching, 0, {suffix: 'for touching'});
 	});
 
-	test('checkHoriz', 5, function () {
+	test('sameX / checkHoriz', 10, function () {
+		var $nearest  = $.nearest( this.midBox, '.xy-group', {sameX: true});
+		var $furthest = $.furthest(this.midBox, '.xy-group', {sameX: true});
+		var $touching = $.touching(this.midBox, '.xy-group', {sameX: true});
+
+		assertSet($nearest,  1, {suffix: 'for nearest'},  'xy-mid-sameX');
+		assertSet($furthest, 1, {suffix: 'for furthest'}, 'xy-mid-sameX');
+		assertSet($touching, 0, {suffix: 'for touching'}); // Make sure .touching() is unaffected
+
+		// Old tests for checkHoriz - remove when the option has been removed
 		var $nearest2  = $.nearest( this.midBox, '.xy-group', {checkHoriz: false});
 		var $furthest2 = $.furthest(this.midBox, '.xy-group', {checkHoriz: false});
 		var $touching2 = $.touching(this.midBox, '.xy-group', {checkHoriz: false});
 
-		assertSet($nearest2,  1, {suffix: 'for nearest'},  'xy-mid-sameX');
-		assertSet($furthest2, 1, {suffix: 'for furthest'}, 'xy-mid-sameX');
-		assertSet($touching2, 0, {suffix: 'for touching'}); // Make sure .touching() is unaffected
+		assertSet($nearest2,  1, {suffix: 'for nearest 2'},  'xy-mid-sameX');
+		assertSet($furthest2, 1, {suffix: 'for furthest 2'}, 'xy-mid-sameX');
+		assertSet($touching2, 0, {suffix: 'for touching 2'}); // Make sure .touching() is unaffected
 	});
 
-	test('checkVert', 5, function () {
+	test('sameY / checkVert', 10, function () {
+		var $nearest  = $.nearest( this.midBox, '.xy-group', {sameY: true});
+		var $furthest = $.furthest(this.midBox, '.xy-group', {sameY: true});
+		var $touching = $.touching(this.midBox, '.xy-group', {sameY: true});
+
+		assertSet($nearest,  1, {suffix: 'for nearest'},  'xy-mid-sameY');
+		assertSet($furthest, 1, {suffix: 'for furthest'}, 'xy-mid-sameY');
+		assertSet($touching, 0, {suffix: 'for touching'}); // Make sure .touching() is unaffected
+
+		// Old tests for checkVert - remove when the option has been removed
 		var $nearest2  = $.nearest( this.midBox, '.xy-group', {checkVert: false});
 		var $furthest2 = $.furthest(this.midBox, '.xy-group', {checkVert: false});
 		var $touching2 = $.touching(this.midBox, '.xy-group', {checkVert: false});
 
-		assertSet($nearest2,  1, {suffix: 'for nearest'},  'xy-mid-sameY');
-		assertSet($furthest2, 1, {suffix: 'for furthest'}, 'xy-mid-sameY');
-		assertSet($touching2, 0, {suffix: 'for touching'}); // Make sure .touching() is unaffected
+		assertSet($nearest2,  1, {suffix: 'for nearest 2'},  'xy-mid-sameY');
+		assertSet($furthest2, 1, {suffix: 'for furthest 2'}, 'xy-mid-sameY');
+		assertSet($touching2, 0, {suffix: 'for touching 2'}); // Make sure .touching() is unaffected
 	});
 
-	test('checkHoriz + checkVert (no match)', 3, function () {
+	test('sameX / checkHoriz + sameY / checkVert (no match)', 6, function () {
+		var $nearest  = $.nearest( this.midBox, '.xy-group', {sameX: true, sameY: true});
+		var $furthest = $.furthest(this.midBox, '.xy-group', {sameX: true, sameY: true});
+		var $touching = $.touching(this.midBox, '.xy-group', {sameX: true, sameY: true});
+
+		// All methods should act like .touching()
+		assertSet($nearest,  0, {suffix: 'for nearest'});
+		assertSet($furthest, 0, {suffix: 'for furthest'});
+		assertSet($touching, 0, {suffix: 'for touching'});
+
+		// Old tests for checkHoriz + checkVert - remove when the option has been removed
 		var $nearest2  = $.nearest( this.midBox, '.xy-group', {checkHoriz: false, checkVert: false});
 		var $furthest2 = $.furthest(this.midBox, '.xy-group', {checkHoriz: false, checkVert: false});
 		var $touching2 = $.touching(this.midBox, '.xy-group', {checkHoriz: false, checkVert: false});
 
 		// All methods should act like .touching()
-		assertSet($nearest2,  0, {suffix: 'for nearest'});
-		assertSet($furthest2, 0, {suffix: 'for furthest'});
-		assertSet($touching2, 0, {suffix: 'for touching'});
+		assertSet($nearest2,  0, {suffix: 'for nearest 2'});
+		assertSet($furthest2, 0, {suffix: 'for furthest 2'});
+		assertSet($touching2, 0, {suffix: 'for touching 2'});
 	});
 
-	test('checkHoriz + checkVert (match)', 6, function () {
+	test('sameX / checkHoriz + sameY / checkVert (match)', 12, function () {
 		var point = getPoint(290, 790);
+		var $nearest  = $.nearest( point, '.xy-group', {sameX: true, sameY: true});
+		var $furthest = $.furthest(point, '.xy-group', {sameX: true, sameY: true});
+		var $touching = $.touching(point, '.xy-group', {sameX: true, sameY: true});
+
+		// All methods should act like .touching()
+		assertSet($nearest,  1, {suffix: 'for nearest'},  'xy-nearest-diag');
+		assertSet($furthest, 1, {suffix: 'for furthest'}, 'xy-nearest-diag');
+		assertSet($touching, 1, {suffix: 'for touching'}, 'xy-nearest-diag');
+
+		// Old tests for checkHoriz + checkVert - remove when the option has been removed
 		var $nearest2  = $.nearest( point, '.xy-group', {checkHoriz: false, checkVert: false});
 		var $furthest2 = $.furthest(point, '.xy-group', {checkHoriz: false, checkVert: false});
 		var $touching2 = $.touching(point, '.xy-group', {checkHoriz: false, checkVert: false});
 
 		// All methods should act like .touching()
-		assertSet($nearest2,  1, {suffix: 'for nearest'},  'xy-nearest-diag');
-		assertSet($furthest2, 1, {suffix: 'for furthest'}, 'xy-nearest-diag');
-		assertSet($touching2, 1, {suffix: 'for touching'}, 'xy-nearest-diag');
+		assertSet($nearest2,  1, {suffix: 'for nearest 2'},  'xy-nearest-diag');
+		assertSet($furthest2, 1, {suffix: 'for furthest 2'}, 'xy-nearest-diag');
+		assertSet($touching2, 1, {suffix: 'for touching 2'}, 'xy-nearest-diag');
 	});
 
 	test('onlyX', 5, function () {
@@ -225,6 +263,16 @@
 		assertSet($nearest,  1, {suffix: 'for nearest'},  'xy-closeY');
 		assertSet($furthest, 1, {suffix: 'for furthest'}, 'xy-bottom');
 		assertSet($touching, 0, {suffix: 'for touching'}); // Make sure .touching() is unaffected
+	});
+
+	test('sameX overrides onlyX', 1, function () {
+		var $set = $.nearest(this.midBox, '.xy-group.not-same', {onlyX: true, sameX: true});
+		assertSet($set, 0);
+	});
+
+	test('sameY overrides onlyY', 1, function () {
+		var $set = $.nearest(this.midBox, '.xy-group.not-same', {onlyY: true, sameY: true});
+		assertSet($set, 0);
 	});
 
 	test('tolerance: 0', 4, function () {

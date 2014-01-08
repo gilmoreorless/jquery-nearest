@@ -60,12 +60,20 @@
 			}
 		}
 
+		// Deprecated options - remove in 2.0
+		if (options.sameX === false && options.checkHoriz === false) {
+			options.sameX = !options.checkHoriz;
+		}
+		if (options.sameY === false && options.checkVert === false) {
+			options.sameY = !options.checkVert;
+		}
+
 		// Get elements and work out x/y points
 		var $all = $container.find(selector),
 			cache = [],
 			furthest = !!options.furthest,
-			checkX = !!options.checkHoriz,
-			checkY = !!options.checkVert,
+			checkX = !options.sameX,
+			checkY = !options.sameY,
 			compDist = furthest ? 0 : Infinity,
 			point1x = parseFloat(options.x) || 0,
 			point1y = parseFloat(options.y) || 0,
@@ -106,9 +114,9 @@
 				(checkX && checkY) ||
 				// .touching()
 				(!checkX && !checkY && intersectX && intersectY) ||
-				// .nearest({checkVert: false})
+				// .nearest({sameY: true})
 				(checkX && intersectY) ||
-				// .nearest({checkHoriz: false})
+				// .nearest({sameX: true})
 				(checkY && intersectX) ||
 				// .nearest({onlyX: true})
 				(checkX && options.onlyX) ||
@@ -176,8 +184,10 @@
 			container:   document, // Container of objects for calculating %-based dimensions
 			furthest:    name == 'furthest', // Find max distance (true) or min distance (false)
 			includeSelf: false, // Include 'this' in search results (t/f) - only applies to $(elem).func(selector) syntax
-			checkHoriz:  name != 'touching', // Check variations in X axis (t/f)
-			checkVert:   name != 'touching'  // Check variations in Y axis (t/f)
+			sameX: name === 'touching', // Only match for the same X axis values (t/f)
+			sameY: name === 'touching', // Only match for the same Y axis values (t/f)
+			onlyX: false, // Only check X axis variations (t/f)
+			onlyY: false  // Only check Y axis variations (t/f)
 		};
 
 		/**
