@@ -74,6 +74,8 @@
 			furthest = !!options.furthest,
 			checkX = !options.sameX,
 			checkY = !options.sameY,
+			onlyX  = !!options.onlyX,
+			onlyY  = !!options.onlyY,
 			compDist = furthest ? 0 : Infinity,
 			point1x = parseFloat(options.x) || 0,
 			point1y = parseFloat(options.y) || 0,
@@ -119,16 +121,14 @@
 				// .nearest({sameX: true})
 				(checkY && intersectX) ||
 				// .nearest({onlyX: true})
-				(checkX && options.onlyX) ||
+				(checkX && onlyX) ||
 				// .nearest({onlyY: true})
-				(checkY && options.onlyY)
+				(checkY && onlyY)
 			) {
 				distX = intersectX ? 0 : maxX1 - minX2;
 				distY = intersectY ? 0 : maxY1 - minY2;
-				if (options.onlyX) {
-					distT = distX;
-				} else if (options.onlyY) {
-					distT = distY;
+				if (onlyX || onlyY) {
+					distT = onlyX ? distX : distY;
 				} else {
 					distT = intersectX || intersectY ?
 						max(distX, distY) :
