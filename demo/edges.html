@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Edges/100% Demo - jQuery Nearest Element plugin</title>
+	<meta charset="utf-8">
+	<style>
+		html, body {background-color:#FFC; font-family:Arial; height:100%; margin:0;}
+		a {color:#000; text-decoration:underline;}
+		a:hover {text-decoration:none;}
+		#menu {height:100%; overflow:hidden; padding:0 10px; width:230px;}
+		.grid {border-collapse:collapse; display:table; margin:0 auto;}
+		.grid-row {display:table-row;}
+		.grid-row label {border:1px solid #000; cursor:pointer; display:table-cell; height:30px; text-align:center; vertical-align:middle; width:30px;}
+		.grid-row label.edge {border:none;}
+		.grid-row label:hover {background-color:#FC9;}
+		.grid-row input {cursor:pointer;}
+		#menu pre {background-color:#FFF; border:1px solid #999; padding:.5em;}
+		#header {position:absolute; top:0; width:100%;}
+		#header p {font-size:0.9em; margin:0 0 0 282px; padding:5px 0;}
+		#container {background-color:#FFF; border:2px solid #000; bottom:20px; left:270px; position:absolute; right:20px; top:60px;}
+		.corner {background-color:#000; cursor:move; height:15px; position:absolute; width:15px;}
+		.corner.top {top:-15px;}
+		.corner.bottom {bottom:-15px;}
+		.corner.left {left:-15px;}
+		.corner.right {right:-15px;}
+		.block-wrap {bottom:0; left:0; overflow:hidden; position:absolute; right:0; top:0;}
+		.block, dt {background-color:#AAA; border:1px solid #000; font-size:16px; opacity:1; text-align:center;}
+		.block {float:left; height:100px; margin:10px; width:100px;}
+		.nearest {background-color:#9F9;}
+	</style>
+</head>
+<body>
+	<div id="menu">
+		<h3>Options</h3>
+		<h4>Edge / Corner</h4>
+		<div class="grid" id="dimension-select">
+			<div class="grid-row">
+				<label><input type="radio" name="dimension" value="tl"></label>
+				<label class="edge"><input type="radio" name="dimension" value="tm" checked></label>
+				<label><input type="radio" name="dimension" value="tr"></label>
+			</div>
+			<div class="grid-row">
+				<label class="edge"><input type="radio" name="dimension" value="ml"></label>
+				<label><!--<input type="radio" name="dimension" value="mm">--></label>
+				<label class="edge"><input type="radio" name="dimension" value="mr"></label>
+			</div>
+			<div class="grid-row">
+				<label><input type="radio" name="dimension" value="bl"></label>
+				<label class="edge"><input type="radio" name="dimension" value="bm"></label>
+				<label><input type="radio" name="dimension" value="br"></label>
+			</div>
+		</div>
+
+		<h3>Output:</h3>
+		<pre><code id="code-output"></code></pre>
+
+		<a href="../">Back to documentation</a>
+	</div>
+	<div id="header">
+		<p>
+			A demonstration of the <a href="../">jQuery Nearest Element plugin</a>.
+			Check out the <a href="demo-edges.js">code behind it</a>.
+		</p>
+		<p>
+			Select an edge/corner to find the nearest blocks (with example code).
+			Drag the corners to resize the container.
+		</p>
+	</div>
+	<div id="container">
+		<div class="block-wrap"></div>
+	</div>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+	<!-- Offline fallback -->
+	<script>window.jQuery || document.write('<script src="../inc/lib/jquery-1.7.1.js"><\/script>')</script>
+	<script src="../inc/lib/jquery.ba-each2.min.js"></script>
+	<script src="../src/jquery.nearest.js"></script>
+	<script src="demo-edges.js"></script>
+	<script src="../../lib/js/common-docs.js"></script>
+</body>
+</html>

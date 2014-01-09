@@ -40,31 +40,48 @@
 		selector || (selector = 'div'); // I STRONGLY recommend passing in a selector
 		var $container = $(options.container),
 			containerOffset = $container.offset() || {left: 0, top: 0},
-			containerDims = [
-				containerOffset.left + $container.width(),
-				containerOffset.top + $container.height()
+			containerWH = [
+				$container.width() || 0,
+				$container.height() || 0
 			],
-			percProps = {x: 0, y: 1, w: 0, h: 1},
-			prop, match;
-		for (prop in percProps) if (percProps.hasOwnProperty(prop)) {
+			containerProps = {
+				// prop: [min, max]
+				x: [containerOffset.left, containerOffset.left + containerWH[0]],
+				y: [containerOffset.top, containerOffset.top + containerWH[1]],
+				w: [0, containerWH[0]],
+				h: [0, containerWH[1]]
+			},
+			prop, dims, match;
+		for (prop in containerProps) if (containerProps.hasOwnProperty(prop)) {
 			match = rPerc.exec(options[prop]);
 			if (match) {
-				options[prop] = containerDims[percProps[prop]] * match[1] / 100;
+				dims = containerProps[prop];
+				options[prop] = (dims[1] - dims[0]) * match[1] / 100 + dims[0];
 			}
+		}
+
+		// Deprecated options - remove in 2.0
+		if (options.sameX === false && options.checkHoriz === false) {
+			options.sameX = !options.checkHoriz;
+		}
+		if (options.sameY === false && options.checkVert === false) {
+			options.sameY = !options.checkVert;
 		}
 
 		// Get elements and work out x/y points
 		var $all = $container.find(selector),
 			cache = [],
 			furthest = !!options.furthest,
-			checkX = !!options.checkHoriz,
-			checkY = !!options.checkVert,
+			checkX = !options.sameX,
+			checkY = !options.sameY,
+			onlyX  = !!options.onlyX,
+			onlyY  = !!options.onlyY,
 			compDist = furthest ? 0 : Infinity,
 			point1x = parseFloat(options.x) || 0,
 			point1y = parseFloat(options.y) || 0,
 			point2x = parseFloat(point1x + options.w) || point1x,
 			point2y = parseFloat(point1y + options.h) || point1y,
-			tolerance = options.tolerance || 0,
+			tolerance = parseFloat(options.tolerance) || 0,
 			hasEach2 = !!$.fn.each2,
 			// Shortcuts to help with compression
 			min = Math.min,
@@ -99,21 +116,19 @@
 				(checkX && checkY) ||
 				// .touching()
 				(!checkX && !checkY && intersectX && intersectY) ||
-				// .nearest({checkVert: false})
+				// .nearest({sameY: true})
 				(checkX && intersectY) ||
-				// .nearest({checkHoriz: false})
+				// .nearest({sameX: true})
 				(checkY && intersectX) ||
 				// .nearest({onlyX: true})
-				(checkX && options.onlyX) ||
+				(checkX && onlyX) ||
 				// .nearest({onlyY: true})
-				(checkY && options.onlyY)
+				(checkY && onlyY)
 			) {
 				distX = intersectX ? 0 : maxX1 - minX2;
 				distY = intersectY ? 0 : maxY1 - minY2;
-				if (options.onlyX) {
-					distT = distX;
-				} else if (options.onlyY) {
-					distT = distY;
+				if (onlyX || onlyY) {
+					distT = onlyX ? distX : distY;
 				} else {
 					distT = intersectX || intersectY ?
 						max(distX, distY) :
@@ -169,8 +184,10 @@
 			container:   document, // Container of objects for calculating %-based dimensions
 			furthest:    name == 'furthest', // Find max distance (true) or min distance (false)
 			includeSelf: false, // Include 'this' in search results (t/f) - only applies to $(elem).func(selector) syntax
-			checkHoriz:  name != 'touching', // Check variations in X axis (t/f)
-			checkVert:   name != 'touching'  // Check variations in Y axis (t/f)
+			sameX: name === 'touching', // Only match for the same X axis values (t/f)
+			sameY: name === 'touching', // Only match for the same Y axis values (t/f)
+			onlyX: false, // Only check X axis variations (t/f)
+			onlyY: false  // Only check Y axis variations (t/f)
 		};
 
 		/**
@@ -214,6 +231,9 @@
 		 *   @return jQuery object containing matching elements in elemSet
 		 */
 		$.fn[name] = function (selector, options) {
+			if (!this.length) {
+				return this.pushStack([]);
+			}
 			var opts;
 			if (selector && $.isPlainObject(selector)) {
 				opts = $.extend({}, defaults, selector, options || {});

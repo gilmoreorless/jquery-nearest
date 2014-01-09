@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Demo - jQuery Nearest Element plugin</title>
+	<meta charset="utf-8">
+	<style>
+		html, body {font-family:Arial; height:100%; margin:0;}
+		a {color:#000; text-decoration:underline;}
+		a:hover {text-decoration:none;}
+		#menu {background-color:#FFC; border-right:1px solid #000; height:100%; overflow:hidden; padding:0 10px; position:absolute; width:180px; z-index:5;}
+		#menu strong {display:block; margin-bottom:5px;}
+		#menu label {display:block; padding-left:20px; position:relative;}
+		#menu label input {left:0; position:absolute;}
+		dl {position:relative;}
+		dt {height:25px; left:0; position:absolute; width:25px;}
+		dt div {height:19px; width:19px;}
+		dd {margin-bottom:1em; margin-left:45px;}
+		#container {height:100%; overflow:hidden; position:relative; width:100%;}
+		.guide {display:none; position:absolute;}
+		.guidePoint {background-color:#00F;}
+		#pointHoriz {height:1px; width:100%;}
+		#pointVert {height:100%; width:1px;}
+		.pointDiag {background-color:#F00; border-radius:5px;}
+		.guideBlock {background-color:#9FF;}
+		.guideText {background-color:rgba(255,255,255,0.9); border:1px solid #F00; color:#F00; font-size:12px; padding:2px;}
+		.guideTol {border-style:solid; border-radius:100%; opacity:0.6;}
+		.guideTolInner {border-color:#393;}
+		.guideTolOuter {border-color:#000;}
+		#blockHoriz {width:100%;}
+		#blockVert {height:100%;}
+		.block, dt {background-color:#AAA; border:1px solid #000; font-size:16px; opacity:1; position:absolute; text-align:center;}
+		dt.guideTol {background:none; border-width:4px; height:19px; width:19px;}
+		.block div {bottom:0; left:0; position:absolute; right:0; top:0;}
+		.nearestFilter {background-color:#9F9;}
+		.nearestFind {opacity:0.5;}
+		.furthestFind div {border:3px solid #000;}
+		.nearestClick {border-color:#F00;}
+		.furthestClick {border-style:dashed;}
+		#footer {background-color:#FFC; bottom:0; position:absolute; width:100%; z-index:10;}
+		#footer p {border-top:1px solid #000; font-size:0.9em; margin:0 0 0 200px; padding:5px 0; text-align:center;}
+	</style>
+</head>
+<body>
+	<div id="menu">
+		<h3>Options:</h3>
+		<label><input type="checkbox" name="showGuides" checked>Show guides</label>
+		<label><input type="checkbox" name="sameX">Check identical X axis only (<code>sameX</code>)</label>
+		<label><input type="checkbox" name="sameY">Check identical Y axis only (<code>sameY</code>)</label>
+		<label for="toleranceRange">Tolerance (in pixels): <span id="toleranceValue">1</span></label>
+		<input type="range" id="toleranceRange" value="1" min="0" max="50" step="1" />
+
+		<h3>Legend:</h3>
+		<dl id="legend">
+			<dt class="nearestFilter nearestFind"></dt>
+			<dd>Nearest to cursor (found two ways)</dd>
+			<dt class="furthestFind"><div></div></dt>
+			<dd>Furthest from cursor</dd>
+			<dt class="nearestClick"></dt>
+			<dd>Nearest to clicked element</dd>
+			<dt class="furthestClick"></dt>
+			<dd>Furthest from clicked element</dd>
+			<dt class="guideTol guideTolInner"></dt>
+			<dd>Tolerance for nearest element</dd>
+			<dt class="guideTol guideTolOuter"></dt>
+			<dd>Tolerance for furthest element</dd>
+		</dl>
+
+		<a href="../">Back to documentation</a>
+	</div>
+	<div id="container">
+		<div class="guide guideBlock" id="blockHoriz"></div>
+		<div class="guide guideBlock" id="blockVert"></div>
+		<div class="guide guidePoint" id="pointHoriz"></div>
+		<div class="guide guidePoint" id="pointVert"></div>
+		<div class="guide guideTol guideTolInner"    id="tolInner"></div>
+		<div class="guide guideTol guideTolOuter"    id="tolOuter"></div>
+		<div class="guide guidePoint guidePointDiag" id="pointDiag0"></div>
+		<div class="guide guideText"  id="textDiag0"></div>
+	</div>
+	<div id="footer">
+		<p>
+			A demonstration of the <a href="../">jQuery Nearest Element plugin</a>.
+			Check out the <a href="demo-main.js">code behind it</a>.
+			Distance line generated with the <a href="https://github.com/gilmoreorless/jquery-dom-line">jQuery DOM Line plugin</a>.
+		</p>
+	</div>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+	<!-- Offline fallback -->
+	<script>window.jQuery || document.write('<script src="../inc/lib/jquery-1.7.1.js"><\/script>')</script>
+	<script src="../inc/lib/jquery.ba-each2.min.js"></script>
+	<script src="../inc/lib/jquery.domline.min.js"></script>
+	<script src="../src/jquery.nearest.js"></script>
+	<script src="demo-main.js"></script>
+	<script src="../../lib/js/common-docs.js"></script>
+</body>
+</html>
