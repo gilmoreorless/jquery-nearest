@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>jQuery Nearest Test Suite</title>
+	<link rel="stylesheet" href="qunit/qunit.css">
+	<style>
+		#qunit-fixture > *, .container > * {
+			height: 20px;
+			position: absolute;
+			width: 20px;
+		}
+		/* Visual debugging styles */
+		#qunit-fixture { background: #cff; }
+		#qunit-fixture > * { background: #f66; }
+		#qunit-fixture > .container { background: #9ff; opacity: 0.7; }
+		.container > * { background: #f96; }
+	</style>
+
+	<!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+	<script src="../inc/lib/jquery-loader.js"></script>
+	<script src="qunit/qunit.js"></script>
+
+	<script src="../src/jquery.nearest.js"></script>
+	<script src="nearest_test.js"></script>
+	<script>window._$ = jQuery.noConflict(true);</script>
+</head>
+<body>
+	<div id="qunit"></div>
+	<div id="qunit-fixture">
+		<!-- Corners -->
+		<div class="corner" id="top-left" style="left:0;top:0;"></div>
+		<div class="corner" id="top-right" style="right:0;top:0;"></div>
+		<div class="corner" id="bottom-left" style="left:0;bottom:0;"></div>
+		<div class="corner" id="bottom-right" style="right:0;bottom:0;"></div>
+
+		<div id="dead-centre" style="left:50%;top:50%;margin:-10px -10px 0 0;"></div>
+
+		<!-- Top middle group -->
+		<span class="top-mid" id="tmtl" style="left:500px;top:0;"></span>
+		<span class="top-mid" id="tmbl" style="left:500px;top:40px;"></span>
+		<span class="top-mid" id="tmtr" style="left:540px;top:0;"></span>
+		<span class="top-mid" id="tmbr" style="left:540px;top:40px;"></span>
+
+		<!-- Basic group of touching/near/far elems from bottom-right -->
+		<div id="basic-group-container" class="container" style="left:200px;top:200px;width:200px;height:200px;position:absolute;">
+			<a    class="basic-group" id="basic-ref" style="left:0;top:0;">thing</a>
+			<span class="basic-group" id="basic-touching" style="left:10px;top:15px;">thing</span>
+			<div  class="basic-group" id="basic-nearest" style="left:30px;top:15px;">thing</div>
+			<div  class="basic-group" id="basic-mid" style="left:50%;top:50%;">thing</div>
+			<p    class="basic-group" id="basic-furthest" style="right:0;bottom:0;">thing</a>
+		</div>
+
+		<!-- For testing (same|only)(X|Y) options -->
+		<!-- 100,600 -> 400,900 = 300x300; 25% = 175,675; 50% = 250,750; 75% = 325,825 -->
+		<div class="xy-group not-same" id="xy-nearest-diag" style="left:280px;top:780px;"></div>
+		<div class="xy-group not-same" id="xy-furthest-diag" style="left:110px;top:610px;"></div>
+		<div class="xy-group" id="xy-mid-sameX" style="left:250px;top:670px;"></div>
+		<div class="xy-group" id="xy-mid-sameY" style="left:170px;top:750px;"></div>
+		<div class="xy-group not-same" id="xy-bottom" style="left:200px;top:880px;"></div>
+		<div class="xy-group not-same" id="xy-right" style="left:380px;top:700px;"></div>
+		<div class="xy-group not-same" id="xy-closeX" style="left:275px;top:660px;"></div>
+		<div class="xy-group not-same" id="xy-closeY" style="left:160px;top:775px;"></div>
+
+		<!-- Tolerance option -->
+		<!-- Reference point is 700,200 -->
+		<div class="tolerance" id="tol-14" style="left:714px;top:200px;"></div>
+		<div class="tolerance" id="tol-14-and-a-bit" style="left:710px;top:210px;"></div><!-- Distance ~= 14.142 -->
+		<div class="tolerance" id="tol-15" style="left:715px;top:195px;"></div>
+		<div class="tolerance" id="tol-16" style="left:716px;top:190px;"></div>
+
+		<!-- Container option -->
+		<div class="cont" id="cont-outside" style="left:690px;top:690px;"></div>
+		<div id="cont-option-container" class="container" style="left:600px;top:600px;width:200px;height:200px;position:absolute;">
+			<div class="cont" id="cont-centre" style="left:110px;top:110px;"></div>
+			<div class="cont" id="cont-top-left" style="left:0;top:0;"></div>
+		</div>
+	</div>
+</body>
+</html>

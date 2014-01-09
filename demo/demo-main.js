@@ -1,8 +1,8 @@
 // can be overwritten in console
 var opts = {
 	includeSelf: false,
-	checkHoriz: true,
-	checkVert: true,
+	sameX: false,
+	sameY: false,
 	showGuides: true,
 	tolerance: 1
 };
@@ -39,25 +39,25 @@ $(function () {
 
 	var $guidePointHoriz = $('#pointHoriz'),
 		$guidePointVert  = $('#pointVert'),
-		$guidePointDiag  = $('.guidePointDiag'),
+		$guidePointDiag  = $container.find('.guidePointDiag'),
 		$guideBlockHoriz = $('#blockHoriz'),
 		$guideBlockVert  = $('#blockVert'),
-		$guideTextDiag   = $('.guideText'),
-		$guidePointAll   = $('.guidePoint, .guideText, .guideTol'),
-		$guideBlockAll   = $('.guideBlock'),
-		$guideTolAll     = $('.guideTol'),
+		$guideTextDiag   = $container.find('.guideText'),
+		$guidePointAll   = $container.find('.guidePoint, .guideText, .guideTol'),
+		$guideBlockAll   = $container.find('.guideBlock'),
+		$guideTolAll     = $container.find('.guideTol'),
 		$guideTolInner   = $('#tolInner'),
 		$guideTolOuter   = $('#tolOuter'),
 		showGuides;
 
 	function updatePointGuideDisplay() {
-		showGuides = opts.showGuides && (opts.checkHoriz || opts.checkVert);
+		showGuides = opts.showGuides && !(opts.sameX && opts.sameY);
 		if (showGuides) {
-			$guidePointHoriz.toggle(opts.checkHoriz);
-			$guidePointVert.toggle(opts.checkVert);
-			$guidePointDiag.add($guideTextDiag).toggle(opts.checkHoriz && opts.checkVert);
-			(opts.checkHoriz && !opts.checkVert) || $guideBlockHoriz.hide();
-			(opts.checkVert && !opts.checkHoriz) || $guideBlockVert.hide();
+			$guidePointHoriz.toggle(!opts.sameX);
+			$guidePointVert.toggle(!opts.sameY);
+			$guidePointDiag.add($guideTextDiag).toggle(!opts.sameX || !opts.sameY);
+			(!opts.sameX && opts.sameY) || $guideBlockHoriz.hide();
+			(!opts.sameY && opts.sameX) || $guideBlockVert.hide();
 			$guideTolAll.show();
 		} else {
 			$guidePointAll.hide();
@@ -107,8 +107,8 @@ $(function () {
 			y = e.pageY,
 			point = {x: x, y: y};
 		if (opts.showGuides) {
-			opts.checkHoriz && $guidePointHoriz.css({top: y});
-			opts.checkVert && $guidePointVert.css({left: x});
+			!opts.sameX && $guidePointHoriz.css({top: y});
+			!opts.sameY && $guidePointVert.css({left: x});
 		}
 		var $nearest = $blocks.removeClass('nearestFilter nearestFind furthestFind')
 			.nearest(point, opts)
@@ -230,35 +230,12 @@ $(function () {
 	$blocks.click(function () {
 		var $this = $(this);
 		if (opts.showGuides) {
-			opts.checkHoriz && !opts.checkVert && $guideBlockHoriz.css({top: $this.css('top'), height: $this.outerHeight()}).show();
-			opts.checkVert && !opts.checkHoriz && $guideBlockVert.css({left: $this.css('left'), width: $this.outerWidth()}).show();
+			opts.sameX && !opts.sameY && $guideBlockVert.css({left: $this.css('left'), width: $this.outerWidth()}).show();
+			opts.sameY && !opts.sameX && $guideBlockHoriz.css({top: $this.css('top'), height: $this.outerHeight()}).show();
 		}
 		$blocks.removeClass('nearestClick furthestClick').children().text('');
 		$this.addClass('nearestClick').children().text('CLICKED');
 		$this.nearest($blocks, opts).addClass('nearestClick').children().text('nearest');
 		$this.furthest($blocks, opts).addClass('furthestClick').children().text('furthest');
 	});
-	//*/
-
-	// Test for chaining
-	/*
-	$('<div/>').css({
-		width:1,
-		height:1,
-		backgroundColor:'#900',
-		position:'absolute',
-		left:500,
-		top:100
-	}).appendTo('body');
-	$blocks
-		.css('backgroundColor','#066')
-		.filter(':odd')
-			.css('backgroundColor','#0FF')
-			.nearest({x:500, y:100})
-				.text('Nearest')
-				.end()
-			.css('color','#F90')
-			.end()
-		.css('opacity', 0.5);
-	//*/
 });

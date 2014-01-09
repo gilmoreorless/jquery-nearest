@@ -1,0 +1,16 @@
+{
+  "name": "jquery-nearest",
+  "version": "1.3-alpha",
+  "main": "src/jquery.nearest.js",
+  "ignore": [
+    "**/.*",
+    "demo",
+    "inc",
+    "test",
+    "Makefile",
+    "index.html"
+  ],
+  "dependencies": {
+    "jquery": ">=1.4"
+  }
+}
