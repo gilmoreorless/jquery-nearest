@@ -9,7 +9,8 @@
 		a:hover {text-decoration:none;}
 		#menu {background-color:#FFC; border-right:1px solid #000; height:100%; overflow:hidden; padding:0 10px; position:absolute; width:180px; z-index:5;}
 		#menu strong {display:block; margin-bottom:5px;}
-		#menu label {display:block;}
+		#menu label {display:block; padding-left:20px; position:relative;}
+		#menu label input {left:0; position:absolute;}
 		dl {position:relative;}
 		dt {height:25px; left:0; position:absolute; width:25px;}
 		dt div {height:19px; width:19px;}
@@ -42,9 +43,9 @@
 <body>
 	<div id="menu">
 		<h3>Options:</h3>
-		<label><input type="checkbox" name="checkHoriz" checked>Check horizontal axis</label>
-		<label><input type="checkbox" name="checkVert" checked>Check vertical axis</label>
 		<label><input type="checkbox" name="showGuides" checked>Show guides</label>
+		<label><input type="checkbox" name="sameX">Check identical X axis only (<code>sameX</code>)</label>
+		<label><input type="checkbox" name="sameY">Check identical Y axis only (<code>sameY</code>)</label>
 		<label for="toleranceRange">Tolerance (in pixels): <span id="toleranceValue">1</span></label>
 		<input type="range" id="toleranceRange" value="1" min="0" max="50" step="1" />
 
