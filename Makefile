@@ -11,5 +11,6 @@ uglify:
 version:
 	@sed -i '' 's/\("version": \)"\(.*\)"/\1"$(VERSION)"/g' *.json
 	@sed -i '' 's/\(plugin v\).*$\/\1$(VERSION)/' src/*.js
+	@sed -i '' 's/\(class="version">v\).*\(<\/span>\)/\1$(VERSION)\2/' index.html
 
 .PHONY: uglify
