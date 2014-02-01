@@ -208,7 +208,7 @@ var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 				A example of using different options can be found on the <a href="demo.html">demonstration page</a>.
 			</p>
 
-			<h2>Notes</h2>
+			<h2 id="notes">Notes</h2>
 			<ul>
 				<li>
 					The <code>selector</code> parameter is technically optional in all methods, and will default to <code>div</code> if not present.
@@ -222,6 +222,45 @@ var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 					If you set both to true, the <code>.nearest()</code> and <code>.furthest()</code> methods will fail to work (it is exactly the same as calling <code>.touching()</code> instead).
 				</li>
 			</ul>
+
+			<h3 id="changelog">Changelog</h3>
+			<dl class="changelog">
+				<dt class="minor" id="v1.3.0">1.3.0</dt>
+				<dd><ul>
+					<li>New <code>onlyX</code> and <code>onlyY</code> options
+						(<a href="https://github.com/gilmoreorless/jquery-nearest/pull/7">PR #7</a>).</li>
+					<li>New <code>sameX</code> and <code>sameY</code> options as the inverse replacement for <code>checkHoriz</code> and <code>checkVert</code>
+						(<a href="https://github.com/gilmoreorless/jquery-nearest/issues/9">#9</a>).</li>
+					<li><strong>Deprecated</strong> the <code>checkHoriz</code> and <code>checkVert</code> options.</li>
+					<li>Bug fix for filtering on empty sets.</li>
+					<li>Better calculation of dimensions for percentage-based options.</li>
+				</ul></dd>
+				<dt class="point" id="v1.2.2">1.2.2</dt>
+				<dd><ul>
+					<li>Bug fix to find only children of the <code>container</code> element if the option is present.
+						(<a href="https://github.com/gilmoreorless/jquery-nearest/pull/5">PR #5</a>).</li>
+				</ul></dd>
+				<dt class="point" id="v1.2.1">1.2.1</dt>
+				<dd><ul>
+					<li>Added to <a href="http://plugins.jquery.com/project/nearest">plugins.jquery.com</a>.</li>
+				</ul></dd>
+				<dt class="minor" id="v1.2.0">1.2.0</dt>
+				<dd><ul>
+					<li>Added to <a href="http://bower.io/">Bower</a>
+						(<a href="https://github.com/gilmoreorless/jquery-nearest/issues/4">#4</a>).</li>
+					<li>New <code>container</code> option and the ability to use percentage-based strings for <code>x</code>, <code>y</code>, <code>w</code> and <code>h</code> options
+						(<a href="https://github.com/gilmoreorless/jquery-nearest/issues/2">#2</a>).</li>
+				</ul></dd>
+				<dt class="minor" id="v1.1.0">1.1.0</dt>
+				<dd><ul>
+					<li>Added <code>tolerance</code> option to account for fractional pixel values and “close enough” situations
+						(<a href="https://github.com/gilmoreorless/jquery-nearest/issues/1">#1</a>).</li>
+				</ul></dd>
+				<dt class="major" id="v1.0.0">1.0.0</dt>
+				<dd><ul>
+					<li>First stable release.</li>
+				</ul></dd>
+			</dl>
 		</div><!-- #details -->
 	</div><!-- #wrapper -->
 	<!-- <a class="forkme" href="https://github.com/gilmoreorless/jquery-nearest">Fork me on GitHub</a> -->
