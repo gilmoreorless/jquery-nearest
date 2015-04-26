@@ -1,12 +1,12 @@
 SRC = src/jquery.nearest.js
 MIN = src/jquery.nearest.min.js
 VERSION = $(shell cat VERSION.txt)
-CUR_BRANCH = $(shell git rev-parse --abbrev-ref HEAD)
 
 $(MIN): uglify
 
 uglify:
-	@uglifyjs $(SRC) --compress --mangle --comments '/^\!/' --output $(MIN)
+	uglifyjs $(SRC) --compress --mangle --comments '/^\!/' --output $(MIN)
+	@echo "" >> $(MIN)
 
 install:
 	npm install -g uglifyjs
@@ -25,7 +25,7 @@ tag: commit-version
 update-pages:
 	git checkout gh-pages
 	git merge --no-ff -m "Keeping gh-pages up to date" master
-	git checkout $(CUR_BRANCH)
+	git checkout -
 
 push: update-pages
 	git push --tags origin master gh-pages
