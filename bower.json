@@ -8,7 +8,8 @@
     "inc",
     "test",
     "Makefile",
-    "index.html"
+    "index.html",
+    "package.json"
   ],
   "dependencies": {
     "jquery": ">=1.4"
