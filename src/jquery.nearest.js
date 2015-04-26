@@ -1,9 +1,10 @@
 /*!
- * jQuery Nearest plugin v1.3.0
+ * jQuery Nearest plugin v1.3.1
  *
  * Finds elements closest to a single point based on screen location and pixel dimensions
  * http://gilmoreorless.github.io/jquery-nearest/
- * Open source under the MIT licence: http://gilmoreorless.mit-license.org/2011/
+ * Copyright (c) 2011-2015 Gilmore Davidson under the MIT licence:
+ *   http://gilmoreorless.github.io/jquery-nearest/LICENSE.txt
  *
  * Requires jQuery 1.4 or above
  * Also supports Ben Alman's "each2" plugin for faster looping (if available)

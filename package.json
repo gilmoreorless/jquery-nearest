@@ -1,0 +1,34 @@
+{
+  "name": "jquery-nearest",
+  "title": "jQuery Nearest Element",
+  "description": "jQuery plugin to find the elements in a page that are closest to (or furthest away from) a particular point or element, based on pixel dimensions",
+  "version": "1.3.1",
+  "keywords": ["jquery-plugin", "ecosystem:jquery", "nearest", "furthest", "touching", "pixel", "distance"],
+  "main": "src/jquery.nearest.js",
+  "files": [
+    "src/jquery.nearest.js",
+    "src/jquery.nearest.min.js",
+    "CONTRIBUTING.md",
+    "LICENSE.txt",
+    "README.md"
+  ],
+  "author": {
+    "name": "Gilmore Davidson",
+    "url": "https://shoehornwithteeth.com/"
+  },
+  "homepage": "http://gilmoreorless.github.io/jquery-nearest/",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/gilmoreorless/jquery-nearest.git"
+  },
+  "bugs": "https://github.com/gilmoreorless/jquery-nearest/issues",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://gilmoreorless.github.io/jquery-nearest/LICENSE.txt"
+    }
+  ],
+  "dependencies": {
+    "jquery": ">=1.4"
+  }
+}
