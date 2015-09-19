@@ -99,10 +99,10 @@
 		$all[hasEach2 ? 'each2' : 'each'](function (i, elem) {
 			var $this = hasEach2 ? elem : $(this),
 				off = $this.offset(),
-				x = off.left,
-				y = off.top,
-				w = $this.outerWidth(),
-				h = $this.outerHeight(),
+				x = off.left - parseInt($this.css('margin-left')),
+				y = off.top - parseInt($this.css('margin-top')),
+				w = $this.outerWidth(true),
+				h = $this.outerHeight(true),
 				x2 = x + w,
 				y2 = y + h,
 				maxX1 = max(x, point1x),
@@ -244,8 +244,8 @@
 				dimensions = {
 					x: offset.left,
 					y: offset.top,
-					w: this.outerWidth(),
-					h: this.outerHeight()
+					w: this.outerWidth(true),
+					h: this.outerHeight(true)
 				};
 			opts = $.extend({}, defaults, dimensions, options || {});
 			return this.pushStack(nearest(selector, opts, this));
