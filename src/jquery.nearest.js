@@ -135,9 +135,14 @@
 						max(distX, distY) :
 						Math.sqrt(distX * distX + distY * distY);
 				}
-				isValid = furthest ?
-					distT >= compDist - tolerance :
-					distT <= compDist + tolerance;
+
+
+				if (!thisObj || checkDirectionConstraints(thisObj[0], this, options.directionConstraints)) {
+					isValid = furthest ?
+						distT >= compDist - tolerance :
+						distT <= compDist + tolerance;
+				}
+
 				if (isValid) {
 					compDist = furthest ?
 						max(compDist, distT) :
@@ -149,6 +154,13 @@
 				}
 			}
 		});
+
+		if (options.sort === 'nearest') {
+			cache.sort(function(a,b) { return a.dist - b.dist});
+		} else if (options.sort === 'furthest') {
+			cache.sort(function(a,b) { return b.dist - a.dist})
+		}
+
 		// Make sure all cached items are within tolerance range
 		var len = cache.length,
 			filtered = [],
@@ -169,7 +181,24 @@
 				}
 			}
 		}
+
 		return filtered;
+	}
+
+	function checkDirectionConstraints(self, item, constraints) {
+		var rect1 = self.getBoundingClientRect();
+		var rect2 = item.getBoundingClientRect();
+
+		var results = {
+			left: rect1.left > rect2.right,
+			right: rect1.right < rect2.left,
+			top: rect1.top > rect2.bottom,
+			bottom: rect1.bottom < rect2.top,
+		}
+
+		return constraints.reduce(function(result, direction) {
+			return result && !!results[direction];
+		}, true);
 	}
 
 	$.each(['nearest', 'furthest', 'touching'], function (i, name) {
@@ -188,7 +217,9 @@
 			sameX: name === 'touching', // Only match for the same X axis values (t/f)
 			sameY: name === 'touching', // Only match for the same Y axis values (t/f)
 			onlyX: false, // Only check X axis variations (t/f)
-			onlyY: false  // Only check Y axis variations (t/f)
+			onlyY: false, // Only check Y axis variations (t/f),
+			directionConstraints: [], // Array of directions to limit search: 'left', 'right' ,'top', 'bottom'
+			sort: false // Sort results based on distance: 'nearest', 'furthest'
 		};
 
 		/**

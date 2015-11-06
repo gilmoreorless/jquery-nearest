@@ -194,6 +194,19 @@ var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 				<dd class="type">DOM node or jQuery selector &ndash; default <code>document</code></dd>
 				<dd>Acts as a root node, so that only elements within the container will be matched.<br>
 					Also used with percentage options for <code>x</code>, <code>y</code>, <code>w</code> and <code>h</code> &ndash; the top left corner of the container is 0%, the bottom right corner is 100%.</dd>
+
+				<dt><code>directionConstraints</code></dt>
+				<dd class="type">String array &ndash; default <code>empty</code></dd>
+				<dd>A list of directions to limit the search. Available values:
+					<code>left</code>,<code>right</code>,<code>top</code>,<code>bottom</code><br/>
+					Example: <code>['left','top'] will search only to the top left of object.<br/>
+					This only works for Single Element operations</dd>
+
+				<dt><code>sort</code></dt>
+				<dd class="type">String &ndash; default <code>empty</code></dd>
+				<dd>Sorts results based on distance, defaults to no sorting which is DOM order.<br/>
+					Available options: <code>nearest</code> or <code>furthest</code></dd>
+
 			</dl>
 			<dl class="deprecated">
 				<dt><code>checkHoriz</code></dt>
