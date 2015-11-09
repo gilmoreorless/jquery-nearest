@@ -84,6 +84,7 @@
 			point2y = parseFloat(point1y + options.h) || point1y,
 			tolerance = parseFloat(options.tolerance) || 0,
 			hasEach2 = !!$.fn.each2,
+			sortMinDist = !!options.sortMinDist,
 			// Shortcuts to help with compression
 			min = Math.min,
 			max = Math.max;
@@ -152,6 +153,10 @@
 						dist: distT
 					});
 				}
+			}
+
+			if(sortMinDist) {
+				cache.sort(function(a, b) {return a.dist - b.dist});
 			}
 		});
 
