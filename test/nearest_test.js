@@ -400,4 +400,22 @@
 		assertSet($touching, 0, {suffix: 'for touching'});
 	});
 
+	test('option: directionConstraints', 4, function() {
+		var $elem = $('#basic-ref');
+		var $nearestTopLeft  = $elem.nearest( '.corner', {directionConstraints: ['left', 'top']});
+		var $furthestBottomRight = $elem.furthest( '.corner', {directionConstraints: ['bottom', 'right']});
+
+		assertSet($nearestTopLeft,  1, {suffix: 'for ["left", "top"]'},  'top-left');
+		assertSet($furthestBottomRight,  1, {suffix: 'for ["bottom", "right"]'},  'bottom-right');
+	});
+
+	test('option: sort', 10, function () {
+		var $elem = $('#basic-ref');
+		var $sortedNearest  = $elem.nearest('.basic-group', {sort: 'nearest', tolerance: 300});
+		var $sortedFurthest = $elem.nearest('.basic-group', {sort: 'furthest', tolerance: 300});
+
+		assertSet($sortedNearest,  4, {suffix: 'for nearest'},  'basic-touching', 'basic-nearest', 'basic-mid', 'basic-furthest');
+		assertSet($sortedFurthest, 4, {suffix: 'for furthest'}, 'basic-furthest', 'basic-mid', 'basic-nearest', 'basic-touching');
+	});
+
 }(jQuery));
