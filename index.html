@@ -198,14 +198,13 @@ var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 				<dt><code>directionConstraints</code></dt>
 				<dd class="type">String array &ndash; default <code>empty</code></dd>
 				<dd>A list of directions to limit the search. Available values:
-					<code>left</code>,<code>right</code>,<code>top</code>,<code>bottom</code><br/>
-					Example: <code>['left','top']</code> will search only to the top left of object.<br/>
-					This only works for Single Element operations</dd>
+					<code>"left"</code>, <code>"right"</code>, <code>"top"</code>, <code>"bottom"</code><br/>
+					For example, <code>["left", "top"]</code> will only match elements to the top left of the reference point.</dd>
 
 				<dt><code>sort</code></dt>
 				<dd class="type">String &ndash; default <code>empty</code></dd>
-				<dd>Sorts results based on distance, defaults to no sorting which is DOM order.<br/>
-					Available options: <code>nearest</code> or <code>furthest</code></dd>
+				<dd>Sorts results based on distance, defaults to no sorting (results are returned in DOM order).<br/>
+					Available values: <code>"nearest"</code> or <code>"furthest"</code></dd>
 
 			</dl>
 			<dl class="deprecated">
@@ -238,7 +237,7 @@ var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 
 			<h3 id="changelog">Changelog</h3>
 			<dl class="changelog">
-				<dt class="minor" id="v1.4.0">1.4.0 (UNRELEASED)</dt>
+				<dt class="minor" id="v1.4.0">1.4.0</dt>
 				<dd><ul>
 					<li>New <code>directionConstraints</code> option
 						(<a href="https://github.com/gilmoreorless/jquery-nearest/pull/29">PR #29</a>).</li>
