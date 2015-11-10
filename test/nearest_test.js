@@ -344,6 +344,49 @@
 		assertSet($set, 0); // Make sure it doesn't blow up
 	});
 
+	test('directionConstraints: point', 5, function () {
+		var point = getPoint(300, 300);
+		var $nearestTopRight = $.nearest(point, '.corner', {directionConstraints: ['right', 'top']});
+		var $furthestBottom = $.furthest(point, '.corner', {directionConstraints: ['bottom'], tolerance: 1000});
+
+		assertSet($nearestTopRight, 1, {suffix: 'for ["right", "top"]'}, 'top-right');
+		assertSet($furthestBottom,  2, {suffix: 'for ["bottom"]'}, 'bottom-left', 'bottom-right');
+	});
+
+	test('directionConstraints: box', 6, function () {
+		// This box intersects with the 'dead-centre' block
+		var box = getBox(300, 400, 500, 100);
+		var optsTL = {directionConstraints: ['top', 'left']};
+		var optsB  = {directionConstraints: ['bottom']};
+		var $nearestCorner  = $.nearest(box, '.corner', optsTL);
+		var $nearestBlockTL = $.nearest(box, '.corner, #dead-centre', optsTL);
+		var $nearestBlockB  = $.nearest(box, '.corner, #dead-centre', optsB);
+
+		assertSet($nearestCorner,  1, {suffix: 'for non-intersecting elements'}, 'top-left');
+		// An element that is touching is only counted if it intersects in the right direction
+		assertSet($nearestBlockTL, 1, {suffix: 'for an intersecting element in the wrong direction'}, 'top-left');
+		assertSet($nearestBlockB,  1, {suffix: 'for an intersecting element in the right direction'}, 'dead-centre');
+	});
+
+	test('directionConstraints: string parameter converts to array', 3, function () {
+		var $nearestString = $.nearest(this.midPoint, '.corner', {directionConstraints: 'left', tolerance: 1000});
+		assertSet($nearestString, 2, {suffix: 'for "left"'}, 'top-left', 'bottom-left');
+	});
+
+	test('directionConstraints: invalid parameter turns off constraints', 5, function () {
+		var $nearestString = $.nearest(this.midPoint, '.corner', {directionConstraints: {}, tolerance: 1000});
+		assertSet($nearestString, 4, {suffix: 'for {} value'}, 'top-left', 'top-right', 'bottom-left', 'bottom-right');
+	});
+
+	test('sort', 10, function () {
+		var point = getPoint(400, 200);
+		var $sortedNearest  = $.nearest(point, '.corner', {sort: 'nearest', tolerance: 1000});
+		var $sortedFurthest = $.nearest(point, '.corner', {sort: 'furthest', tolerance: 1000});
+
+		assertSet($sortedNearest,  4, {suffix: 'for nearest'},  'top-left', 'top-right', 'bottom-left', 'bottom-right');
+		assertSet($sortedFurthest, 4, {suffix: 'for furthest'}, 'bottom-right', 'bottom-left', 'top-right', 'top-left');
+	});
+
 
 
 	////////// MODULE $.fn.method //////////
@@ -379,6 +422,10 @@
 		assertSet($touching, 1, {suffix: 'for touching'}, 'basic-touching');
 	});
 
+	/**
+	 * This option is not tested with all the other options in the
+	 * `$.method: options` module as it only applies to element operations.
+	 */
 	test('option: includeSelf', 5, function () {
 		var $elem = $('#basic-ref');
 		var $withoutSelf = $elem.nearest('.basic-group');
@@ -398,6 +445,17 @@
 		assertSet($nearest,  1, {suffix: 'for nearest'},  'top-left');
 		assertSet($furthest, 1, {suffix: 'for furthest'}, 'bottom-right');
 		assertSet($touching, 0, {suffix: 'for touching'});
+	});
+
+	test('filter with directionConstraints', 4, function() {
+		var $set = $('.corner');
+		var point = getPoint(30, 30);
+		var opts = {directionConstraints: ['top', 'right']};
+		var $nearest  = $set.nearest( point, opts);
+		var $furthest = $set.furthest(point, opts);
+
+		assertSet($nearest,  1, {suffix: 'for nearest'},  'top-right');
+		assertSet($furthest, 1, {suffix: 'for furthest'}, 'top-right');
 	});
 
 }(jQuery));

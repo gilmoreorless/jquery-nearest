@@ -1,5 +1,5 @@
 /*!
- * jQuery Nearest plugin v1.3.1
+ * jQuery Nearest plugin v1.4.0
  *
  * Finds elements closest to a single point based on screen location and pixel dimensions
  * http://gilmoreorless.github.io/jquery-nearest/
@@ -37,7 +37,7 @@
 	 */
 	var rPerc = /^([\d.]+)%$/;
 	function nearest(selector, options, thisObj) {
-		// Normalise selector and dimensions
+		// Normalise selector, dimensions and constraints
 		selector || (selector = 'div'); // I STRONGLY recommend passing in a selector
 		var $container = $(options.container),
 			containerOffset = $container.offset() || {left: 0, top: 0},
@@ -52,6 +52,7 @@
 				w: [0, containerWH[0]],
 				h: [0, containerWH[1]]
 			},
+			directionConstraints = options.directionConstraints,
 			prop, dims, match;
 		for (prop in containerProps) if (containerProps.hasOwnProperty(prop)) {
 			match = rPerc.exec(options[prop]);
@@ -59,6 +60,9 @@
 				dims = containerProps[prop];
 				options[prop] = (dims[1] - dims[0]) * match[1] / 100 + dims[0];
 			}
+		}
+		if (!$.isArray(directionConstraints)) {
+			directionConstraints = (typeof directionConstraints === 'string') ? [directionConstraints] : [];
 		}
 
 		// Deprecated options - remove in 2.0
@@ -82,6 +86,12 @@
 			point1y = parseFloat(options.y) || 0,
 			point2x = parseFloat(point1x + options.w) || point1x,
 			point2y = parseFloat(point1y + options.h) || point1y,
+			box = {
+				x1: point1x,
+				y1: point1y,
+				x2: point2x,
+				y2: point2y
+			},
 			tolerance = parseFloat(options.tolerance) || 0,
 			hasEach2 = !!$.fn.each2,
 			// Shortcuts to help with compression
@@ -109,6 +119,12 @@
 				minX2 = min(x2, point2x),
 				maxY1 = max(y, point1y),
 				minY2 = min(y2, point2y),
+				thisBox = {
+					x1: x,
+					y1: y,
+					x2: x2,
+					y2: y2
+				},
 				intersectX = minX2 >= maxX1,
 				intersectY = minY2 >= maxY1,
 				distX, distY, distT, isValid;
@@ -135,9 +151,14 @@
 						max(distX, distY) :
 						Math.sqrt(distX * distX + distY * distY);
 				}
+
 				isValid = furthest ?
 					distT >= compDist - tolerance :
 					distT <= compDist + tolerance;
+				if (!checkDirectionConstraints(box, thisBox, directionConstraints)) {
+					isValid = false;
+				}
+
 				if (isValid) {
 					compDist = furthest ?
 						max(compDist, distT) :
@@ -149,6 +170,13 @@
 				}
 			}
 		});
+
+		if (options.sort === 'nearest') {
+			cache.sort(function(a,b) { return a.dist - b.dist; });
+		} else if (options.sort === 'furthest') {
+			cache.sort(function(a,b) { return b.dist - a.dist; });
+		}
+
 		// Make sure all cached items are within tolerance range
 		var len = cache.length,
 			filtered = [],
@@ -169,7 +197,21 @@
 				}
 			}
 		}
+
 		return filtered;
+	}
+
+	function checkDirectionConstraints(refBox, itemBox, constraints) {
+		var results = {
+			left:   refBox.x1 > itemBox.x1,
+			right:  refBox.x2 < itemBox.x2,
+			top:    refBox.y1 > itemBox.y1,
+			bottom: refBox.y2 < itemBox.y2
+		};
+
+		return constraints.reduce(function(result, direction) {
+			return result && !!results[direction];
+		}, true);
 	}
 
 	$.each(['nearest', 'furthest', 'touching'], function (i, name) {
@@ -188,7 +230,9 @@
 			sameX: name === 'touching', // Only match for the same X axis values (t/f)
 			sameY: name === 'touching', // Only match for the same Y axis values (t/f)
 			onlyX: false, // Only check X axis variations (t/f)
-			onlyY: false  // Only check Y axis variations (t/f)
+			onlyY: false, // Only check Y axis variations (t/f),
+			directionConstraints: [], // Array of directions to limit search: 'left', 'right' ,'top', 'bottom'
+			sort: false // Sort results based on distance: 'nearest', 'furthest'
 		};
 
 		/**

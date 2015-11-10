@@ -42,7 +42,7 @@
 <body>
 	<div id="wrapper">
 		<div id="details">
-			<h1>jQuery Nearest Element plugin <span class="version">v1.3.1</span></h1>
+			<h1>jQuery Nearest Element plugin <span class="version">v1.4.0</span></h1>
 			<h2>Quick Links</h2>
 			<ul>
 				<li><a href="https://github.com/gilmoreorless/jquery-nearest">Github project</a></li>
@@ -51,8 +51,8 @@
 				<li><a href="demo/">Interactive demonstration #1 &ndash; Options and mouse movement</a></li>
 				<li><a href="demo/edges.html">Interactive demonstration #2 &ndash; Percentage parameters</a></li>
 			</ul>
-			<p>(Be kind to Github, don't hotlink JS files)</p>
-			<p>Also available on <a href="http://bower.io/">Bower:</a> <code>bower install jquery-nearest</code></p>
+			<p>Available on <a href="https://www.npmjs.com/package/jquery-nearest">npm</a> (<code>npm install jquery-nearest</code>)
+				and <a href="http://bower.io/">Bower</a> (<code>bower install jquery-nearest</code>).</p>
 			<h2>Intro</h2>
 			<p>
 				This plugin finds the elements in a page that are closest to a particular point or element, based on pixel dimensions.
@@ -194,6 +194,18 @@ var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 				<dd class="type">DOM node or jQuery selector &ndash; default <code>document</code></dd>
 				<dd>Acts as a root node, so that only elements within the container will be matched.<br>
 					Also used with percentage options for <code>x</code>, <code>y</code>, <code>w</code> and <code>h</code> &ndash; the top left corner of the container is 0%, the bottom right corner is 100%.</dd>
+
+				<dt><code>directionConstraints</code></dt>
+				<dd class="type">String array &ndash; default <code>empty</code></dd>
+				<dd>A list of directions to limit the search. Available values:
+					<code>"left"</code>, <code>"right"</code>, <code>"top"</code>, <code>"bottom"</code><br/>
+					For example, <code>["left", "top"]</code> will only match elements to the top left of the reference point.</dd>
+
+				<dt><code>sort</code></dt>
+				<dd class="type">String &ndash; default <code>empty</code></dd>
+				<dd>Sorts results based on distance, defaults to no sorting (results are returned in DOM order).<br/>
+					Available values: <code>"nearest"</code> or <code>"furthest"</code></dd>
+
 			</dl>
 			<dl class="deprecated">
 				<dt><code>checkHoriz</code></dt>
@@ -225,6 +237,20 @@ var $closestToRegion = $set.nearest({x: 300, y: 100, w: 200, h: 200});
 
 			<h3 id="changelog">Changelog</h3>
 			<dl class="changelog">
+				<dt class="minor" id="v1.4.0">1.4.0</dt>
+				<dd><ul>
+					<li>New <code>directionConstraints</code> option
+						(<a href="https://github.com/gilmoreorless/jquery-nearest/pull/29">PR #29</a>).</li>
+					<li>New <code>sort</code> option
+						(<a href="https://github.com/gilmoreorless/jquery-nearest/pull/29">PR #29</a>).</li>
+				</ul></dd>
+				<dt class="point" id="v1.3.1">1.3.1</dt>
+				<dd><ul>
+					<li>No code changes. Metadata updates only
+						(<a href="https://github.com/gilmoreorless/jquery-nearest/issues/15">#15</a>,
+						<a href="https://github.com/gilmoreorless/jquery-nearest/issues/16">#16</a>,
+						<a href="https://github.com/gilmoreorless/jquery-nearest/issues/25">#25</a>).</li>
+				</ul></dd>
 				<dt class="minor" id="v1.3.0">1.3.0</dt>
 				<dd><ul>
 					<li>New <code>onlyX</code> and <code>onlyY</code> options
