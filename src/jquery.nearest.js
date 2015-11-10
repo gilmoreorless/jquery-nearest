@@ -37,7 +37,7 @@
 	 */
 	var rPerc = /^([\d.]+)%$/;
 	function nearest(selector, options, thisObj) {
-		// Normalise selector and dimensions
+		// Normalise selector, dimensions and constraints
 		selector || (selector = 'div'); // I STRONGLY recommend passing in a selector
 		var $container = $(options.container),
 			containerOffset = $container.offset() || {left: 0, top: 0},
@@ -52,6 +52,7 @@
 				w: [0, containerWH[0]],
 				h: [0, containerWH[1]]
 			},
+			directionConstraints = options.directionConstraints,
 			prop, dims, match;
 		for (prop in containerProps) if (containerProps.hasOwnProperty(prop)) {
 			match = rPerc.exec(options[prop]);
@@ -59,6 +60,9 @@
 				dims = containerProps[prop];
 				options[prop] = (dims[1] - dims[0]) * match[1] / 100 + dims[0];
 			}
+		}
+		if (!$.isArray(directionConstraints)) {
+			directionConstraints = (typeof directionConstraints === 'string') ? [directionConstraints] : [];
 		}
 
 		// Deprecated options - remove in 2.0
@@ -82,6 +86,12 @@
 			point1y = parseFloat(options.y) || 0,
 			point2x = parseFloat(point1x + options.w) || point1x,
 			point2y = parseFloat(point1y + options.h) || point1y,
+			box = {
+				x1: point1x,
+				y1: point1y,
+				x2: point2x,
+				y2: point2y
+			},
 			tolerance = parseFloat(options.tolerance) || 0,
 			hasEach2 = !!$.fn.each2,
 			// Shortcuts to help with compression
@@ -109,6 +119,12 @@
 				minX2 = min(x2, point2x),
 				maxY1 = max(y, point1y),
 				minY2 = min(y2, point2y),
+				thisBox = {
+					x1: x,
+					y1: y,
+					x2: x2,
+					y2: y2
+				},
 				intersectX = minX2 >= maxX1,
 				intersectY = minY2 >= maxY1,
 				distX, distY, distT, isValid;
@@ -136,11 +152,11 @@
 						Math.sqrt(distX * distX + distY * distY);
 				}
 
-
-				if (!thisObj || checkDirectionConstraints(thisObj[0], this, options.directionConstraints)) {
-					isValid = furthest ?
-						distT >= compDist - tolerance :
-						distT <= compDist + tolerance;
+				isValid = furthest ?
+					distT >= compDist - tolerance :
+					distT <= compDist + tolerance;
+				if (!checkDirectionConstraints(box, thisBox, directionConstraints)) {
+					isValid = false;
 				}
 
 				if (isValid) {
@@ -156,9 +172,9 @@
 		});
 
 		if (options.sort === 'nearest') {
-			cache.sort(function(a,b) { return a.dist - b.dist});
+			cache.sort(function(a,b) { return a.dist - b.dist; });
 		} else if (options.sort === 'furthest') {
-			cache.sort(function(a,b) { return b.dist - a.dist})
+			cache.sort(function(a,b) { return b.dist - a.dist; });
 		}
 
 		// Make sure all cached items are within tolerance range
@@ -185,16 +201,13 @@
 		return filtered;
 	}
 
-	function checkDirectionConstraints(self, item, constraints) {
-		var rect1 = self.getBoundingClientRect();
-		var rect2 = item.getBoundingClientRect();
-
+	function checkDirectionConstraints(refBox, itemBox, constraints) {
 		var results = {
-			left: rect1.left > rect2.right,
-			right: rect1.right < rect2.left,
-			top: rect1.top > rect2.bottom,
-			bottom: rect1.bottom < rect2.top,
-		}
+			left:   refBox.x1 > itemBox.x1,
+			right:  refBox.x2 < itemBox.x2,
+			top:    refBox.y1 > itemBox.y1,
+			bottom: refBox.y2 < itemBox.y2
+		};
 
 		return constraints.reduce(function(result, direction) {
 			return result && !!results[direction];
